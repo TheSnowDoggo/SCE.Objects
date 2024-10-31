@@ -1,0 +1,96 @@
+﻿namespace SCECorePlus.Objects
+{
+    using SCECore.ComponentSystem;
+
+    /// <summary>
+    /// A class used to represent an object.
+    /// </summary>
+    public class SCEObject : ICContainerHolder
+    {
+        private const bool DefaultActiveState = true;
+
+        private const string DefaultName = "[OBJECT]";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCEObject"/> class.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="position">The position of the object.</param>
+        /// <param name="cList">The intitial cList of the object.</param>
+        /// <param name="isActive">The initial active state of the object.</param>
+        public SCEObject(string name, Vector2 position, CList cList, bool isActive = DefaultActiveState)
+        {
+            Name = name;
+            Position = position;
+            CContainer = new(this, cList);
+            IsActive = isActive;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCEObject"/> class.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="cList">The intitial cList of the object.</param>
+        /// <param name="isActive">The initial active state of the object.</param>
+        public SCEObject(string name, CList cList, bool isActive = DefaultActiveState)
+            : this(name, Vector2.Zero, cList, isActive)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCEObject"/> class.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="position">The position of the object.</param>
+        /// <param name="isActive">The initial active state of the object.</param>
+        public SCEObject(string name, Vector2 position, bool isActive = DefaultActiveState)
+            : this(name, position, new CList(), isActive)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCEObject"/> class.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="isActive">The initial active state of the object.</param>
+        public SCEObject(string name, bool isActive = DefaultActiveState)
+            : this(name, new CList(), isActive)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCEObject"/> class.
+        /// </summary>
+        /// <param name="isActive">The initial active state of the object.</param>
+        public SCEObject(bool isActive = DefaultActiveState)
+            : this(DefaultName, isActive)
+        {
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is active.
+        /// </summary>
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of this instance.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the position of this instance.
+        /// </summary>
+        public Vector2 Position { get; set; }
+
+        /// <summary>
+        /// Gets the grid position of this instance.
+        /// </summary>
+        public Vector2Int GridPosition => (Vector2Int)Position.Round();
+
+        /// <inheritdoc/>
+        public CContainer CContainer { get; }
+
+        /// <inheritdoc/>
+        public override string ToString() => $"Name:\"{Name}\" | Pos:({Position}) | Active?:{IsActive}";
+    }
+}
