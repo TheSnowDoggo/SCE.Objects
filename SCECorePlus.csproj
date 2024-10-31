@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="lib\" />
-    <Folder Include="git\" />
     <Folder Include="scripts\CameraTrack\" />
   </ItemGroup>
 

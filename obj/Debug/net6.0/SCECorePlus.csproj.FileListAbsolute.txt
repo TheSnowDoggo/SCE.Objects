@@ -1,0 +1,14 @@
+C:\Users\redst\source\repos\SCECorePlus\bin\Debug\net6.0\SCECorePlus.deps.json
+C:\Users\redst\source\repos\SCECorePlus\bin\Debug\net6.0\SCECorePlus.dll
+C:\Users\redst\source\repos\SCECorePlus\bin\Debug\net6.0\SCECorePlus.pdb
+C:\Users\redst\source\repos\SCECorePlus\bin\Debug\net6.0\SCECore.dll
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.AssemblyReference.cache
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.AssemblyInfoInputs.cache
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.AssemblyInfo.cs
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.CoreCompileInputs.cache
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.CopyComplete
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.dll
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\refint\SCECorePlus.dll
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\SCECorePlus.pdb
+C:\Users\redst\source\repos\SCECorePlus\obj\Debug\net6.0\ref\SCECorePlus.dll
