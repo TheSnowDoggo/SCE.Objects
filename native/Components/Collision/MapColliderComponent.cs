@@ -85,7 +85,7 @@
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 
-        public static Grid2D<bool> ConvertToCollisionGrid(DisplayMap displayMap, byte excludedBgColor = Color.Transparent)
+        public static Grid2D<bool> ConvertToCollisionGrid(DisplayMap displayMap, Color excludedBgColor = Color.Transparent)
         {
             Grid2D<bool> collisionGrid = new(displayMap.Dimensions);
 
@@ -102,7 +102,7 @@
             return collisionGrid;
         }
 
-        public static Grid2D<bool> ConvertToCollisionGrid(Image image, byte excludedBgColor = Color.Transparent)
+        public static Grid2D<bool> ConvertToCollisionGrid(Image image, Color excludedBgColor = Color.Transparent)
         {
             return ConvertToCollisionGrid((DisplayMap)image, excludedBgColor);
         }

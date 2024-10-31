@@ -7,13 +7,12 @@
     /// </summary>
     public class SCEConsole : IRenderable
     {
-        private const string VersionName = "SCEConsole V1.1";
-
         private const bool DefaultActiveState = true;
 
-        private const byte DefaultBgColor = Color.Black;
+        private const string VersionName = "SCEConsole V1.1";
 
-        private const byte DefaultFgColor = Color.White;
+        private const Color DefaultBgColor = Color.Black;
+        private const Color DefaultFgColor = Color.White;
 
         private readonly List<Log> logList = new();
 
@@ -28,7 +27,7 @@
         /// <param name="bgColor">The background color of the console.</param>
         /// <param name="fgColor">The foreground color of the console.</param>
         /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions, byte bgColor, byte fgColor, bool isActive = DefaultActiveState)
+        public SCEConsole(Vector2Int dimensions, Color bgColor, Color fgColor, bool isActive = DefaultActiveState)
         {
             ui = new(dimensions, bgColor, DefaultText, isActive);
             FgColor = fgColor;
@@ -40,7 +39,7 @@
         /// <param name="dimensions">The dimensions of the console.</param>
         /// <param name="bgColor">The background color of the console.</param>
         /// <param name="isActive">The initial active state of the console.</param>
-        public SCEConsole(Vector2Int dimensions, byte bgColor = DefaultBgColor, bool isActive = DefaultActiveState)
+        public SCEConsole(Vector2Int dimensions, Color bgColor = DefaultBgColor, bool isActive = DefaultActiveState)
         {
             ui = new(dimensions, bgColor, DefaultText, isActive);
         }
@@ -87,10 +86,10 @@
         /// <summary>
         /// Gets or sets the foreground color of the console.
         /// </summary>
-        public byte FgColor
+        public Color FgColor
         {
             get => ui.Text.FgColor;
-            set => ui.Text.FgColor = ValidSetColor(value);
+            set => ui.Text.FgColor = value;
         }
 
         /// <summary>
@@ -167,11 +166,6 @@
         public void RemoveAt(int index)
         {
             logList.RemoveAt(index);
-        }
-
-        private static byte ValidSetColor(byte color)
-        {
-            return Color.IsColorCode(color) ? color : throw new ArgumentException("Value is not a valid color code");
         }
 
         private string BuildLogList()

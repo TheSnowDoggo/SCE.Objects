@@ -9,8 +9,6 @@
     {
         private const bool DefaultActiveState = true;
 
-        private const byte DefaultBgColor = Color.Black;
-
         private readonly List<ImageRenderPackage> renderList = new();
 
         private readonly List<Area2DInt> areaClearList = new();
@@ -20,8 +18,6 @@
         private readonly List<Area2DInt> cameraWorldAlignedAreaCacheList = new();
 
         private CContainer? cContainer;
-
-        private byte bgColor = DefaultBgColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorldSpaceRHC"/> class.
@@ -39,7 +35,7 @@
         /// <param name="dimensions">The dimensions of the world space.</param>
         /// <param name="bgColor">The background color of the world space.</param>
         /// <param name="isActive">The intial active state of the world space.</param>
-        public WorldSpaceRHC(Vector2Int dimensions, byte bgColor, bool isActive = DefaultActiveState)
+        public WorldSpaceRHC(Vector2Int dimensions, Color bgColor, bool isActive = DefaultActiveState)
         {
             Image = new(dimensions, bgColor, isActive);
 
@@ -81,11 +77,7 @@
         /// <summary>
         /// Gets or sets the background color of the world space.
         /// </summary>
-        public byte BgColor
-        {
-            get => bgColor;
-            set => bgColor = Color.ValidSet(value);
-        }
+        public Color BgColor { get; set; }
 
         /// <summary>
         /// Gets the camera list of the world space.

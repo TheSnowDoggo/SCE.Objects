@@ -9,8 +9,6 @@
     {
         private const bool DefaultActiveState = true;
 
-        private byte bgColor = 0;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.
         /// </summary>
@@ -34,7 +32,7 @@
         /// <param name="bgColor">The background color of the camera.</param>
         /// <param name="cList">The initial cList of the camera.</param>
         /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, byte bgColor, CList cList, bool isActive = DefaultActiveState)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, CList cList, bool isActive = DefaultActiveState)
             : base(dimensions, bgColor, isActive)
         {
             WorldSpace = worldSpace;
@@ -61,7 +59,7 @@
         /// <param name="dimensions">The dimensions of the camera.</param>
         /// <param name="bgColor">The background color of the camera.</param>
         /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, byte bgColor, bool isActive = DefaultActiveState)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, bool isActive = DefaultActiveState)
             : this(worldSpace, dimensions, bgColor, new CList(), isActive)
         {
         }
@@ -73,7 +71,7 @@
         /// <param name="worldSpace">The WorldSpace to render from.</param>
         /// <param name="bgColor">The background color of the camera.</param>
         /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(Image image, WorldSpaceRHC worldSpace, byte bgColor, CList cList, bool isActive = DefaultActiveState)
+        public Camera(Image image, WorldSpaceRHC worldSpace, Color bgColor, CList cList, bool isActive = DefaultActiveState)
             : base(image)
         {
             WorldSpace = worldSpace;
@@ -110,11 +108,7 @@
         /// <summary>
         /// Gets or sets the background color of this instance.
         /// </summary>
-        public byte BgColor
-        {
-            get => bgColor;
-            set => bgColor = Color.ValidSet(value);
-        }
+        public Color BgColor { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the camera should update every component on render.

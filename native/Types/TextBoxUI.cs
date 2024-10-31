@@ -9,7 +9,7 @@
 
         private readonly List<Area2DInt> renderedAreaList = new();
 
-        private byte bgColor = Color.Black;
+        private Color bgColor = Color.Black;
 
         private Text? renderedText;
 
@@ -38,7 +38,7 @@
         /// <param name="bgColor">The background color of the text box used for previous text clearing if basic text box rendering is enabled.</param>
         /// <param name="text">The text of the text box.</param>
         /// <param name="isActive">The active state of the text box.</param>
-        public TextBoxUI(Vector2Int dimensions, byte bgColor, Text? text = null, bool isActive = DefaultActiveState)
+        public TextBoxUI(Vector2Int dimensions, Color bgColor, Text? text = null, bool isActive = DefaultActiveState)
             : this(dimensions, text, isActive)
         {
             BgColor = bgColor;
@@ -71,12 +71,12 @@
         /// <summary>
         /// Gets or sets the background color of the text box used for previous text clearing if basic text box rendering is enabled.
         /// </summary>
-        public byte BgColor
+        public Color BgColor
         {
             get => bgColor;
             set
             {
-                bgColor = Color.ValidSet(value);
+                bgColor = value;
 
                 FillBackground();
             }
@@ -142,7 +142,7 @@
         }
 
         // Smart text map functions
-        private void SmartMapLine(Vector2Int position, string line, byte fgColor = Color.White, byte bgColor = Color.Transparent)
+        private void SmartMapLine(Vector2Int position, string line, Color fgColor = Color.White, Color bgColor = Color.Transparent)
         {
             MapLine(position, line, fgColor, bgColor);
 
