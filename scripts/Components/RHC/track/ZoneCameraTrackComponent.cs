@@ -1,8 +1,9 @@
 ﻿namespace SCECorePlus.Components.RHS
 {
+    using SCECore.ComponentSystem;
+
     using SCECorePlus.Objects;
     using SCECorePlus.Types;
-    using SCECore.ComponentSystem;
 
     /// <summary>
     /// An <see cref="IComponent"/> used for zone-based object camera tracking.

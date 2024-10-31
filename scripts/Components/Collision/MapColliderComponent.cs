@@ -1,8 +1,9 @@
 ﻿namespace SCECorePlus.Components.Collision
 {
+    using SCECore.ComponentSystem;
+
     using SCECorePlus.Objects;
     using SCECorePlus.Types;
-    using SCECore.ComponentSystem;
 
     public class MapColliderComponent : IComponent, ICollidable
     {

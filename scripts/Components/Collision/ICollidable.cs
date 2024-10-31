@@ -1,7 +1,8 @@
 ﻿namespace SCECorePlus.Components.Collision
 {
-    using SCECorePlus.Objects;
     using SCECore.ComponentSystem;
+
+    using SCECorePlus.Objects;
 
     public interface ICollidable : IComponent
     {

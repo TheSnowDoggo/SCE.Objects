@@ -1,7 +1,8 @@
 ﻿namespace SCECorePlus.Components.RHS
 {
-    using SCECorePlus.Objects;
     using SCECore.ComponentSystem;
+
+    using SCECorePlus.Objects;    
 
     // WorldSpace RenderHandlerComponent
     public class WorldSpaceRHC : IRenderable, IComponent

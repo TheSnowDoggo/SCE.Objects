@@ -2,8 +2,9 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    using SCECorePlus.Objects;
     using SCECore.ComponentSystem;
+
+    using SCECorePlus.Objects;
 
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an image in an object.
@@ -48,6 +49,11 @@
             get => image ?? throw new NullReferenceException("Image is null.");
             set => image = value;
         }
+
+        /// <summary>
+        /// Gets a value indicating whether this image component has an image.
+        /// </summary>
+        public bool HasImage { get => image != null; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

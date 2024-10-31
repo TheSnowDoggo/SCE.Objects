@@ -2,8 +2,9 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    using SCECorePlus.Objects;
     using SCECore.ComponentSystem;
+
+    using SCECorePlus.Objects;
 
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an <see cref="IRenderable"/> in an object.
