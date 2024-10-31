@@ -2,7 +2,7 @@
 {
     using SCECore.ComponentSystem;
 
-    using SCECorePlus.Objects;    
+    using SCECorePlus.Objects;
 
     // WorldSpace RenderHandlerComponent
     public class WorldSpaceRHC : IRenderable, IComponent
