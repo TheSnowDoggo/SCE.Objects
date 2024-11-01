@@ -21,8 +21,9 @@
         /// Initializes a new instance of the <see cref="ImageComponent"/> class.
         /// </summary>
         /// <param name="isActive">The initial active state of the image component.</param>
-        public ImageComponent(bool isActive = DefaultActiveState)
+        public ImageComponent(string name, bool isActive = DefaultActiveState)
         {
+            Name = name;
             IsActive = isActive;
         }
 
@@ -31,8 +32,8 @@
         /// </summary>
         /// <param name="image">The initial image.</param>
         /// <param name="isActive">The initial active state of the image component.</param>
-        public ImageComponent(Image image, bool isActive = DefaultActiveState)
-            : this(isActive)
+        public ImageComponent(string name, Image image, bool isActive = DefaultActiveState)
+            : this(name, isActive)
         {
             Image = image;
         }
@@ -71,7 +72,7 @@
         /// <returns>A shallow copy of this instance.</returns>
         public ImageComponent Clone()
         {
-            return new(Image.Clone());
+            return new(Name, Image.Clone());
         }
 
         /// <inheritdoc/>
