@@ -18,7 +18,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public BoxColliderComponent(Vector2Int dimensions, byte layer, Anchor anchor, bool isActive = DefaultActiveState)
+        public BoxColliderComponent(string name, Vector2Int dimensions, byte layer, Anchor anchor, bool isActive = DefaultActiveState)
         {
             if (dimensions < 1)
             {
@@ -27,25 +27,25 @@
 
             Dimensions = dimensions;
 
+            Name = name;
             Layer = layer;
             Anchor = anchor;
-
             IsActive = isActive;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public BoxColliderComponent(Vector2Int dimensions, byte layer, bool isActive = DefaultActiveState)
-            : this(dimensions, layer, new Anchor(), isActive)
+        public BoxColliderComponent(string name, Vector2Int dimensions, byte layer, bool isActive = DefaultActiveState)
+            : this(name, dimensions, layer, new Anchor(), isActive)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public BoxColliderComponent(Vector2Int dimensions, bool isActive = DefaultActiveState)
-            : this(dimensions, DefaultLayer, isActive)
+        public BoxColliderComponent(string name, Vector2Int dimensions, bool isActive = DefaultActiveState)
+            : this(name, dimensions, DefaultLayer, isActive)
         {
         }
         
