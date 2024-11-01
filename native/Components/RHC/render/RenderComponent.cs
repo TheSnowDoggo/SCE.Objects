@@ -2,7 +2,7 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
 
@@ -19,8 +19,9 @@
         /// Initializes a new instance of the <see cref="RenderComponent"/> class.
         /// </summary>
         /// <param name="isActive">The initial active state of the render component.</param>
-        public RenderComponent(bool isActive = DefaultActiveState)
+        public RenderComponent(string name, bool isActive = DefaultActiveState)
         {
+            Name = name;
             IsActive = isActive;
         }
 
@@ -29,8 +30,8 @@
         /// </summary>
         /// <param name="renderable">The initial <see cref="IRenderable"/>.</param>
         /// <param name="isActive">The initial active state of the render component.</param>
-        public RenderComponent(IRenderable renderable, bool isActive = DefaultActiveState)
-            : this(isActive)
+        public RenderComponent(string name, IRenderable renderable, bool isActive = DefaultActiveState)
+            : this(name, isActive)
         {
             Renderable = renderable;
         }
@@ -53,8 +54,12 @@
         /// </summary>
         public bool HasRenderable { get => renderable != null; }
 
+        public string Name { get; set; }
+
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        public event EventHandler? ComponentModifyEvent;
 
         /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)

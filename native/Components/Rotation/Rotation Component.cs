@@ -1,11 +1,11 @@
 ﻿namespace SCECorePlus.Components.Rotation
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     /// <summary>
     /// An <see cref="LunaSCE.Image"/> <see cref="IComponent"/> class for simualting rotation through <see cref="Vector2"/> position transformation.
     /// </summary>
-    public class RotationComponent : IComponent, IAlignPositionInt
+    public class RotationComponent : IComponent
     {
         private const bool DefaultActiveState = true;
 
@@ -23,8 +23,9 @@
         /// Initializes a new instance of the <see cref="RotationComponent"/> class.
         /// </summary>
         /// <param name="isActive">The starting active status of the <see cref="RotationComponent"/>.</param>
-        public RotationComponent(bool isActive = DefaultActiveState)
+        public RotationComponent(string name, bool isActive = DefaultActiveState)
         {
+            Name = name;
             IsActive = isActive;
         }
 
@@ -33,8 +34,8 @@
         /// </summary>
         /// <param name="rotationalAlignment">The starting rotational alignment mode.</param>
         /// <param name="isActive">The starting active status of the <see cref="RotationComponent"/>.</param>
-        public RotationComponent(AlignType rotationalAlignment, bool isActive = DefaultActiveState)
-            : this(isActive)
+        public RotationComponent(string name, AlignType rotationalAlignment, bool isActive = DefaultActiveState)
+            : this(name, isActive)
         {
             RotationalAlignment = rotationalAlignment;
         }
@@ -45,8 +46,8 @@
         /// <param name="rotationalAlignment">The starting rotational alignment mode.</param>
         /// <param name="customRotationAxis">The <see cref="Vector2"/> rotation axis used when <see cref="AlignType.Custom"/> is set.</param>
         /// <param name="isActive">The starting active status of the <see cref="RotationComponent"/>.</param>
-        public RotationComponent(AlignType rotationalAlignment, Vector2 customRotationAxis, bool isActive = DefaultActiveState)
-            : this(rotationalAlignment, isActive)
+        public RotationComponent(string name, AlignType rotationalAlignment, Vector2 customRotationAxis, bool isActive = DefaultActiveState)
+            : this(name, rotationalAlignment, isActive)
         {
             CustomRotationAxis = customRotationAxis;
         }
@@ -59,51 +60,19 @@
         /// <param name="rotationFactor">The starting rotation factor.</param>
         /// <param name="offsetPosition">The starting <see cref="Vector2Int"/> offset position.</param>
         /// <param name="isActive">The starting active status of the <see cref="RotationComponent"/>.</param>
-        public RotationComponent(AlignType rotationalAlignment, Vector2 customRotationAxis, int rotationFactor, Vector2Int offsetPosition, bool isActive = DefaultActiveState)
-            : this(rotationalAlignment, customRotationAxis, isActive)
+        public RotationComponent(string name, AlignType rotationalAlignment, Vector2 customRotationAxis, int rotationFactor, Vector2Int offsetPosition, bool isActive = DefaultActiveState)
+            : this(name, rotationalAlignment, customRotationAxis, isActive)
         {
             RotationFactor = rotationFactor;
             this.offsetPosition = offsetPosition;
         }
 
-        /// <summary>
-        /// Represents the rotational alignment mode which determines the rotation axis to rotate about.
-        /// </summary>
-        public enum AlignType
-        {
-            /// <summary>
-            /// Rotates about the given custom <see cref="Vector2"/> rotation axis.
-            /// </summary>
-            Custom,
-
-            /// <summary>
-            /// Rotates about the starting midpoint of the <see cref="Image"/>.
-            /// </summary>
-            Center,
-
-            /// <summary>
-            /// Rotates about the bottom-left of the <see cref="Image"/>.
-            /// </summary>
-            BottomLeft,
-
-            /// <summary>
-            /// Rotates about the bottom-right of the <see cref="Image"/>.
-            /// </summary>
-            BottomRight,
-
-            /// <summary>
-            /// Rotates about the top-left of the <see cref="Image"/>.
-            /// </summary>
-            TopLeft,
-
-            /// <summary>
-            /// Rotates about the top-right of the <see cref="Image"/>.
-            /// </summary>
-            TopRight,
-        }
+        public string Name { get; set; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        public event EventHandler? ComponentModifyEvent;
 
         /// <summary>
         /// Gets the rotationally aligned <see cref="Area2DInt"/> of the associated <see cref="LunaSCE.Image"/>.
@@ -224,6 +193,42 @@
             offsetPosition = Vector2Int.Zero;
             RotationFactor = 0;
             rotationAxis = null;
+        }
+
+        /// <summary>
+        /// Represents the rotational alignment mode which determines the rotation axis to rotate about.
+        /// </summary>
+        public enum AlignType
+        {
+            /// <summary>
+            /// Rotates about the given custom <see cref="Vector2"/> rotation axis.
+            /// </summary>
+            Custom,
+
+            /// <summary>
+            /// Rotates about the starting midpoint of the <see cref="Image"/>.
+            /// </summary>
+            Center,
+
+            /// <summary>
+            /// Rotates about the bottom-left of the <see cref="Image"/>.
+            /// </summary>
+            BottomLeft,
+
+            /// <summary>
+            /// Rotates about the bottom-right of the <see cref="Image"/>.
+            /// </summary>
+            BottomRight,
+
+            /// <summary>
+            /// Rotates about the top-left of the <see cref="Image"/>.
+            /// </summary>
+            TopLeft,
+
+            /// <summary>
+            /// Rotates about the top-right of the <see cref="Image"/>.
+            /// </summary>
+            TopRight,
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.Collision
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
 
@@ -12,13 +12,18 @@
 
         private CContainer? cContainer;
 
-        public ColliderHandlerComponent(bool isActive = DefaultActiveState)
+        public ColliderHandlerComponent(string name, bool isActive = DefaultActiveState)
         {
+            Name = name;
             IsActive = isActive;
         }
 
+        public string Name { get; set; }
+
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        public event EventHandler? ComponentModifyEvent;
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 

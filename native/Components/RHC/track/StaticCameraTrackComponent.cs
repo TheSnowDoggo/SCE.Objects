@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.RHS
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
     using SCECorePlus.Types;
@@ -20,8 +20,9 @@
         /// <param name="obj">The object to track.</param>
         /// <param name="anchor">The position anchor of the camera.</param>
         /// <param name="isActive">The active state of the component.</param>
-        public StaticCameraTrackComponent(SCEObject obj, Anchor anchor, bool isActive = DefaultActiveState)
+        public StaticCameraTrackComponent(string name, SCEObject obj, Anchor anchor, bool isActive = DefaultActiveState)
         {
+            Name = name;
             Object = obj;
             Anchor = anchor;
             IsActive = isActive;
@@ -32,13 +33,17 @@
         /// </summary>
         /// <param name="obj">The object to track.</param>
         /// <param name="isActive">The active state of the component.</param>
-        public StaticCameraTrackComponent(SCEObject obj, bool isActive = DefaultActiveState)
-            : this(obj, new Anchor(), isActive)
+        public StaticCameraTrackComponent(string name, SCEObject obj, bool isActive = DefaultActiveState)
+            : this(name, obj, new Anchor(), isActive)
         {
         }
 
+        public string Name { get; set; }
+
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        public event EventHandler? ComponentModifyEvent;
 
         /// <summary>
         /// Gets or sets the controlled camera.

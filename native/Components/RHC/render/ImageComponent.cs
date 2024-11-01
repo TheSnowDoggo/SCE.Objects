@@ -2,7 +2,7 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
 
@@ -55,30 +55,12 @@
         /// </summary>
         public bool HasImage { get => image != null; }
 
+        public string Name { get; set; }
+
         /// <inheritdoc/>
         public bool IsActive { get; set; }
 
-        /// <summary>
-        /// Gets the object aligned <see cref="Area2DInt"/> area of the object aligned position and the object aligned position corner.
-        /// </summary>
-        public Area2DInt ObjectAlignedArea { get => new(ObjectAlignedPosition, ObjectAlignedPositionCorner); }
-
-        /// <summary>
-        /// Gets the object aligned <see cref="Vector2Int"/> position of the image aligned position and the parent object position.
-        /// </summary>
-        public Vector2Int ObjectAlignedPosition { get => Image.AlignedPosition + (Vector2Int)Object.Position.Round(); }
-
-        /// <summary>
-        /// Gets the zero-based top-right corner position object aligned position.
-        /// </summary>
-        public Vector2Int ObjectAlignedPositionCorner { get => Image.AlignedPositionCorner + (Vector2Int)Object.Position.Round(); }
-
-        private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
-
-        /// <summary>
-        /// Gets the parent Object of this instance.
-        /// </summary>
-        private SCEObject Object { get => (SCEObject)CContainer.CContainerHolder; }
+        public event EventHandler? ComponentModifyEvent;
 
         /// <summary>
         /// Creates a shallow copy of this instance.
@@ -95,11 +77,7 @@
         /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
-            if (holder is SCEObject)
-            {
-                this.cContainer = cContainer;
-            }
-            else
+            if (holder is not SCEObject)
             {
                 throw new InvalidCContainerHolderException("CContainerHolder must be Object.");
             }

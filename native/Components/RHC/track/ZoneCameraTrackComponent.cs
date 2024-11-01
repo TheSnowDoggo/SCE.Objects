@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.RHS
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
     using SCECorePlus.Types;
@@ -26,8 +26,10 @@
         /// <param name="cameraAnchor">The anchor of the camera.</param>
         /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, Anchor cameraAnchor, bool isActive = DefaultActiveState)
+        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, Anchor cameraAnchor, bool isActive = DefaultActiveState)
         {
+            Name = name;
+
             Object = obj;
 
             BoundingArea = boundingArea;
@@ -55,8 +57,8 @@
         /// <param name="zoneAnchor">The anchor of the zone.</param>
         /// /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, bool isActive = DefaultActiveState)
-            : this(obj, boundingArea, zoneDimensions, zoneAnchor, new Anchor(), isActive)
+        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, bool isActive = DefaultActiveState)
+            : this(name, obj, boundingArea, zoneDimensions, zoneAnchor, new Anchor(), isActive)
         {
         }
 
@@ -68,10 +70,13 @@
         /// <param name="zoneDimensions">The dimensions of the zone.</param>
         /// /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
-            : this(obj, boundingArea, zoneDimensions, new Anchor(), isActive)
+        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
+            : this(name, obj, boundingArea, zoneDimensions, new Anchor(), isActive)
         {
         }
+
+        /// <inheritdoc/>
+        public string Name { get; set; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
@@ -113,6 +118,8 @@
         /// </summary>
         public Anchor CameraAnchor { get; set; }
 
+        public event EventHandler? ComponentModifyEvent; 
+
         private Vector2Int ObjectAlignedZonePosition => Object.GridPosition + ZoneAnchor.GetAlignedOffset(ZoneDimensions);
 
         private Area2DInt BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
@@ -123,7 +130,8 @@
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 
-        private Camera Camera => (Camera)CContainer.CContainerHolder;
+        private Camera Camera { get => (Camera)CContainer.CContainerHolder; }
+
 
         /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder cContainerHolder)

@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.Collision
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
 

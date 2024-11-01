@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.Collision
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
     using SCECorePlus.Types;
@@ -18,41 +18,45 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MapColliderComponent"/> class.
         /// </summary>
-        public MapColliderComponent(Grid2D<bool> collisionGrid, byte layer, Anchor anchor, bool isActive = DefaultActiveState)
+        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, byte layer, Anchor anchor, bool isActive = DefaultActiveState)
         {
+            Name = name;
             CollisionGrid = collisionGrid;
             Anchor = anchor;
             Layer = layer;
-
             IsActive = isActive;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public MapColliderComponent(Grid2D<bool> collisionGrid, byte layer, bool isActive = DefaultActiveState)
-            : this(collisionGrid, layer, new Anchor(), isActive)
+        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, byte layer, bool isActive = DefaultActiveState)
+            : this(name, collisionGrid, layer, new Anchor(), isActive)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public MapColliderComponent(Grid2D<bool> collisionGrid, Anchor anchor, bool isActive = DefaultActiveState)
-            : this(collisionGrid, DefaultLayer, anchor, isActive)
+        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, Anchor anchor, bool isActive = DefaultActiveState)
+            : this(name, collisionGrid, DefaultLayer, anchor, isActive)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public MapColliderComponent(Grid2D<bool> collisionGrid, bool isActive = DefaultActiveState)
-            : this(collisionGrid, DefaultLayer, isActive)
+        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, bool isActive = DefaultActiveState)
+            : this(name, collisionGrid, DefaultLayer, isActive)
         {
         }
+
+        public string Name { get; set; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        public event EventHandler? ComponentModifyEvent;
 
         /// <inheritdoc/>
         public bool IsListening { get; set; } = DefaultListeningState;
@@ -127,12 +131,12 @@
             {
                 Area2DInt otherObjectAlignedArea = mapColliderComp.ObjectAlignedAnchoredCollisionArea;
 
-                if (!ObjectAlignedAnchoredCollisionArea.OverlapsWith(otherObjectAlignedArea))
+                if (!Area2DInt.Overlaps(ObjectAlignedAnchoredCollisionArea, otherObjectAlignedArea))
                 {
                     return false;
                 }
 
-                Area2DInt thisOverlappingGridArea = CollisionGrid.GridArea.GetOverlap(otherObjectAlignedArea - OffsetPosition);
+                Area2DInt thisOverlappingGridArea = Area2DInt.GetOverlap(CollisionGrid.GridArea, otherObjectAlignedArea - OffsetPosition); 
 
                 bool collides = false;
 
@@ -157,12 +161,12 @@
             {
                 Area2DInt otherObjectAlignedArea = boxColliderComp.ObjectAlignedAnchoredCollisionArea;
 
-                if (!ObjectAlignedAnchoredCollisionArea.OverlapsWith(otherObjectAlignedArea))
+                if (!Area2DInt.Overlaps(ObjectAlignedAnchoredCollisionArea, otherObjectAlignedArea))
                 {
                     return false;
                 }
 
-                Area2DInt thisOverlappingGridArea = CollisionGrid.GridArea.GetOverlap(otherObjectAlignedArea - OffsetPosition);
+                Area2DInt thisOverlappingGridArea = Area2DInt.GetOverlap(CollisionGrid.GridArea, otherObjectAlignedArea - OffsetPosition);
 
                 bool collides = false;
 

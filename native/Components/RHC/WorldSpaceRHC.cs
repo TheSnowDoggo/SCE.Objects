@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.RHS
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
 
@@ -11,7 +11,7 @@
 
         private readonly List<ImageRenderPackage> renderList = new();
 
-        private readonly List<Area2DInt> areaClearList = new();
+        private readonly List<Area2DInt> loadedAreaList = new();
 
         private readonly List<Camera> cameraList = new();
 
@@ -35,10 +35,11 @@
         /// <param name="dimensions">The dimensions of the world space.</param>
         /// <param name="bgColor">The background color of the world space.</param>
         /// <param name="isActive">The intial active state of the world space.</param>
-        public WorldSpaceRHC(Vector2Int dimensions, Color bgColor, bool isActive = DefaultActiveState)
+        public WorldSpaceRHC(string name, Vector2Int dimensions, Color bgColor, bool isActive = DefaultActiveState)
         {
             Image = new(dimensions, bgColor, isActive);
 
+            Name = name;
             BgColor = bgColor;
         }
 
@@ -46,6 +47,9 @@
         /// Gets the grid area of the world space.
         /// </summary>
         public Area2DInt GridArea { get => Image.GridArea; }
+
+        /// <inheritdoc/>
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the world space is active.
@@ -55,6 +59,8 @@
             get => Image.IsActive;
             set => Image.IsActive = value;
         }
+
+        public event EventHandler? ComponentModifyEvent;
 
         /// <summary>
         /// Gets or sets the <see cref="Vector2Int"/> position of the world space.
@@ -95,19 +101,19 @@
         public bool RenderOnUpdate { get; set; } = false;
 
         /// <summary>
-        /// Gets the current dimensions of the world space.
-        /// </summary>
-        public Vector2Int Dimensions => Image.Dimensions;
-
-        /// <summary>
         /// Gets the current width of the world space.
         /// </summary>
-        public int Width => Image.Width;
+        public int Width { get => Image.Width; }
 
         /// <summary>
         /// Gets the current height of the world space.
         /// </summary>
-        public int Height => Image.Height;
+        public int Height { get => Image.Height; }
+
+        /// <summary>
+        /// Gets the current dimensions of the world space.
+        /// </summary>
+        public Vector2Int Dimensions { get => Image.Dimensions; }
 
         private Area2DInt CachedGridArea { get; set; }
 
@@ -146,7 +152,7 @@
         /// <inheritdoc/>
         public void Update()
         {
-            if (RenderOnUpdate)
+            if (IsActive && RenderOnUpdate)
             {
                 Render();
             }
@@ -175,12 +181,12 @@
         {
             Pixel clearPixel = new(BgColor);
 
-            foreach (Area2DInt area in areaClearList)
+            foreach (Area2DInt area in loadedAreaList)
             {
                 Image.FillArea(clearPixel, area, true);
             }
-
-            areaClearList.Clear();
+                
+            loadedAreaList.Clear();
         }
 
         private void Render()
@@ -224,16 +230,21 @@
             {
                 if (component.IsActive && component is IRenderable renderable)
                 {
-                    TryAddToRenderList(renderable.GetImage(), obj.GridPosition);
+                    Image image = renderable.GetImage();
+
+                    TryAddToRenderList(image, obj.GridPosition);
                 }
             }
         }
 
         private void TryAddToRenderList(Image image, Vector2Int offset)
         {
-            if (image.IsActive && ((!HasCamera && CachedGridArea.OverlapsWith(image.AlignedArea + offset)) || AnyCachedCameraWorldAlignedAreaOverlapsArea(image.AlignedArea + offset)))
+            if (image.IsActive && AnyCachedCameraWorldAlignedAreaOverlapsImage(image, offset))
             {
-                renderList.Add(new ImageRenderPackage(image, offset));
+                if ((!HasCamera && Area2DInt.Overlaps(CachedGridArea, image.GridArea + offset)) || (HasCamera && AnyCachedCameraWorldAlignedAreaOverlapsArea(image.GridArea + offset)))
+                {
+                    renderList.Add(new ImageRenderPackage(image, offset));
+                }
             }
         }
 
@@ -286,7 +297,7 @@
 
             Image.MapToArea(renderPackage.Image, resizedImageGridArea, alignedImagePosition, true);
 
-            areaClearList.Add(alignedResizedImageArea);
+            loadedAreaList.Add(alignedResizedImageArea);
         }
         
         // Cache functions
@@ -306,11 +317,29 @@
             }
         }
 
+        private bool AnyCachedCameraWorldAlignedAreaOverlapsImage(Image image, Vector2Int offset)
+        {
+            Vector2Int alignedPosStart = image.Position + offset;
+            Vector2Int alignedPosEnd = alignedPosStart + image.Dimensions;
+
+            foreach (Area2DInt worldAlignedArea in cameraWorldAlignedAreaCacheList)
+            {
+                worldAlignedArea.Expose(out Vector2Int start, out Vector2Int end);
+
+                if (Area2DInt.Overlaps(alignedPosStart, alignedPosEnd, start, end))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private bool AnyCachedCameraWorldAlignedAreaOverlapsArea(Area2DInt alignedImageArea)
         {
             foreach (Area2DInt worldAlignedArea in cameraWorldAlignedAreaCacheList)
             {
-                if (worldAlignedArea.OverlapsWith(alignedImageArea))
+                if (Area2DInt.Overlaps(worldAlignedArea, alignedImageArea))
                 {
                     return true;
                 }

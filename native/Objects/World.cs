@@ -3,43 +3,22 @@
     using System;
     using System.Collections;
 
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     /// <summary>
     /// Represents a world containing objects and components.
     /// </summary>
     public class World : IEnumerable<SCEObject>, ICContainerHolder
     {
-        private readonly List<SCEObject> objectList;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="World"/> class.
-        /// </summary>
-        /// <param name="objectList">The initial object list of the world.</param>
-        /// <param name="cList">The initial cList of the world.</param>
-        public World(List<SCEObject> objectList, CList cList)
-        {
-            this.objectList = objectList;
-
-            CContainer = new(this, cList);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="World"/> class.
-        /// </summary>
-        /// <param name="objectList">The initial object list of the world.</param>
-        public World(List<SCEObject> objectList)
-            : this(objectList, new CList())
-        {
-        }
+        private readonly List<SCEObject> objectList = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="World"/> class.
         /// </summary>
         /// <param name="cList">The initial cList of the world.</param>
         public World(CList cList)
-            : this(new List<SCEObject>(), cList)
         {
+            CContainer = new(this, cList);
         }
 
         /// <summary>
@@ -68,33 +47,26 @@
         /// </summary>
         public int Objects { get => objectList.Count; }
 
+        public event EventHandler<WorldModifyEventArgs>? WorldModifyEvent;
+
         /// <summary>
-        /// Gets or sets the object at the specified index.
+        /// Gets the object at the specified index.
         /// </summary>
-        /// <param name="index">The zero-based index of the object to get or set.</param>
+        /// <param name="index">The zero-based index of the object to get.</param>
         /// <returns>The object at the specified index.</returns>
-        public SCEObject this[int index]
-        {
-            get => objectList[index];
-            set => objectList[index] = value;
-        }
+        public SCEObject this[int index] { get => objectList[index]; }
 
-        /// <summary>
-        /// Gets or sets the first occurance of an object with a name matching the specified name.
-        /// </summary>
-        /// <param name="name">The name of the object to get or set.</param>
-        /// <returns>The first occurance of an object with a name matching the specified name.</returns>
-        public SCEObject this[string name]
+        /// <inheritdoc/>
+        public IEnumerator<SCEObject> GetEnumerator()
         {
-            get => this[IndexOf(name)];
-            set => this[IndexOf(name)] = value;
+            return objectList.GetEnumerator();
         }
 
         /// <inheritdoc/>
-        public IEnumerator<SCEObject> GetEnumerator() => objectList.GetEnumerator();
-
-        /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         /// <summary>
         /// Updates all the components in the world and all the components in every object.
@@ -131,15 +103,28 @@
         public void Add(SCEObject obj)
         {
             objectList.Add(obj);
+            OnAdd(obj);
         }
 
         /// <summary>
-        /// Adds a every object in an object array to the world.
+        /// Adds every object in an object list to the world.
         /// </summary>
-        /// <param name="objArray">The object array containing every object to be added to the world.</param>
-        public void Add(SCEObject[] objArray)
+        /// <param name="objArray">The object list containing every object to be added to the world.</param>
+        public void Add(List<SCEObject> objectList)
         {
-            foreach (SCEObject obj in objArray)
+            foreach (SCEObject obj in objectList)
+            {
+                Add(obj);
+            }
+        }
+
+        /// <summary>
+        /// Adds every object in an object arayy to the world.
+        /// </summary>
+        /// <param name="objectArray">The object list containing every object to be added to the world.</param>
+        public void Add(SCEObject[] objectArray)
+        {
+            foreach (SCEObject obj in objectArray)
             {
                 Add(obj);
             }
@@ -152,24 +137,14 @@
         /// <returns><see langword="true"/> if <paramref name="obj"/> is successfully removed; otherwise, <see langword="false"/>.</returns>
         public bool Remove(SCEObject obj)
         {
-            return objectList.Remove(obj);
-        }
+            bool successful = objectList.Remove(obj);
 
-        /// <summary>
-        /// Removes the first occurance of an object with a name matching specified name.
-        /// </summary>
-        /// <param name="name">The name of the object to remove from the world.</param>
-        /// <returns><see langword="true"/> if an object with a matching <paramref name="name"/> is successfully removed; otherwise, <see langword="false"/>.</returns>
-        public bool Remove(string name)
-        {
-            bool found = Contains(name, out int index);
-
-            if (found)
+            if (successful)
             {
-                RemoveAt(index);
+                OnRemove(obj);
             }
 
-            return found;
+            return successful;
         }
 
         /// <summary>
@@ -179,6 +154,24 @@
         public void RemoveAt(int index)
         {
             objectList.RemoveAt(index);
+            OnRemove(objectList[index]);
+        }
+
+        /// <summary>
+        /// Removes the first occurance of an object with a name matching specified name.
+        /// </summary>
+        /// <param name="name">The name of the object to remove from the world.</param>
+        /// <returns><see langword="true"/> if an object with a matching <paramref name="name"/> is successfully removed; otherwise, <see langword="false"/>.</returns>
+        public bool Remove(string name)
+        {
+            bool contains = Contains(name, out int index);
+
+            if (contains)
+            {
+                RemoveAt(index);
+            }
+
+            return contains;
         }
 
         /// <summary>
@@ -189,24 +182,20 @@
         /// <returns><see langword="true"/> if an object with a name matching the specified name is found in the world is found; otherwise, <see langword="false"/>.</returns>
         public bool Contains(string name, out int index)
         {
-            bool found = false;
             int i = 0;
-            do
+            foreach (SCEObject obj in this)
             {
-                if (this[i].Name == name)
+                if (obj.Name == name)
                 {
-                    found = true;
+                    index = i;
+                    return true;
                 }
-                else
-                {
-                    i++;
-                }
+
+                i++;
             }
-            while (i < Objects && !found);
 
-            index = found ? i : -1;
-
-            return found;
+            index = -1;
+            return false;
         }
 
         /// <summary>
@@ -225,11 +214,11 @@
         /// <param name="name">The name of the object to find.</param>
         /// <returns>The first occurance of an object with a name matching the specified <paramref name="name"/> in the world.</returns>
         /// <exception cref="ArgumentException">Thrown if no object with the given <paramref name="name"/> is found in the world.</exception>
-        public SCEObject Find(string name)
+        public SCEObject Get(string name)
         {
-            bool found = Contains(name, out int index);
+            bool contains = Contains(name, out int index);
 
-            if(!found)
+            if(!contains)
             {
                 throw new ArgumentException("No object with specified name found.");
             }
@@ -257,6 +246,34 @@
         public int IndexOf(SCEObject obj)
         {
             return objectList.IndexOf(obj);
+        }
+
+        private void OnAdd(SCEObject obj)
+        {
+            obj.ObjectModifyEvent += World_ObjectModifyEvent;
+            WorldModifyEvent?.Invoke(this, new(obj, WorldModifyEventArgs.ModifyType.Add));
+        }
+
+        private void OnRemove(SCEObject obj)
+        {
+            obj.ObjectModifyEvent -= World_ObjectModifyEvent;
+            WorldModifyEvent?.Invoke(this, new(obj, WorldModifyEventArgs.ModifyType.Remove));
+        }
+
+        private void World_ObjectModifyEvent(object? sender, ObjectModifyEventArgs e)
+        {
+            if (sender is SCEObject obj)
+            {
+                WorldModifyEventArgs.ModifyType type = e.Type switch
+                {
+                    ObjectModifyEventArgs.ModifyType.Name => WorldModifyEventArgs.ModifyType.ModifyName,
+                    ObjectModifyEventArgs.ModifyType.Position => WorldModifyEventArgs.ModifyType.ModifyPosition,
+                    ObjectModifyEventArgs.ModifyType.IsActive => WorldModifyEventArgs.ModifyType.ModifyIsActive,
+                    _ => throw new NotImplementedException()
+                };
+
+                WorldModifyEvent?.Invoke(this, new(obj, type));
+            }
         }
     }
 }

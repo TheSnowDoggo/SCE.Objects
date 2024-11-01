@@ -1,11 +1,11 @@
 ﻿namespace SCECorePlus.Components.RHS
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     /// <summary>
     /// Represents a camera in a world space.
     /// </summary>
-    public class Camera : Image, IRenderable
+    public class Camera : Image, IRenderable, ICContainerHolder
     {
         private const bool DefaultActiveState = true;
 
@@ -83,7 +83,7 @@
         /// <summary>
         /// Gets or sets the delegate called after rendering WorldSpace and before returning itself in GetImage (IRenderable)
         /// </summary>
-        public CallOnRender? AfterRender { get; set; }
+        public Action? AfterRender { get; set; }
 
         /// <summary>
         /// Gets the GridArea of this instance aligned to its WorldPosition.
@@ -94,6 +94,9 @@
         /// Gets or sets the position of this instance in the WorldSpace.
         /// </summary>
         public Vector2 WorldPosition { get; set; } = Vector2.Zero;
+
+        /// <inheritdoc/>
+        public CContainer CContainer { get; }
 
         /// <summary>
         /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
@@ -137,7 +140,7 @@
         {
             Image worldImage = WorldSpace.GetImage();
 
-            if (WorldAlignedArea.OverlapsWith(worldImage.GridArea))
+            if (Area2DInt.Overlaps(WorldAlignedArea, worldImage.GridArea))
             {
                 Area2DInt fixedGridArea = worldImage.GridArea.TrimArea(WorldAlignedArea, out bool hasFixed) - WorldPositionInt;
 

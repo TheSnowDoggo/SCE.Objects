@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Components.Collision
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     using SCECorePlus.Objects;
     using SCECorePlus.Types;
@@ -48,9 +48,13 @@
             : this(dimensions, DefaultLayer, isActive)
         {
         }
+        
+        public string Name { get; set; }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        public event EventHandler? ComponentModifyEvent;
 
         /// <inheritdoc/>
         public bool IsListening { get; set; } = DefaultListeningState;
@@ -122,7 +126,7 @@
 
         public bool DoesAreaOverlapWith(Area2DInt area)
         {
-            return ObjectAlignedAnchoredCollisionArea.OverlapsWith(area);
+            return Area2DInt.Overlaps(ObjectAlignedAnchoredCollisionArea, area);
         }
     }
 }

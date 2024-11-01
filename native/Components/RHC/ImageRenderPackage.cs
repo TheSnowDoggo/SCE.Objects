@@ -29,12 +29,12 @@
         /// <summary>
         /// Gets the image aligned position offset by the offset.
         /// </summary>
-        public Vector2Int OffsetAlignedPosition { get => Image.AlignedPosition + Offset; }
+        public Vector2Int OffsetAlignedPosition { get => Image.Position + Offset; }
 
         /// <summary>
         /// Gets the image aligned position corner offset by the offset.
         /// </summary>
-        public Vector2Int OffsetAlignedPositionCorner { get => Image.AlignedPositionCorner + Offset; }
+        public Vector2Int OffsetAlignedPositionCorner { get => Image.Position + Image.Dimensions + Offset; }
 
         /// <summary>
         /// Gets the image aligned area offset by the offset.

@@ -1,6 +1,6 @@
 ﻿namespace SCECorePlus.Objects
 {
-    using SCECore.ComponentSystem;
+    using SCEComponents;
 
     /// <summary>
     /// A class used to represent an object.
@@ -9,7 +9,9 @@
     {
         private const bool DefaultActiveState = true;
 
-        private const string DefaultName = "[OBJECT]";
+        private string name;
+        private Vector2 position;
+        private bool isActive;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SCEObject"/> class.
@@ -20,10 +22,11 @@
         /// <param name="isActive">The initial active state of the object.</param>
         public SCEObject(string name, Vector2 position, CList cList, bool isActive = DefaultActiveState)
         {
-            Name = name;
-            Position = position;
+            this.name = name;
+            this.position = position;
+            this.isActive = isActive;
+
             CContainer = new(this, cList);
-            IsActive = isActive;
         }
 
         /// <summary>
@@ -63,34 +66,81 @@
         /// </summary>
         /// <param name="isActive">The initial active state of the object.</param>
         public SCEObject(bool isActive = DefaultActiveState)
-            : this(DefaultName, isActive)
+            : this(string.Empty, isActive)
         {
+        }
+
+        /// <summary>
+        /// Gets or sets the name of this instance.
+        /// </summary>
+        public string Name
+        {
+            get => name;
+            set
+            {
+                string lastName = name;
+
+                if (lastName != value)
+                {
+                    name = value;
+
+                    ObjectModifyEvent?.Invoke(this, new(ObjectModifyEventArgs.ModifyType.Name));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the position of this instance.
+        /// </summary>
+        public Vector2 Position
+        {
+            get => position;
+            set
+            {
+                Vector2 lastPos = position;
+
+                if (lastPos != value)
+                {
+                    position = value;
+
+                    ObjectModifyEvent?.Invoke(this, new(ObjectModifyEventArgs.ModifyType.Position));
+                }
+            }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is active.
         /// </summary>
-        public bool IsActive { get; set; }
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                bool lastIsActive = isActive;
 
-        /// <summary>
-        /// Gets or sets the name of this instance.
-        /// </summary>
-        public string Name { get; set; }
+                if (lastIsActive != value)
+                {
+                    isActive = value;
 
-        /// <summary>
-        /// Gets or sets the position of this instance.
-        /// </summary>
-        public Vector2 Position { get; set; }
+                    ObjectModifyEvent?.Invoke(this, new(ObjectModifyEventArgs.ModifyType.IsActive));
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the grid position of this instance.
         /// </summary>
-        public Vector2Int GridPosition => (Vector2Int)Position.Round();
+        public Vector2Int GridPosition { get => (Vector2Int)Position.Round(); }
 
         /// <inheritdoc/>
         public CContainer CContainer { get; }
 
+        public event EventHandler<ObjectModifyEventArgs>? ObjectModifyEvent;
+
         /// <inheritdoc/>
-        public override string ToString() => $"Name:\"{Name}\" | Pos:({Position}) | Active?:{IsActive}";
+        public override string ToString()
+        {
+            return $"Name:\"{Name}\" | Pos:({Position}) | Active?:{IsActive}";
+        }
     }
 }
