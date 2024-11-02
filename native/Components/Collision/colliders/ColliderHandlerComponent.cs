@@ -20,10 +20,7 @@
 
         public string Name { get; set; }
 
-        /// <inheritdoc/>
         public bool IsActive { get; set; }
-
-        public event EventHandler? ComponentModifyEvent;
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 
@@ -31,7 +28,6 @@
 
         private List<SCEObject> ObjectList { get => World.ObjectList; }
 
-        /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is World)

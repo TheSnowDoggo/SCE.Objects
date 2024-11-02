@@ -58,10 +58,15 @@
 
         public string Name { get; set; }
 
-        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
-        public event EventHandler? ComponentModifyEvent;
+        public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
+        {
+            if (holder is not SCEObject)
+            {
+                throw new InvalidCContainerHolderException("CContainerHolder must be Object.");
+            }
+        }
 
         /// <summary>
         /// Creates a shallow copy of this instance.
@@ -73,15 +78,6 @@
         public ImageComponent Clone()
         {
             return new(Name, Image.Clone());
-        }
-
-        /// <inheritdoc/>
-        public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
-        {
-            if (holder is not SCEObject)
-            {
-                throw new InvalidCContainerHolderException("CContainerHolder must be Object.");
-            }
         }
 
         /// <inheritdoc/>

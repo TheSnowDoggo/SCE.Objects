@@ -53,10 +53,7 @@
 
         public string Name { get; set; }
 
-        /// <inheritdoc/>
         public bool IsActive { get; set; }
-
-        public event EventHandler? ComponentModifyEvent;
 
         /// <inheritdoc/>
         public bool IsListening { get; set; } = DefaultListeningState;
@@ -111,7 +108,6 @@
             return ConvertToCollisionGrid((DisplayMap)image, excludedBgColor);
         }
 
-        /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is SCEObject)

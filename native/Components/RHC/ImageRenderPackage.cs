@@ -14,6 +14,10 @@
         {
             Image = image;
             Offset = offset;
+
+            AlignedPosition = Image.Position + Offset;
+            AlignedPositionCorner = AlignedPosition + Image.Dimensions;
+            AlignedArea = new(AlignedPosition, AlignedPositionCorner); 
         }
 
         /// <summary>
@@ -29,16 +33,16 @@
         /// <summary>
         /// Gets the image aligned position offset by the offset.
         /// </summary>
-        public Vector2Int OffsetAlignedPosition { get => Image.Position + Offset; }
+        public Vector2Int AlignedPosition { get; }
 
         /// <summary>
         /// Gets the image aligned position corner offset by the offset.
         /// </summary>
-        public Vector2Int OffsetAlignedPositionCorner { get => Image.Position + Image.Dimensions + Offset; }
+        public Vector2Int AlignedPositionCorner { get; }
 
         /// <summary>
         /// Gets the image aligned area offset by the offset.
         /// </summary>
-        public Area2DInt OffsetAlignedArea { get => new(OffsetAlignedPosition, OffsetAlignedPositionCorner); }
+        public Area2DInt AlignedArea { get; }
     }
 }

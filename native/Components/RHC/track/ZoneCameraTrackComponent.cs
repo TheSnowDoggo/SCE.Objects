@@ -75,10 +75,8 @@
         {
         }
 
-        /// <inheritdoc/>
         public string Name { get; set; }
 
-        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
         /// <summary>
@@ -118,8 +116,6 @@
         /// </summary>
         public Anchor CameraAnchor { get; set; }
 
-        public event EventHandler? ComponentModifyEvent; 
-
         private Vector2Int ObjectAlignedZonePosition => Object.GridPosition + ZoneAnchor.GetAlignedOffset(ZoneDimensions);
 
         private Area2DInt BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
@@ -132,8 +128,6 @@
 
         private Camera Camera { get => (Camera)CContainer.CContainerHolder; }
 
-
-        /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder cContainerHolder)
         {
             if (cContainerHolder is Camera)
@@ -146,7 +140,6 @@
             }
         }
 
-        /// <inheritdoc/>
         public void Update()
         {
             Camera.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + CameraAnchor.GetAlignedOffset(Camera.Dimensions));

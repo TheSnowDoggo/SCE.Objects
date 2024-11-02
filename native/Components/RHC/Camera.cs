@@ -88,12 +88,12 @@
         /// <summary>
         /// Gets the GridArea of this instance aligned to its WorldPosition.
         /// </summary>
-        public Area2DInt WorldAlignedArea => GridArea + WorldPositionInt;
+        public Area2DInt WorldAlignedArea { get => GridArea + WorldPositionInt; }
 
         /// <summary>
         /// Gets or sets the position of this instance in the WorldSpace.
         /// </summary>
-        public Vector2 WorldPosition { get; set; } = Vector2.Zero;
+        public Vector2 WorldPosition { get; set; }
 
         /// <inheritdoc/>
         public CContainer CContainer { get; }

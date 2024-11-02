@@ -56,12 +56,8 @@
 
         public string Name { get; set; }
 
-        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
-        public event EventHandler? ComponentModifyEvent;
-
-        /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is not SCEObject)

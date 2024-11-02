@@ -40,10 +40,7 @@
 
         public string Name { get; set; }
 
-        /// <inheritdoc/>
         public bool IsActive { get; set; }
-
-        public event EventHandler? ComponentModifyEvent;
 
         /// <summary>
         /// Gets or sets the controlled camera.
@@ -59,7 +56,6 @@
 
         private Camera Camera { get => (Camera)CContainer.CContainerHolder; }
 
-        /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is Camera)

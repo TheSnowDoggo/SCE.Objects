@@ -24,9 +24,11 @@
         /// </summary>
         /// <param name="dimensions">The dimensions of the world space.</param>
         /// <param name="isActive">The initial active state of the world space.</param>
-        public WorldSpaceRHC(Vector2Int dimensions, bool isActive = DefaultActiveState)
+        public WorldSpaceRHC(string name, Vector2Int dimensions, bool isActive = DefaultActiveState)
         {
             Image = new(dimensions, isActive);
+
+            Name = name;
         }
 
         /// <summary>
@@ -48,7 +50,6 @@
         /// </summary>
         public Area2DInt GridArea { get => Image.GridArea; }
 
-        /// <inheritdoc/>
         public string Name { get; set; }
 
         /// <summary>
@@ -59,8 +60,6 @@
             get => Image.IsActive;
             set => Image.IsActive = value;
         }
-
-        public event EventHandler? ComponentModifyEvent;
 
         /// <summary>
         /// Gets or sets the <see cref="Vector2Int"/> position of the world space.
@@ -88,12 +87,12 @@
         /// <summary>
         /// Gets the camera list of the world space.
         /// </summary>
-        public List<Camera> CameraList => cameraList;
+        public List<Camera> CameraList { get => cameraList; }
 
         /// <summary>
         /// Gets a value indicating whether the world space contains any camera.
         /// </summary>
-        public bool HasCamera => CameraList.Count != 0;
+        public bool HasCamera { get => CameraList.Count != 0; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the world space should render when GameHandler calls OnUpdate, rather called through IRenderable.
@@ -121,9 +120,9 @@
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 
-        private World World => (World)CContainer.CContainerHolder;
+        private World World { get => (World)CContainer.CContainerHolder; }
 
-        private List<SCEObject> ObjectList => World.ObjectList;
+        private List<SCEObject> ObjectList { get => World.ObjectList; }
 
         /// <inheritdoc/>
         public Image GetImage()
@@ -136,7 +135,6 @@
             return Image;
         }
 
-        /// <inheritdoc/>
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is World)
@@ -149,7 +147,6 @@
             }
         }
 
-        /// <inheritdoc/>
         public void Update()
         {
             if (IsActive && RenderOnUpdate)
@@ -250,23 +247,7 @@
 
         private void SortRenderList()
         {
-            bool swapped;
-            do
-            {
-                swapped = false;
-                for (int i = 1; i < renderList.Count; i++)
-                {
-                    ImageRenderPackage current = renderList[i], last = renderList[i - 1];
-
-                    if (last.Image.Layer > current.Image.Layer)
-                    {
-                        (renderList[i], renderList[i - 1]) = (last, current);
-
-                        swapped = true;
-                    }
-                }
-            }
-            while (swapped);
+            renderList.Sort((left, right) => left.Image.Layer - right.Image.Layer);
         }
 
         private void LoadRenderListToWorldSpace()
@@ -289,9 +270,9 @@
 
         private void MapImageComponentWithinArea(ImageRenderPackage renderPackage, Area2DInt area)
         {
-            Vector2Int alignedImagePosition = renderPackage.OffsetAlignedPosition;
+            Vector2Int alignedImagePosition = renderPackage.AlignedPosition;
 
-            Area2DInt alignedResizedImageArea = area.TrimArea(renderPackage.OffsetAlignedArea);
+            Area2DInt alignedResizedImageArea = area.TrimArea(renderPackage.AlignedArea);
 
             Area2DInt resizedImageGridArea = alignedResizedImageArea - alignedImagePosition;
 
