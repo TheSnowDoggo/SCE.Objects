@@ -8,7 +8,7 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for zone-based object camera tracking.
     /// </summary>
-    public class ZoneCameraTrackComponent : IComponent
+    public class ZoneCameraTrackComponentV2 : IComponent
     {
         private const bool DefaultActiveState = true;
 
@@ -17,7 +17,7 @@
         private Vector2Int zoneDimensions;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponent"/> class.
+        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponentV2"/> class.
         /// </summary>
         /// <param name="obj">The objcet to track.</param>
         /// <param name="boundingArea">The area the zone is bounded to.</param>
@@ -26,7 +26,7 @@
         /// <param name="cameraAnchor">The anchor of the camera.</param>
         /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, Anchor cameraAnchor, bool isActive = DefaultActiveState)
+        public ZoneCameraTrackComponentV2(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, Anchor cameraAnchor, bool isActive = DefaultActiveState)
         {
             Name = name;
 
@@ -49,7 +49,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponent"/> class.
+        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponentV2"/> class.
         /// </summary>
         /// <param name="obj">The objcet to track.</param>
         /// <param name="boundingArea">The area the zone is bounded to.</param>
@@ -57,20 +57,20 @@
         /// <param name="zoneAnchor">The anchor of the zone.</param>
         /// /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, bool isActive = DefaultActiveState)
+        public ZoneCameraTrackComponentV2(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, bool isActive = DefaultActiveState)
             : this(name, obj, boundingArea, zoneDimensions, zoneAnchor, new Anchor(), isActive)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponent"/> class.
+        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponentV2"/> class.
         /// </summary>
         /// <param name="obj">The objcet to track.</param>
         /// <param name="boundingArea">The area the zone is bounded to.</param>
         /// <param name="zoneDimensions">The dimensions of the zone.</param>
         /// /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
+        public ZoneCameraTrackComponentV2(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
             : this(name, obj, boundingArea, zoneDimensions, new Anchor(), isActive)
         {
         }
@@ -126,17 +126,17 @@
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 
-        private Camera Camera { get => (Camera)CContainer.CContainerHolder; }
+        private CameraV2 Camera { get => (CameraV2)CContainer.CContainerHolder; }
 
         public void SetCContainer(CContainer? cContainer, ICContainerHolder cContainerHolder)
         {
-            if (cContainerHolder is Camera)
+            if (cContainerHolder is CameraV2)
             {
                 this.cContainer = cContainer;
             }
             else
             {
-                throw new InvalidCContainerHolderException("CContainerHolder is not Camera.");
+                throw new InvalidCContainerHolderException("CContainerHolder is not CameraV2.");
             }
         }
 

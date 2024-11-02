@@ -10,6 +10,8 @@
         private const bool DefaultActiveState = true;
         private const bool DefaultUpdateOnRender = false;
 
+        public readonly List<ImageRenderPackage> renderList = new();
+
         private Vector2 worldPosition;
 
         /// <summary>
@@ -25,6 +27,10 @@
             WorldSpace = worldSpace;
 
             CContainer = new(this, cList);
+
+            OnUpdateWorldPosition();
+
+            OnResize += Camera_OnImageResize;
         }
 
         /// <summary>
@@ -76,24 +82,60 @@
         /// <inheritdoc/>
         public override Image GetImage()
         {
+            Render();
             return this;
         }
 
-        public void FillBackground(Color bgColor)
+        public void LoadIRP(ImageRenderPackage irp)
         {
-            BgColorFill(bgColor);
+            renderList.Add(irp);
+        }
+
+        private void Render()
+        {
+            FillBackground(WorldSpace.BgColor);
+            SortRenderList();
+            LoadRenderList();
+            renderList.Clear();
+        }
+
+        private void FillBackground(Color bgColor)
+        {
+            if (bgColor == Color.Black)
+            {
+                Clear();
+            }
+            else if (bgColor != Color.Transparent)
+            {
+                Fill(new Pixel(bgColor));
+            }
+        }
+
+        private void SortRenderList()
+        {
+            renderList.Sort((a, b) => a.Image.Layer < b.Image.Layer ? -1 : 1);
+        }
+
+        private void LoadRenderList()
+        {
+            foreach (ImageRenderPackage irp in renderList)
+            {
+                RenderIRP(irp);
+            }
         }
 
         /// <summary>
         /// Renders the specified irp to the camera.
         /// </summary>
-        public void RenderIRP(ImageRenderPackage irp)
+        private void RenderIRP(ImageRenderPackage irp)
         {
-            Area2DInt area = irp.AlignedArea;
+            Area2DInt trimmedArea = WorldAlignedArea.TrimArea(irp.AlignedArea);
 
-            Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(area) - irp.Offset;
+            Vector2Int cameraOffsetPosition = trimmedArea.Start - WorldPositionInt;
 
-            MapAreaFrom(irp.Image, trimmedGridArea, irp.Offset, true);
+            Area2DInt trimmedGridArea = trimmedArea - irp.AlignedPosition;
+
+            MapToArea(irp.Image, trimmedGridArea, cameraOffsetPosition, true);
         }
 
         private void OnUpdateWorldPosition()
@@ -101,6 +143,11 @@
             WorldPositionInt = (Vector2Int)WorldPosition.Round();
 
             WorldAlignedArea = GridArea + WorldPositionInt;
+        }
+
+        private void Camera_OnImageResize()
+        {
+            OnUpdateWorldPosition();
         }
     }
 }

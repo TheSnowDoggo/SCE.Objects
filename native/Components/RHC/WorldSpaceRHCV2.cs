@@ -13,7 +13,7 @@
 
         private readonly List<CameraV2> cameraList = new();
 
-        private readonly List<(Area2DInt, int)> cachedCameraAreaList = new();
+        private readonly List<CameraV2> activeCameraList = new();
 
         private CContainer? cContainer;
 
@@ -81,12 +81,23 @@
 
         private void Render()
         {
-            LoadCachedCameraAreaList();
+            LoadActiveCameras();
 
-            RenderObjects();
+            LoadObjects();
         }
 
-        private void RenderObjects()
+        private void LoadActiveCameras()
+        {
+            foreach (CameraV2 camera in cameraList)
+            {
+                if (camera.IsActive)
+                {
+                    activeCameraList.Add(camera);
+                }
+            }
+        }
+
+        private void LoadObjects()
         {
             foreach (SCEObject obj in ObjectList)
             {
@@ -108,45 +119,22 @@
             }
         }
 
-        private void TryLoadActiveRenderable(IRenderable renderable, Vector2Int offset)
+        private void TryLoadActiveRenderable(IRenderable renderable, Vector2Int objectOffset)
         {
             Image image = renderable.GetImage();
 
-            Vector2Int imageOffsetPos = image.Position + offset;
+            Vector2Int imageOffsetPos = image.Position + objectOffset;
 
             Vector2Int imageOffsetPosCorner = imageOffsetPos + image.Dimensions;
 
-            foreach ((Area2DInt, int) package in cachedCameraAreaList)
+            foreach (CameraV2 activeCamera in activeCameraList)
             {
-                Area2DInt cameraArea = package.Item1;
-
-                if (Area2DInt.Overlaps(cameraArea.Start, cameraArea.End, imageOffsetPos, imageOffsetPosCorner))
+                if (Area2DInt.Overlaps(activeCamera.WorldAlignedArea.Start, activeCamera.WorldAlignedArea.End, imageOffsetPos, imageOffsetPosCorner))
                 {
-                    int index = package.Item2;
+                    ImageRenderPackage irp = new(image, objectOffset);
 
-                    CameraV2 camera = cameraList[index];
-
-                    ImageRenderPackage irp = new(image, offset);
-
-                    camera.RenderIRP(irp);
+                    activeCamera.LoadIRP(irp);
                 }
-            }
-        }
-
-        private void LoadCachedCameraAreaList()
-        {
-            int i = 0;
-
-            foreach (CameraV2 camera in cameraList)
-            {
-                if (camera.IsActive)
-                {
-                    camera.FillBackground(BgColor);
-
-                    cachedCameraAreaList.Add((camera.WorldAlignedArea, i));
-                }
-
-                i++;
             }
         }
     }
