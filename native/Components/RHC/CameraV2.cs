@@ -12,7 +12,11 @@
 
         public readonly List<ImageRenderPackage> renderList = new();
 
+        private readonly Queue<Area2DInt> clearQueue = new();
+
         private Vector2 worldPosition;
+
+        private Color? renderedBgColor = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.
@@ -70,6 +74,11 @@
         public Vector2Int WorldPositionInt { get; private set; }
 
         /// <summary>
+        /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
+        /// </summary>
+        public Vector2Int WorldPositionIntCorner { get; private set; }
+
+        /// <summary>
         /// Gets the GridArea of this instance aligned to its WorldPosition.
         /// </summary>
         public Area2DInt WorldAlignedArea { get; private set; }
@@ -82,7 +91,6 @@
         /// <inheritdoc/>
         public override Image GetImage()
         {
-            Render();
             return this;
         }
 
@@ -91,24 +99,38 @@
             renderList.Add(irp);
         }
 
-        private void Render()
+        public void Render()
         {
-            FillBackground(WorldSpace.BgColor);
+            SmartClear();
             SortRenderList();
             LoadRenderList();
             renderList.Clear();
         }
 
-        private void FillBackground(Color bgColor)
+        private void SmartClear()
         {
-            if (bgColor == Color.Black)
+            Color bgColor = WorldSpace.BgColor;
+
+            if (bgColor == Color.Transparent)
             {
-                Clear();
+                throw new Exception("Transparent is not a valid background color.");
             }
-            else if (bgColor != Color.Transparent)
+
+            Pixel clearPixel = new(bgColor);
+            if (renderedBgColor != null && renderedBgColor != bgColor)
             {
-                Fill(new Pixel(bgColor));
+                foreach (Area2DInt area in clearQueue)
+                {
+                    FillArea(clearPixel, area);
+                }
             }
+            else
+            {
+                Fill(clearPixel);
+                renderedBgColor = bgColor;
+            }
+
+            clearQueue.Clear();
         }
 
         private void SortRenderList()
@@ -129,18 +151,23 @@
         /// </summary>
         private void RenderIRP(ImageRenderPackage irp)
         {
-            Area2DInt trimmedArea = WorldAlignedArea.TrimArea(irp.AlignedArea);
+            if (Area2DInt.Overlaps(WorldAlignedArea, irp.AlignedArea))
+            {
+                Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.AlignedArea) - irp.AlignedPosition;
 
-            Vector2Int cameraOffsetPosition = trimmedArea.Start - WorldPositionInt;
+                Vector2Int cameraOffsetPosition = irp.AlignedPosition - WorldPositionInt;
 
-            Area2DInt trimmedGridArea = trimmedArea - irp.AlignedPosition;
+                MapToArea(irp.Image, trimmedGridArea, cameraOffsetPosition, true);
 
-            MapToArea(irp.Image, trimmedGridArea, cameraOffsetPosition, true);
+                clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
+            }
         }
 
         private void OnUpdateWorldPosition()
         {
             WorldPositionInt = (Vector2Int)WorldPosition.Round();
+
+            WorldPositionIntCorner = WorldPositionInt + Dimensions;
 
             WorldAlignedArea = GridArea + WorldPositionInt;
         }
@@ -148,6 +175,10 @@
         private void Camera_OnImageResize()
         {
             OnUpdateWorldPosition();
+
+            renderList.Clear();
+            clearQueue.Clear();
+            renderedBgColor = null;
         }
     }
 }

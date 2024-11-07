@@ -43,9 +43,12 @@
         /// <inheritdoc/>
         public void Update()
         {
-            UpdateColliderLayerList();
+            if (IsActive)
+            {
+                UpdateColliderLayerList();
 
-            CheckLayersForCollisions();
+                CheckLayersForCollisions();
+            }
         }
 
         private static bool DoCollidersCollide(ICollidable collider, ICollidable other)

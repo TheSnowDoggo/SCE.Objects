@@ -163,6 +163,8 @@
         public void CleanResize(int width, int height)
         {
             Image.CleanResize(width, height);
+            Image.BgColorFill(BgColor);
+            loadedAreaList.Clear();
         }
 
         /// <summary>
@@ -171,7 +173,7 @@
         /// <param name="dimensions">The new dimensions of the world space.</param>
         public void CleanResize(Vector2Int dimensions)
         {
-            Image.CleanResize(dimensions);
+            CleanResize(dimensions.X, dimensions.Y);
         }
 
         private void SmartClear()

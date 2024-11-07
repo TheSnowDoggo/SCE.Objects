@@ -13,7 +13,7 @@
 
         private readonly List<CameraV2> cameraList = new();
 
-        private readonly List<CameraV2> activeCameraList = new();
+        private readonly Queue<CameraV2> cameraRenderQueue = new();
 
         private CContainer? cContainer;
 
@@ -81,18 +81,20 @@
 
         private void Render()
         {
-            LoadActiveCameras();
+            LoadCameraQueue();
 
             LoadObjects();
+
+            RenderCameraQueue();
         }
 
-        private void LoadActiveCameras()
+        private void LoadCameraQueue()
         {
             foreach (CameraV2 camera in cameraList)
             {
                 if (camera.IsActive)
                 {
-                    activeCameraList.Add(camera);
+                    cameraRenderQueue.Enqueue(camera);
                 }
             }
         }
@@ -123,19 +125,32 @@
         {
             Image image = renderable.GetImage();
 
-            Vector2Int imageOffsetPos = image.Position + objectOffset;
-
-            Vector2Int imageOffsetPosCorner = imageOffsetPos + image.Dimensions;
-
-            foreach (CameraV2 activeCamera in activeCameraList)
+            if (image.IsActive)
             {
-                if (Area2DInt.Overlaps(activeCamera.WorldAlignedArea.Start, activeCamera.WorldAlignedArea.End, imageOffsetPos, imageOffsetPosCorner))
-                {
-                    ImageRenderPackage irp = new(image, objectOffset);
+                Vector2Int imageAlignedPos = image.Position + objectOffset;
 
-                    activeCamera.LoadIRP(irp);
+                Vector2Int imageAlignedPosCorner = imageAlignedPos + image.Dimensions;
+
+                foreach (CameraV2 camera in cameraRenderQueue)
+                {
+                    if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, imageAlignedPos, imageAlignedPosCorner))
+                    {
+                        ImageRenderPackage irp = new(image, objectOffset);
+
+                        camera.LoadIRP(irp);
+                    }
                 }
             }
+        }
+
+        private void RenderCameraQueue()
+        {
+            foreach (CameraV2 camera in cameraRenderQueue)
+            {
+                camera.Render();
+            }
+
+            cameraRenderQueue.Clear();
         }
     }
 }
