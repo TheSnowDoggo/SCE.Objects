@@ -211,14 +211,16 @@
         {
             renderList.Clear();
 
-            if (!HasCamera || AnyCachedCameraWorldAlignedAreaOverlapsWorldSpace())
+            if (HasCamera && !AnyCachedCameraWorldAlignedAreaOverlapsWorldSpace())
             {
-                foreach (SCEObject obj in ObjectList)
+                return;
+            }
+
+            foreach (SCEObject obj in ObjectList)
+            {
+                if (obj.IsActive)
                 {
-                    if (obj.IsActive)
-                    {
-                        TryAddRenderableComponents(obj);
-                    }
+                    TryAddRenderableComponents(obj);
                 }
             }
         }
@@ -238,18 +240,31 @@
 
         private void TryAddToRenderList(Image image, Vector2Int offset)
         {
-            if (image.IsActive && AnyCachedCameraWorldAlignedAreaOverlapsImage(image, offset))
+            if ((!HasCamera && Area2DInt.Overlaps(CachedGridArea, image.GridArea + offset)) || (HasCamera && AnyCachedCameraWorldAlignedAreaOverlapsArea(image.GridArea + offset)))
             {
-                if ((!HasCamera && Area2DInt.Overlaps(CachedGridArea, image.GridArea + offset)) || (HasCamera && AnyCachedCameraWorldAlignedAreaOverlapsArea(image.GridArea + offset)))
-                {
-                    renderList.Add(new ImageRenderPackage(image, offset));
-                }
+                renderList.Add(new ImageRenderPackage(image, offset));
             }
         }
 
         private void SortRenderList()
         {
-            renderList.Sort((left, right) => left.Image.Layer - right.Image.Layer);
+            bool swapped;
+            do
+            {
+                swapped = false;
+                for (int i = 1; i < renderList.Count; i++)
+                {
+                    ImageRenderPackage current = renderList[i], last = renderList[i - 1];
+
+                    if (last.Image.Layer > current.Image.Layer)
+                    {
+                        (renderList[i], renderList[i - 1]) = (last, current);
+
+                        swapped = true;
+                    }
+                }
+            }
+            while (swapped);
         }
 
         private void LoadRenderListToWorldSpace()
