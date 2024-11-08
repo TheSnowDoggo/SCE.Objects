@@ -27,9 +27,11 @@
 
         public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, CList cList)
         {
-            image = new(dimensions, bgColor);
+            image = new(dimensions);
 
             WorldSpace = worldSpace;
+
+            BgColor = bgColor;
 
             CContainer = new(this, cList);
 
@@ -134,6 +136,20 @@
             renderList.Clear();
         }
 
+        public void Resize(Vector2Int dimensions)
+        {
+            if (dimensions <= 0)
+            {
+                throw new ArgumentException("Dimensions cannot be less than 0.");
+            }
+
+            image.CleanResize(dimensions);
+
+            renderList.Clear();
+            clearQueue.Clear();
+            renderedBgColor = null;
+        }
+
         private void SmartClear()
         {
             Pixel clearPixel = new(BgColor);
@@ -190,15 +206,6 @@
             WorldPositionIntCorner = WorldPositionInt + Dimensions;
 
             WorldAlignedArea = image.GridArea + WorldPositionInt;
-        }
-
-        private void Camera_OnImageResize()
-        {
-            OnUpdateWorldPosition();
-
-            renderList.Clear();
-            clearQueue.Clear();
-            renderedBgColor = null;
         }
     }
 }
