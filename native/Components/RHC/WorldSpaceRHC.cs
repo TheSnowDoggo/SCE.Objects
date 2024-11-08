@@ -57,8 +57,6 @@
 
         private World World { get => (World)CContainer.CContainerHolder; }
 
-        private IList<SCEObject> ObjectList { get => World.ObjectList; }
-
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is World)
@@ -98,7 +96,7 @@
 
         private void LoadObjects()
         {
-            foreach (SCEObject obj in ObjectList)
+            foreach (SCEObject obj in World)
             {
                 if (obj.IsActive)
                 {

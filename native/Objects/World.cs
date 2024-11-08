@@ -29,11 +29,6 @@
         {
         }
 
-        /// <summary>
-        /// Gets the object list.
-        /// </summary>
-        public IList<SCEObject> ObjectList { get => objectList.AsReadOnly(); }
-
         /// <inheritdoc/>
         public CContainer CContainer { get; }
 
