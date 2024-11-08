@@ -9,8 +9,6 @@
     {
         private const bool DefaultActiveState = true;
 
-        private const Color DefaultBgColor = Color.Black;
-
         private readonly List<Camera> cameraList = new();
 
         private readonly Queue<Camera> cameraRenderQueue = new();
@@ -21,20 +19,9 @@
         /// Initializes a new instance of the <see cref="WorldSpaceRHC"/> class.
         /// </summary>
         /// <param name="name">The component name.</param>
-        /// <param name="bgColor">The base background color.</param>
-        public WorldSpaceRHC(string name, Color bgColor)
+        public WorldSpaceRHC(string name)
         {
             Name = name;
-            BgColor = bgColor;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorldSpaceRHC"/> class.
-        /// </summary>
-        /// <param name="name">The component name.</param>
-        public WorldSpaceRHC(string name)
-            : this(name, DefaultBgColor)
-        {
         }
 
         public string Name { get; set; }

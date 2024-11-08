@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\native",
+    "\\native\\Components",
+    "\\native\\Components\\RHC"
   ],
-  "SelectedNode": "\\SCECorePlus.sln",
+  "SelectedNode": "\\native\\Components\\RHC\\Camera.cs",
   "PreviewInSolutionExplorer": false
 }
