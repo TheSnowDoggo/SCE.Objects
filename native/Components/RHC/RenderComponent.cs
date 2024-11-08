@@ -18,20 +18,17 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderComponent"/> class.
         /// </summary>
-        /// <param name="isActive">The initial active state of the render component.</param>
-        public RenderComponent(string name, bool isActive = DefaultActiveState)
+        public RenderComponent(string name)
         {
             Name = name;
-            IsActive = isActive;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderComponent"/> class.
         /// </summary>
         /// <param name="renderable">The initial <see cref="IRenderable"/>.</param>
-        /// <param name="isActive">The initial active state of the render component.</param>
-        public RenderComponent(string name, IRenderable renderable, bool isActive = DefaultActiveState)
-            : this(name, isActive)
+        public RenderComponent(string name, IRenderable renderable)
+            : this(name)
         {
             Renderable = renderable;
         }
@@ -56,7 +53,7 @@
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = DefaultActiveState;
 
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {

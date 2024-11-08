@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Components.RHS
+﻿namespace SCECorePlus.Components.RHS.Trackers
 {
     using SCEComponents;
 
@@ -18,29 +18,15 @@
         /// Initializes a new instance of the <see cref="StaticCameraTrackComponent"/> class.
         /// </summary>
         /// <param name="obj">The object to track.</param>
-        /// <param name="anchor">The position anchor of the camera.</param>
-        /// <param name="isActive">The active state of the component.</param>
-        public StaticCameraTrackComponent(string name, SCEObject obj, Anchor anchor, bool isActive = DefaultActiveState)
+        public StaticCameraTrackComponent(string name, SCEObject obj)
         {
             Name = name;
             Object = obj;
-            Anchor = anchor;
-            IsActive = isActive;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StaticCameraTrackComponent"/> class.
-        /// </summary>
-        /// <param name="obj">The object to track.</param>
-        /// <param name="isActive">The active state of the component.</param>
-        public StaticCameraTrackComponent(string name, SCEObject obj, bool isActive = DefaultActiveState)
-            : this(name, obj, new Anchor(), isActive)
-        {
         }
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = DefaultActiveState;
 
         /// <summary>
         /// Gets or sets the controlled camera.

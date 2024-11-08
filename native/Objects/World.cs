@@ -47,8 +47,6 @@
         /// </summary>
         public int Objects { get => objectList.Count; }
 
-        public event EventHandler<WorldModifyEventArgs>? WorldModifyEvent;
-
         /// <summary>
         /// Gets the object at the specified index.
         /// </summary>
@@ -103,7 +101,6 @@
         public void Add(SCEObject obj)
         {
             objectList.Add(obj);
-            OnAdd(obj);
         }
 
         /// <summary>
@@ -137,14 +134,7 @@
         /// <returns><see langword="true"/> if <paramref name="obj"/> is successfully removed; otherwise, <see langword="false"/>.</returns>
         public bool Remove(SCEObject obj)
         {
-            bool successful = objectList.Remove(obj);
-
-            if (successful)
-            {
-                OnRemove(obj);
-            }
-
-            return successful;
+            return objectList.Remove(obj);
         }
 
         /// <summary>
@@ -154,7 +144,6 @@
         public void RemoveAt(int index)
         {
             objectList.RemoveAt(index);
-            OnRemove(objectList[index]);
         }
 
         /// <summary>
@@ -246,34 +235,6 @@
         public int IndexOf(SCEObject obj)
         {
             return objectList.IndexOf(obj);
-        }
-
-        private void OnAdd(SCEObject obj)
-        {
-            obj.ObjectModifyEvent += World_ObjectModifyEvent;
-            WorldModifyEvent?.Invoke(this, new(obj, WorldModifyEventArgs.ModifyType.Add));
-        }
-
-        private void OnRemove(SCEObject obj)
-        {
-            obj.ObjectModifyEvent -= World_ObjectModifyEvent;
-            WorldModifyEvent?.Invoke(this, new(obj, WorldModifyEventArgs.ModifyType.Remove));
-        }
-
-        private void World_ObjectModifyEvent(object? sender, ObjectModifyEventArgs e)
-        {
-            if (sender is SCEObject obj)
-            {
-                WorldModifyEventArgs.ModifyType type = e.Type switch
-                {
-                    ObjectModifyEventArgs.ModifyType.Name => WorldModifyEventArgs.ModifyType.ModifyName,
-                    ObjectModifyEventArgs.ModifyType.Position => WorldModifyEventArgs.ModifyType.ModifyPosition,
-                    ObjectModifyEventArgs.ModifyType.IsActive => WorldModifyEventArgs.ModifyType.ModifyIsActive,
-                    _ => throw new NotImplementedException()
-                };
-
-                WorldModifyEvent?.Invoke(this, new(obj, type));
-            }
         }
     }
 }

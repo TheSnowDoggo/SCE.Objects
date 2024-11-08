@@ -18,40 +18,20 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public BoxColliderComponent(string name, Vector2Int dimensions, byte layer, Anchor anchor, bool isActive = DefaultActiveState)
+        public BoxColliderComponent(string name, Vector2Int dimensions)
         {
             if (dimensions < 1)
             {
                 throw new ArgumentException("Dimensions are too small.");
             }
 
-            Dimensions = dimensions;
-
             Name = name;
-            Layer = layer;
-            Anchor = anchor;
-            IsActive = isActive;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
-        /// </summary>
-        public BoxColliderComponent(string name, Vector2Int dimensions, byte layer, bool isActive = DefaultActiveState)
-            : this(name, dimensions, layer, new Anchor(), isActive)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
-        /// </summary>
-        public BoxColliderComponent(string name, Vector2Int dimensions, bool isActive = DefaultActiveState)
-            : this(name, dimensions, DefaultLayer, isActive)
-        {
+            Dimensions = dimensions;
         }
         
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = DefaultActiveState;
 
         /// <inheritdoc/>
         public bool IsListening { get; set; } = DefaultListeningState;
@@ -60,7 +40,7 @@
         public bool IsReceiving { get; set; } = DefaultReceivingState;
 
         /// <inheritdoc/>
-        public byte Layer { get; set; }
+        public byte Layer { get; set; } = DefaultLayer;
 
         /// <inheritdoc/>
         public ICollidable.CallOnCollision? OnCollision { get; set; }

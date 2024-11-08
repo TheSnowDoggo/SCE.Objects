@@ -12,15 +12,14 @@
 
         private CContainer? cContainer;
 
-        public ColliderHandlerComponent(string name, bool isActive = DefaultActiveState)
+        public ColliderHandlerComponent(string name)
         {
             Name = name;
-            IsActive = isActive;
         }
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = DefaultActiveState;
 
         private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 

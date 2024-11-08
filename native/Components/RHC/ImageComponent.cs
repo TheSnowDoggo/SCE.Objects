@@ -13,30 +13,29 @@
     {
         private const bool DefaultActiveState = true;
 
-        private CContainer? cContainer;
-
         private Image? image;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageComponent"/> class.
         /// </summary>
-        /// <param name="isActive">The initial active state of the image component.</param>
-        public ImageComponent(string name, bool isActive = DefaultActiveState)
+        public ImageComponent(string name)
         {
             Name = name;
-            IsActive = isActive;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageComponent"/> class.
         /// </summary>
         /// <param name="image">The initial image.</param>
-        /// <param name="isActive">The initial active state of the image component.</param>
-        public ImageComponent(string name, Image image, bool isActive = DefaultActiveState)
-            : this(name, isActive)
+        public ImageComponent(string name, Image image)
+            : this(name)
         {
             Image = image;
         }
+
+        public string Name { get; set; }
+
+        public bool IsActive { get; set; } = DefaultActiveState;
 
         /// <summary>
         /// Gets or sets the stored Image of this instance.
@@ -55,10 +54,6 @@
         /// Gets a value indicating whether this image component has an image.
         /// </summary>
         public bool HasImage { get => image != null; }
-
-        public string Name { get; set; }
-
-        public bool IsActive { get; set; }
 
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {

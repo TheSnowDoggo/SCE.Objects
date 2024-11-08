@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Components.RHS
+﻿namespace SCECorePlus.Components.RHS.Trackers
 {
     using SCEComponents;
 
@@ -26,53 +26,22 @@
         /// <param name="cameraAnchor">The anchor of the camera.</param>
         /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, Anchor cameraAnchor, bool isActive = DefaultActiveState)
+        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
         {
+            if (zoneDimensions <= 0)
+            {
+                throw new ArgumentException("Zone dimensions must be greater than zero.");
+            }
+
             Name = name;
 
             Object = obj;
 
             BoundingArea = boundingArea;
 
-            if (zoneDimensions <= 0)
-            {
-                throw new ArgumentException("Zone dimensions must be greater than zero.");
-            }
-
             ZoneDimensions = zoneDimensions;
 
-            ZoneAnchor = zoneAnchor;
-
-            CameraAnchor = cameraAnchor;
-
             IsActive = isActive;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponent"/> class.
-        /// </summary>
-        /// <param name="obj">The objcet to track.</param>
-        /// <param name="boundingArea">The area the zone is bounded to.</param>
-        /// <param name="zoneDimensions">The dimensions of the zone.</param>
-        /// <param name="zoneAnchor">The anchor of the zone.</param>
-        /// /// <param name="isActive">The active state of the component.</param>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, Anchor zoneAnchor, bool isActive = DefaultActiveState)
-            : this(name, obj, boundingArea, zoneDimensions, zoneAnchor, new Anchor(), isActive)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ZoneCameraTrackComponent"/> class.
-        /// </summary>
-        /// <param name="obj">The objcet to track.</param>
-        /// <param name="boundingArea">The area the zone is bounded to.</param>
-        /// <param name="zoneDimensions">The dimensions of the zone.</param>
-        /// /// <param name="isActive">The active state of the component.</param>
-        /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
-            : this(name, obj, boundingArea, zoneDimensions, new Anchor(), isActive)
-        {
         }
 
         public string Name { get; set; }
@@ -143,12 +112,6 @@
         public void Update()
         {
             Camera.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + CameraAnchor.GetAlignedOffset(Camera.Dimensions));
-        }
-
-        private enum CameraType : byte
-        {
-            Camera,
-            CameraV2
         }
     }
 }

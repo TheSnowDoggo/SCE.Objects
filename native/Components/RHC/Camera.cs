@@ -5,161 +5,200 @@
     /// <summary>
     /// Represents a camera in a world space.
     /// </summary>
-    public class Camera : Image, IRenderable, ICContainerHolder
+    public class Camera : IRenderable, ICContainerHolder
     {
         private const bool DefaultActiveState = true;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Camera"/> class.
-        /// </summary>
-        /// <param name="worldSpace">The WorldSpace to render from.</param>
-        /// <param name="dimensions">The dimensions of the camera.</param>
-        /// <param name="cList">The initial cList of the camera.</param>
-        /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList, bool isActive = DefaultActiveState)
-            : base(dimensions, isActive)
+        private const bool DefaultUpdateOnRender = false;
+
+        private const Color DefaultBgColor = Color.Black;
+
+        private readonly Image image;
+
+        public readonly List<ImageRenderPackage> renderList = new();
+
+        private readonly Queue<Area2DInt> clearQueue = new();
+
+        private Vector2 worldPosition;
+
+        private Color? renderedBgColor = null;
+
+        private Color bgColor;
+
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, CList cList)
         {
+            image = new(dimensions, bgColor);
+
             WorldSpace = worldSpace;
 
             CContainer = new(this, cList);
+
+            OnUpdateWorldPosition();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Camera"/> class.
-        /// </summary>
-        /// <param name="worldSpace">The WorldSpace to render from.</param>
-        /// <param name="dimensions">The dimensions of the camera.</param>
-        /// <param name="bgColor">The background color of the camera.</param>
-        /// <param name="cList">The initial cList of the camera.</param>
-        /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, CList cList, bool isActive = DefaultActiveState)
-            : base(dimensions, bgColor, isActive)
-        {
-            WorldSpace = worldSpace;
-            BgColor = bgColor;
-
-            CContainer = new(this, cList);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Camera"/> class.
-        /// </summary>
-        /// <param name="worldSpace">The WorldSpace to render from.</param>
-        /// <param name="dimensions">The dimensions of the camera.</param>
-        /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, bool isActive = DefaultActiveState)
-            : this(worldSpace, dimensions, new CList(), isActive)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor)
+            : this(worldSpace, dimensions, bgColor, new CList())
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Camera"/> class.
-        /// </summary>
-        /// <param name="worldSpace">The WorldSpace to render from.</param>
-        /// <param name="dimensions">The dimensions of the camera.</param>
-        /// <param name="bgColor">The background color of the camera.</param>
-        /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, bool isActive = DefaultActiveState)
-            : this(worldSpace, dimensions, bgColor, new CList(), isActive)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList)
+            : this(worldSpace, dimensions, DefaultBgColor, cList)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Camera"/> class.
-        /// </summary>
-        /// <param name="image">The base image of the camera.</param>
-        /// <param name="worldSpace">The WorldSpace to render from.</param>
-        /// <param name="bgColor">The background color of the camera.</param>
-        /// <param name="isActive">The active render status of the camera.</param>
-        public Camera(Image image, WorldSpaceRHC worldSpace, Color bgColor, CList cList, bool isActive = DefaultActiveState)
-            : base(image)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions)
+            : this(worldSpace, dimensions, DefaultBgColor)
         {
-            WorldSpace = worldSpace;
-            BgColor = bgColor;
-            IsActive = isActive;
-            CContainer = new(this, cList);
         }
 
-        /// <summary>
-        /// Gets or sets the delegate called after rendering WorldSpace and before returning itself in GetImage (IRenderable)
-        /// </summary>
-        public Action? AfterRender { get; set; }
+        public bool IsActive { get; set; } = DefaultActiveState;
 
-        /// <summary>
-        /// Gets the GridArea of this instance aligned to its WorldPosition.
-        /// </summary>
-        public Area2DInt WorldAlignedArea { get => GridArea + WorldPositionInt; }
+        public CContainer CContainer { get; }
+
+        public Vector2Int Position
+        {
+            get => image.Position;
+            set => image.Position = value;
+        }
+
+        public Vector2Int Dimensions { get => image.Dimensions; }
 
         /// <summary>
         /// Gets or sets the position of this instance in the WorldSpace.
         /// </summary>
-        public Vector2 WorldPosition { get; set; }
-
-        /// <inheritdoc/>
-        public CContainer CContainer { get; }
-
-        /// <summary>
-        /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
-        /// </summary>
-        public Vector2Int WorldPositionInt => (Vector2Int)WorldPosition.Round();
+        public Vector2 WorldPosition
+        {
+            get => worldPosition;
+            set
+            {
+                worldPosition = value;
+                OnUpdateWorldPosition();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the WorldSpace of this instance to render from.
         /// </summary>
         public WorldSpaceRHC WorldSpace { get; set; }
 
+        public Color BgColor
+        {
+            get => bgColor;
+            set
+            {
+                if (value == Color.Transparent)
+                {
+                    throw new ArgumentException("Background color cannot be Transparent.");
+                }
+
+                bgColor = value;
+            }
+        }
+
         /// <summary>
-        /// Gets or sets the background color of this instance.
+        /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
         /// </summary>
-        public Color BgColor { get; set; }
+        public Vector2Int WorldPositionInt { get; private set; }
+
+        /// <summary>
+        /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
+        /// </summary>
+        public Vector2Int WorldPositionIntCorner { get; private set; }
+
+        /// <summary>
+        /// Gets the GridArea of this instance aligned to its WorldPosition.
+        /// </summary>
+        public Area2DInt WorldAlignedArea { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the camera should update every component on render.
         /// </summary>
-        public bool UpdateOnRender { get; set; } = false;
+        public bool UpdateOnRender { get; set; } = DefaultUpdateOnRender;
 
         /// <inheritdoc/>
-        public override Image GetImage()
+        public Image GetImage()
         {
-            if (UpdateOnRender)
-            {
-                CContainer.Update();
-            }
-
-            OnRender?.Invoke();
-            Render();
-            AfterRender?.Invoke();
-
-            return this;
+            return image;
         }
 
-        /// <summary>
-        /// Renders this instance from WorldSpace.
-        /// </summary>
-        private void Render()
+        public void LoadIRP(ImageRenderPackage irp)
         {
-            Image worldImage = WorldSpace.GetImage();
+            renderList.Add(irp);
+        }
 
-            if (Area2DInt.Overlaps(WorldAlignedArea, worldImage.GridArea))
+        public void Render()
+        {
+            SmartClear();
+            SortRenderList();
+            LoadRenderList();
+            renderList.Clear();
+        }
+
+        private void SmartClear()
+        {
+            Pixel clearPixel = new(BgColor);
+            if (renderedBgColor != null && renderedBgColor != BgColor)
             {
-                Area2DInt fixedGridArea = worldImage.GridArea.TrimArea(WorldAlignedArea, out bool hasFixed) - WorldPositionInt;
-
-                if (hasFixed)
+                foreach (Area2DInt area in clearQueue)
                 {
-                    FillBackground();
+                    image.FillArea(clearPixel, area);
                 }
-
-                MapAreaFrom(worldImage, fixedGridArea, WorldPositionInt);
             }
             else
             {
-                FillBackground();
+                image.Fill(clearPixel);
+                renderedBgColor = BgColor;
             }
 
-            OnRender?.Invoke();
+            clearQueue.Clear();
         }
 
-        /// <inheritdoc cref="DisplayMap.Fill"/>
-        private void FillBackground() => Fill(new Pixel(BgColor));
+        private void SortRenderList()
+        {
+            renderList.Sort((a, b) => a.Image.Layer < b.Image.Layer ? -1 : 1);
+        }
+
+        private void LoadRenderList()
+        {
+            foreach (ImageRenderPackage irp in renderList)
+            {
+                RenderIRP(irp);
+            }
+        }
+
+        /// <summary>
+        /// Renders the specified irp to the camera.
+        /// </summary>
+        private void RenderIRP(ImageRenderPackage irp)
+        {
+            if (Area2DInt.Overlaps(WorldAlignedArea, irp.AlignedArea))
+            {
+                Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.AlignedArea) - irp.AlignedPosition;
+
+                Vector2Int cameraOffsetPosition = irp.AlignedPosition - WorldPositionInt;
+
+                image.MapToArea(irp.Image, trimmedGridArea, cameraOffsetPosition, true);
+
+                clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
+            }
+        }
+
+        private void OnUpdateWorldPosition()
+        {
+            WorldPositionInt = (Vector2Int)WorldPosition.Round();
+
+            WorldPositionIntCorner = WorldPositionInt + Dimensions;
+
+            WorldAlignedArea = image.GridArea + WorldPositionInt;
+        }
+
+        private void Camera_OnImageResize()
+        {
+            OnUpdateWorldPosition();
+
+            renderList.Clear();
+            clearQueue.Clear();
+            renderedBgColor = null;
+        }
     }
 }

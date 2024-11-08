@@ -18,42 +18,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MapColliderComponent"/> class.
         /// </summary>
-        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, byte layer, Anchor anchor, bool isActive = DefaultActiveState)
+        public MapColliderComponent(string name, Grid2D<bool> collisionGrid)
         {
             Name = name;
             CollisionGrid = collisionGrid;
-            Anchor = anchor;
-            Layer = layer;
-            IsActive = isActive;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
-        /// </summary>
-        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, byte layer, bool isActive = DefaultActiveState)
-            : this(name, collisionGrid, layer, new Anchor(), isActive)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
-        /// </summary>
-        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, Anchor anchor, bool isActive = DefaultActiveState)
-            : this(name, collisionGrid, DefaultLayer, anchor, isActive)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
-        /// </summary>
-        public MapColliderComponent(string name, Grid2D<bool> collisionGrid, bool isActive = DefaultActiveState)
-            : this(name, collisionGrid, DefaultLayer, isActive)
-        {
         }
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = DefaultActiveState;
 
         /// <inheritdoc/>
         public bool IsListening { get; set; } = DefaultListeningState;
@@ -62,7 +35,7 @@
         public bool IsReceiving { get; set; } = DefaultReceivingState;
 
         /// <inheritdoc/>
-        public byte Layer { get; set; }
+        public byte Layer { get; set; } = DefaultLayer;
 
         /// <inheritdoc/>
         public ICollidable.CallOnCollision? OnCollision { get; set; }
