@@ -57,7 +57,7 @@
 
         private World World { get => (World)CContainer.CContainerHolder; }
 
-        private List<SCEObject> ObjectList { get => World.ObjectList; }
+        private IList<SCEObject> ObjectList { get => World.ObjectList; }
 
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
