@@ -23,33 +23,21 @@
 
         private Color? renderedBgColor = null;
 
-        private Color bgColor;
+        private Color bgColor = DefaultBgColor;
 
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor, CList cList)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList)
         {
             image = new(dimensions);
 
             WorldSpace = worldSpace;
-
-            BgColor = bgColor;
 
             CContainer = new(this, cList);
 
             OnUpdateWorldPosition();
         }
 
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, Color bgColor)
-            : this(worldSpace, dimensions, bgColor, new CList())
-        {
-        }
-
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList)
-            : this(worldSpace, dimensions, DefaultBgColor, cList)
-        {
-        }
-
         public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions)
-            : this(worldSpace, dimensions, DefaultBgColor)
+            : this(worldSpace, dimensions, new CList())
         {
         }
 
@@ -147,7 +135,10 @@
 
             renderList.Clear();
             clearQueue.Clear();
+
             renderedBgColor = null;
+
+            OnUpdateWorldPosition();
         }
 
         private void SmartClear()
