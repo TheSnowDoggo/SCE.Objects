@@ -1,8 +1,6 @@
-﻿namespace SCECorePlus.Components.Collision
+﻿namespace SCECorePlus
 {
     using SCEComponents;
-
-    using SCECorePlus.Objects;
 
     public class ColliderHandlerComponent : IComponent
     {

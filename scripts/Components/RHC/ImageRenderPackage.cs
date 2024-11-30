@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Components.RHS
+﻿namespace SCECorePlus
 {
     /// <summary>
     /// A struct used for containing an image and its offset for rendering.

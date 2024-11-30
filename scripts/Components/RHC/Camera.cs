@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Components.RHS
+﻿namespace SCECorePlus
 {
     using SCEComponents;
 

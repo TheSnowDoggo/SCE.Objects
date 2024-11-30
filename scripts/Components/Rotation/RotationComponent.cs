@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Components.Rotation
+﻿namespace SCECorePlus
 {
     using SCEComponents;
 
@@ -115,7 +115,7 @@
             get => rotationFactor;
             private set
             {
-                if (!SCERotation.RotationRange.InRange(value))
+                if (!RotationUtils.RotationRange.InRange(value))
                 {
                     throw new ArgumentException("Rotation factor is not within the excepted range.");
                 }
@@ -178,11 +178,11 @@
 
             Image.RotateData90(direction);
 
-            Vector2 rotatedOffsetPosition = SCERotation.GetRotatedOffsetPosition(offsetPosition, direction, rotationAxis);
+            Vector2 rotatedOffsetPosition = RotationUtils.GetRotatedOffsetPosition(offsetPosition, direction, rotationAxis);
 
             offsetPosition = (rotatedOffsetPosition + rotationAxis).ToVector2Int();
 
-            RotationFactor = SCERotation.GetNewRotation(RotationFactor, direction);
+            RotationFactor = RotationUtils.GetNewRotation(RotationFactor, direction);
         }
 
         /// <summary>

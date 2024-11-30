@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Objects
+﻿namespace SCECorePlus
 {
     using SCEComponents;
 

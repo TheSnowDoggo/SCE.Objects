@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Components.Collision
+﻿namespace SCECorePlus
 {
     public class ColliderLayer
     {

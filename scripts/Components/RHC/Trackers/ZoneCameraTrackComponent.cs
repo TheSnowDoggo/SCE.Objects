@@ -1,9 +1,6 @@
-﻿namespace SCECorePlus.Components.RHS.Trackers
+﻿namespace SCECorePlus
 {
     using SCEComponents;
-
-    using SCECorePlus.Objects;
-    using SCECorePlus.Types;
 
     /// <summary>
     /// An <see cref="IComponent"/> used for zone-based object camera tracking.

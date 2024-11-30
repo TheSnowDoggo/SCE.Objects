@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus.Types
+﻿namespace SCECorePlus
 {
     public struct Anchor : IEquatable<Anchor>
     {
