@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     /// <summary>
     /// Represents a camera in a world space.
     /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
     /// <summary>
     /// A struct used for containing an image and its offset for rendering.

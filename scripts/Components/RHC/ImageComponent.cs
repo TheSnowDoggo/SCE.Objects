@@ -1,8 +1,6 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
     using System.Diagnostics.CodeAnalysis;
-
-    using SCEComponents;
 
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an image in an object.

@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     /// <summary>
     /// An <see cref="LunaSCE.Image"/> <see cref="IComponent"/> class for simualting rotation through <see cref="Vector2"/> position transformation.
     /// </summary>

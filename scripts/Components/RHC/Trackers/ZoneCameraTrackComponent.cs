@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     /// <summary>
     /// An <see cref="IComponent"/> used for zone-based object camera tracking.
     /// </summary>

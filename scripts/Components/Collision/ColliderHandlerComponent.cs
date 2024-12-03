@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     public class ColliderHandlerComponent : IComponent
     {
         private const bool DefaultActiveState = true;

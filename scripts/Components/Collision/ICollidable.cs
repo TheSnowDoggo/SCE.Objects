@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     public interface ICollidable : IComponent
     {
         public delegate void CallOnCollision(ICollidable collider, ICollidable other);

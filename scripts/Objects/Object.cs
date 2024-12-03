@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     /// <summary>
     /// A class used to represent an object.
     /// </summary>

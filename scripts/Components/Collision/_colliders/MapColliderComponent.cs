@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     public class MapColliderComponent : IComponent, ICollidable
     {
         private const bool DefaultActiveState = true;

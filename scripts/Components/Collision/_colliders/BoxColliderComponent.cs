@@ -1,7 +1,5 @@
-﻿namespace SCECorePlus
+﻿namespace SCE
 {
-    using SCEComponents;
-
     public class BoxColliderComponent : IComponent, ICollidable
     {
         private const bool DefaultActiveState = true;
