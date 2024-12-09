@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\native",
-    "\\native\\Components",
-    "\\native\\Components\\RHC",
-    "\\native\\Objects"
+    ""
   ],
-  "SelectedNode": "\\native\\Objects\\World.cs",
+  "SelectedNode": "\\obj",
   "PreviewInSolutionExplorer": false
 }

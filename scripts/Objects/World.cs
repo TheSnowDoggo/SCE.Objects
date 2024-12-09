@@ -1,9 +1,7 @@
-﻿namespace SCECorePlus.Objects
+﻿namespace SCE
 {
     using System;
     using System.Collections;
-
-    using SCEComponents;
 
     /// <summary>
     /// Represents a world containing objects and components.

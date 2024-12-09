@@ -1,9 +1,5 @@
-﻿namespace SCECorePlus.Components.Collision
+﻿namespace SCE
 {
-    using SCEComponents;
-
-    using SCECorePlus.Objects;
-
     public class ColliderHandlerComponent : IComponent
     {
         private const bool DefaultActiveState = true;

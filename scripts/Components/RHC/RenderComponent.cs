@@ -1,10 +1,6 @@
-﻿namespace SCECorePlus.Components.RHS
+﻿namespace SCE
 {
     using System.Diagnostics.CodeAnalysis;
-
-    using SCEComponents;
-
-    using SCECorePlus.Objects;
 
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an <see cref="IRenderable"/> in an object.
