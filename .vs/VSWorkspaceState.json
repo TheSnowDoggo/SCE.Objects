@@ -3,8 +3,9 @@
     "",
     "\\native",
     "\\native\\Components",
-    "\\native\\Components\\RHC"
+    "\\native\\Components\\RHC",
+    "\\native\\Objects"
   ],
-  "SelectedNode": "\\native\\Components\\RHC\\Camera.cs",
+  "SelectedNode": "\\native\\Objects\\World.cs",
   "PreviewInSolutionExplorer": false
 }
