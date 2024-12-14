@@ -5,7 +5,7 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an <see cref="IRenderable"/> in an object.
     /// </summary>
-    public class RenderComponent : IComponent, IRenderable
+    public class RenderComponent : IComponent
     {
         private const bool DefaultActiveState = true;
 
@@ -57,12 +57,6 @@
             {
                 throw new InvalidCContainerHolderException("CContainerHolder must be Object.");
             }
-        }
-
-        /// <inheritdoc/>
-        public Image GetImage()
-        {
-            return Renderable.GetImage();
         }
     }
 }

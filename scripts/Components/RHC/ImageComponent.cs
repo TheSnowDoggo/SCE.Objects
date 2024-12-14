@@ -7,8 +7,6 @@
     /// </summary>
     public class ImageComponent : IComponent, IRenderable
     {
-        private const bool DefaultActiveState = true;
-
         private Image? image;
 
         /// <summary>
@@ -31,7 +29,11 @@
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; } = DefaultActiveState;
+        public bool IsActive { get; set; } = true;
+
+        public Vector2Int Position { get => Image.Position; }
+
+        public int Layer { get => Image.Layer; }
 
         /// <summary>
         /// Gets or sets the stored Image of this instance.
@@ -71,8 +73,7 @@
             return new(Name, Image.Clone());
         }
 
-        /// <inheritdoc/>
-        public Image GetImage()
+        public DisplayMap GetMap()
         {
             return Image;
         }

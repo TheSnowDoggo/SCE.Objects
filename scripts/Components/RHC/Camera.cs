@@ -5,15 +5,11 @@
     /// </summary>
     public class Camera : IRenderable, ICContainerHolder
     {
-        private const bool DefaultActiveState = true;
-
-        private const bool DefaultUpdateOnRender = false;
-
         private const Color DefaultBgColor = Color.Black;
 
-        private readonly Image image;
+        private readonly DisplayMap dpMap;
 
-        public readonly List<ImageRenderPackage> renderList = new();
+        private readonly List<RenderPackage> renderList = new();
 
         private readonly Queue<Area2DInt> clearQueue = new();
 
@@ -25,7 +21,7 @@
 
         public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList)
         {
-            image = new(dimensions);
+            dpMap = new(dimensions);
 
             WorldSpace = worldSpace;
 
@@ -39,17 +35,15 @@
         {
         }
 
-        public bool IsActive { get; set; } = DefaultActiveState;
+        public bool IsActive { get; set; } = true;
 
         public CContainer CContainer { get; }
 
-        public Vector2Int Position
-        {
-            get => image.Position;
-            set => image.Position = value;
-        }
+        public Vector2Int Position { get; set; }
 
-        public Vector2Int Dimensions { get => image.Dimensions; }
+        public int Layer { get; set; }
+
+        public Vector2Int Dimensions { get => dpMap.Dimensions; }
 
         /// <summary>
         /// Gets or sets the position of this instance in the WorldSpace.
@@ -101,20 +95,20 @@
         /// <summary>
         /// Gets or sets a value indicating whether the camera should update every component on render.
         /// </summary>
-        public bool UpdateOnRender { get; set; } = DefaultUpdateOnRender;
+        public bool UpdateOnRender { get; set; } = false;
 
         /// <inheritdoc/>
-        public Image GetImage()
+        public DisplayMap GetMap()
         {
-            return image;
+            return dpMap;
         }
 
-        public void LoadIRP(ImageRenderPackage irp)
+        internal void LoadIRP(RenderPackage irp)
         {
             renderList.Add(irp);
         }
 
-        public void Render()
+        internal void Render()
         {
             SmartClear();
             SortRenderList();
@@ -129,7 +123,7 @@
                 throw new ArgumentException("Dimensions cannot be less than 0.");
             }
 
-            image.CleanResize(dimensions);
+            dpMap.CleanResize(dimensions);
 
             renderList.Clear();
             clearQueue.Clear();
@@ -146,12 +140,12 @@
             {
                 foreach (Area2DInt area in clearQueue)
                 {
-                    image.FillArea(clearPixel, area);
+                    dpMap.FillArea(clearPixel, area);
                 }
             }
             else
             {
-                image.Fill(clearPixel);
+                dpMap.Fill(clearPixel);
                 renderedBgColor = BgColor;
             }
 
@@ -160,12 +154,12 @@
 
         private void SortRenderList()
         {
-            renderList.Sort((a, b) => a.Image.Layer < b.Image.Layer ? -1 : 1);
+            renderList.Sort((a, b) => a.Layer < b.Layer ? -1 : 1);
         }
 
         private void LoadRenderList()
         {
-            foreach (ImageRenderPackage irp in renderList)
+            foreach (RenderPackage irp in renderList)
             {
                 RenderIRP(irp);
             }
@@ -174,15 +168,15 @@
         /// <summary>
         /// Renders the specified irp to the camera.
         /// </summary>
-        private void RenderIRP(ImageRenderPackage irp)
+        private void RenderIRP(RenderPackage irp)
         {
-            if (Area2DInt.Overlaps(WorldAlignedArea, irp.AlignedArea))
+            if (Area2DInt.Overlaps(WorldAlignedArea, irp.OffsetArea))
             {
-                Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.AlignedArea) - irp.AlignedPosition;
+                Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.OffsetArea) - irp.Offset;
 
-                Vector2Int cameraOffsetPosition = irp.AlignedPosition - WorldPositionInt;
+                Vector2Int cameraOffsetPosition = irp.Offset - WorldPositionInt;
 
-                image.MapToArea(irp.Image, trimmedGridArea, cameraOffsetPosition, true);
+                dpMap.MapToArea(irp.DisplayMap, trimmedGridArea, cameraOffsetPosition, true);
 
                 clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
             }
@@ -194,7 +188,7 @@
 
             WorldPositionIntCorner = WorldPositionInt + Dimensions;
 
-            WorldAlignedArea = image.GridArea + WorldPositionInt;
+            WorldAlignedArea = dpMap.GridArea + WorldPositionInt;
         }
     }
 }
