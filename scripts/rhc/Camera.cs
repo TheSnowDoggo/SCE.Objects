@@ -3,11 +3,9 @@
     /// <summary>
     /// Represents a camera in a world space.
     /// </summary>
-    public class Camera : IRenderable, ICContainerHolder
+    public class Camera : UIBase, ICContainerHolder
     {
         private const Color DefaultBgColor = Color.Black;
-
-        private readonly DisplayMap dpMap;
 
         private readonly List<RenderPackage> renderList = new();
 
@@ -20,9 +18,8 @@
         private Color bgColor = DefaultBgColor;
 
         public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList)
+            : base(dimensions)
         {
-            dpMap = new(dimensions);
-
             WorldSpace = worldSpace;
 
             CContainer = new(this, cList);
@@ -35,15 +32,7 @@
         {
         }
 
-        public bool IsActive { get; set; } = true;
-
         public CContainer CContainer { get; }
-
-        public Vector2Int Position { get; set; }
-
-        public int Layer { get; set; }
-
-        public Vector2Int Dimensions { get => dpMap.Dimensions; }
 
         /// <summary>
         /// Gets or sets the position of this instance in the WorldSpace.
@@ -69,10 +58,7 @@
             set
             {
                 if (value == Color.Transparent)
-                {
                     throw new ArgumentException("Background color cannot be Transparent.");
-                }
-
                 bgColor = value;
             }
         }
@@ -97,18 +83,14 @@
         /// </summary>
         public bool UpdateOnRender { get; set; } = false;
 
-        /// <inheritdoc/>
-        public DisplayMap GetMap()
-        {
-            return dpMap;
-        }
+        public bool ConsistantSorting { get; set; } = true;
 
         internal void LoadIRP(RenderPackage irp)
         {
             renderList.Add(irp);
         }
 
-        internal void Render()
+        internal void RenderNow()
         {
             SmartClear();
             SortRenderList();
@@ -119,11 +101,9 @@
         public void Resize(Vector2Int dimensions)
         {
             if (dimensions <= 0)
-            {
                 throw new ArgumentException("Dimensions cannot be less than 0.");
-            }
 
-            dpMap.CleanResize(dimensions);
+            _dpMap.CleanResize(dimensions);
 
             renderList.Clear();
             clearQueue.Clear();
@@ -136,33 +116,56 @@
         private void SmartClear()
         {
             Pixel clearPixel = new(BgColor);
-            if (renderedBgColor != null && renderedBgColor != BgColor)
+            if (renderedBgColor is not null && renderedBgColor != BgColor)
             {
                 foreach (Area2DInt area in clearQueue)
-                {
-                    dpMap.FillArea(clearPixel, area);
-                }
+                    _dpMap.FillArea(clearPixel, area);
             }
             else
             {
-                dpMap.Fill(clearPixel);
+                _dpMap.Fill(clearPixel);
                 renderedBgColor = BgColor;
             }
 
             clearQueue.Clear();
         }
+        private void QuickSortRenderList()
+        {
+            renderList.Sort((a, b) => a.Layer < b.Layer ? -1 : 1);
+        }
+
+        private void BubbleSortRenderList()
+        { 
+            bool swapped;
+            int top = renderList.Count;
+            do
+            {
+                swapped = false;
+                for (int i = 1; i < top; ++i)
+                {
+                    if (renderList[i - 1].Layer > renderList[i].Layer)
+                    {
+                        (renderList[i - 1], renderList[i]) = (renderList[i], renderList[i - 1]);
+                        swapped = true;
+                    }
+                }
+                --top;
+            }
+            while (swapped);
+        }
 
         private void SortRenderList()
         {
-            renderList.Sort((a, b) => a.Layer < b.Layer ? -1 : 1);
+            if (ConsistantSorting)
+                BubbleSortRenderList();
+            else
+                QuickSortRenderList();
         }
 
         private void LoadRenderList()
         {
             foreach (RenderPackage irp in renderList)
-            {
                 RenderIRP(irp);
-            }
         }
 
         /// <summary>
@@ -176,9 +179,13 @@
 
                 Vector2Int cameraOffsetPosition = irp.Offset - WorldPositionInt;
 
-                dpMap.MapToArea(irp.DisplayMap, trimmedGridArea, cameraOffsetPosition, true);
+                _dpMap.MapToArea(irp.DisplayMap, trimmedGridArea, cameraOffsetPosition, true);
 
                 clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
+            }
+            else
+            {
+                throw new ArgumentException("owchue");
             }
         }
 
@@ -188,7 +195,7 @@
 
             WorldPositionIntCorner = WorldPositionInt + Dimensions;
 
-            WorldAlignedArea = dpMap.GridArea + WorldPositionInt;
+            WorldAlignedArea = _dpMap.GridArea + WorldPositionInt;
         }
     }
 }

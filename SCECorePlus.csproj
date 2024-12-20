@@ -15,4 +15,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="scripts\chunk\" />
+    <Folder Include="scripts\nativecomponents\" />
+  </ItemGroup>
+
 </Project>

@@ -3,7 +3,7 @@
     /// <summary>
     /// A class used to represent an object.
     /// </summary>
-    public class SCEObject : ICContainerHolder
+    public class SCEObject : ICContainerHolder, ISearcheable
     {
         private const bool DefaultActiveState = true;
 
@@ -15,7 +15,6 @@
         public SCEObject(string name, CList cList)
         {
             Name = name;
-
             CContainer = new(this, cList);
         }
 

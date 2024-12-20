@@ -70,17 +70,21 @@
             }
         }
 
+        public Vector2Int ZonePosition { get; set; }
+
         /// <summary>
         /// Gets or sets the anchor of the zone.
         /// </summary>
         public Anchor ZoneAnchor { get; set; }
+
+        public Vector2Int CameraPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the anchor of the camera.
         /// </summary>
         public Anchor CameraAnchor { get; set; }
 
-        private Vector2Int ObjectAlignedZonePosition => Object.GridPosition + ZoneAnchor.GetAlignedOffset(ZoneDimensions);
+        private Vector2Int ObjectAlignedZonePosition => Object.GridPosition + -AnchorUtils.AnchoredDimension(ZoneAnchor, ZoneDimensions) + ZonePosition;
 
         private Area2DInt BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
 
@@ -95,18 +99,14 @@
         public void SetCContainer(CContainer? cContainer, ICContainerHolder cContainerHolder)
         {
             if (cContainerHolder is Camera)
-            {
                 this.cContainer = cContainer;
-            }
             else
-            {
                 throw new InvalidCContainerHolderException("CContainerHolder is not Camera.");
-            }
         }
 
         public void Update()
         {
-            Camera.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + CameraAnchor.GetAlignedOffset(Camera.Dimensions));
+            Camera.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Camera.Dimensions) + CameraPosition);
         }
     }
 }

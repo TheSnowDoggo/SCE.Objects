@@ -43,13 +43,9 @@
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
             if (holder is World)
-            {
                 this.cContainer = cContainer;
-            }
             else
-            {
                 throw new InvalidCContainerHolderException("CContainerHolder is not World.");
-            }
         }
 
         public void Update()
@@ -97,7 +93,7 @@
         {
             DisplayMap dpMap = renderable.GetMap();
 
-            Vector2Int imageAlignedPos = renderable.Position + objectOffset;
+            Vector2Int imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Position + objectOffset;
 
             Vector2Int imageAlignedPosCorner = imageAlignedPos + dpMap.Dimensions;
 
@@ -106,7 +102,7 @@
                 // More efficient than creating a new Area2DInt for the image
                 if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, imageAlignedPos, imageAlignedPosCorner))
                 {
-                    RenderPackage irp = new(dpMap, renderable.Layer, renderable.Position + objectOffset);
+                    RenderPackage irp = new(dpMap, renderable.Layer, imageAlignedPos);
 
                     camera.LoadIRP(irp);
                 }
@@ -116,7 +112,7 @@
         private void RenderCameraQueue()
         {
             foreach (Camera camera in cameraRenderQueue)
-                camera.Render();
+                camera.RenderNow();
             cameraRenderQueue.Clear();
         }
     }

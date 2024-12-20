@@ -30,7 +30,7 @@
         /// <summary>
         /// Gets the parent object of the collision component.
         /// </summary>
-        public SCEObject Object { get; }
+        public SCEObject Parent { get; }
 
         /// <summary>
         /// Determines whether the specified collision component collides with this collision component.

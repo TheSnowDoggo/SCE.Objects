@@ -5,26 +5,24 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an <see cref="IRenderable"/> in an object.
     /// </summary>
-    public class RenderComponent : IComponent
+    public class RenderComponent : ComponentBase<SCEObject>, IRenderable
     {
-        private const bool DefaultActiveState = true;
-
         private IRenderable? renderable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderComponent"/> class.
         /// </summary>
-        public RenderComponent(string name)
+        public RenderComponent()
+            : base()
         {
-            Name = name;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderComponent"/> class.
         /// </summary>
         /// <param name="renderable">The initial <see cref="IRenderable"/>.</param>
-        public RenderComponent(string name, IRenderable renderable)
-            : this(name)
+        public RenderComponent(IRenderable renderable)
+            : base()
         {
             Renderable = renderable;
         }
@@ -47,16 +45,15 @@
         /// </summary>
         public bool HasRenderable { get => renderable != null; }
 
-        public string Name { get; set; }
+        public Vector2Int Position { get => Renderable.Position; }
 
-        public bool IsActive { get; set; } = DefaultActiveState;
+        public int Layer { get => Renderable.Layer; }
 
-        public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
+        public Anchor Anchor { get => Renderable.Anchor; }
+
+        public DisplayMap GetMap()
         {
-            if (holder is not SCEObject)
-            {
-                throw new InvalidCContainerHolderException("CContainerHolder must be Object.");
-            }
+            return Renderable.GetMap();
         }
     }
 }

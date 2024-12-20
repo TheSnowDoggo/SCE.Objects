@@ -39,7 +39,6 @@ C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCECorePlu
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlus.deps.json
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlus.dll
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlus.pdb
-C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCEComponents.dll
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECore.dll
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.CopyComplete
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\ref\SCECorePlus.dll

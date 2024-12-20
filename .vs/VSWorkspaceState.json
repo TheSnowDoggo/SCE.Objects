@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\scripts",
+    "\\scripts\\Components",
+    "\\scripts\\Components\\RHC"
   ],
-  "SelectedNode": "\\obj",
+  "SelectedNode": "\\scripts\\Components\\RHC\\WorldSpaceRHC.cs",
   "PreviewInSolutionExplorer": false
 }
