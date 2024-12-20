@@ -1,28 +1,20 @@
 ﻿namespace SCE
 {
     // WorldSpace RenderHandlerComponentV2
-    public class WorldSpaceRHC : IComponent
+    public class WorldSpaceRHC : ComponentBase<World>
     {
-        private const bool DefaultActiveState = true;
-
         private readonly List<Camera> cameraList = new();
 
         private readonly Queue<Camera> cameraRenderQueue = new();
-
-        private CContainer? cContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorldSpaceRHC"/> class.
         /// </summary>
         /// <param name="name">The component name.</param>
-        public WorldSpaceRHC(string name)
+        public WorldSpaceRHC()
+            : base()
         {
-            Name = name;
         }
-
-        public string Name { get; set; }
-
-        public bool IsActive { get; set; } = DefaultActiveState;
 
         /// <summary>
         /// Gets or sets the background color of the world space.
@@ -36,19 +28,7 @@
 
         public bool HasCamera { get => CameraList.Count != 0; }
 
-        private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
-
-        private World World { get => (World)CContainer.CContainerHolder; }
-
-        public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
-        {
-            if (holder is World)
-                this.cContainer = cContainer;
-            else
-                throw new InvalidCContainerHolderException("CContainerHolder is not World.");
-        }
-
-        public void Update()
+        public override void Update()
         {
             Render();
         }
@@ -73,7 +53,7 @@
 
         private void LoadObjects()
         {
-            foreach (SCEObject obj in World)
+            foreach (SCEObject obj in Parent)
             {
                 if (obj.IsActive)
                     TryLoadActiveObject(obj);

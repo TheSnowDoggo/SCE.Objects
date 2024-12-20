@@ -3,12 +3,8 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for zone-based object camera tracking.
     /// </summary>
-    public class ZoneCameraTrackComponent : IComponent
+    public class ZoneCameraTrackComponent : ComponentBase<Camera>
     {
-        private const bool DefaultActiveState = true;
-
-        private CContainer? cContainer;
-
         private Vector2Int zoneDimensions;
 
         /// <summary>
@@ -21,27 +17,18 @@
         /// <param name="cameraAnchor">The anchor of the camera.</param>
         /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions, bool isActive = DefaultActiveState)
+        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions)
+            : base()
         {
             if (zoneDimensions <= 0)
-            {
                 throw new ArgumentException("Zone dimensions must be greater than zero.");
-            }
-
-            Name = name;
 
             Object = obj;
 
             BoundingArea = boundingArea;
 
             ZoneDimensions = zoneDimensions;
-
-            IsActive = isActive;
         }
-
-        public string Name { get; set; }
-
-        public bool IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the object to track.
@@ -62,10 +49,7 @@
             set
             {
                 if (value <= 0)
-                {
                     throw new ArgumentException("Zone dimensions must be greater than 0.");
-                }
-
                 zoneDimensions = value;
             }
         }
@@ -92,21 +76,9 @@
 
         private Area2DInt ObjectAlignedZoneArea => new Area2DInt(Vector2Int.Zero, ZoneDimensions) + ObjectAlignedZonePosition;
 
-        private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
-
-        private Camera Camera { get => (Camera)CContainer.CContainerHolder; }
-
-        public void SetCContainer(CContainer? cContainer, ICContainerHolder cContainerHolder)
+        public override void Update()
         {
-            if (cContainerHolder is Camera)
-                this.cContainer = cContainer;
-            else
-                throw new InvalidCContainerHolderException("CContainerHolder is not Camera.");
-        }
-
-        public void Update()
-        {
-            Camera.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Camera.Dimensions) + CameraPosition);
+            Parent.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Parent.Dimensions) + CameraPosition);
         }
     }
 }

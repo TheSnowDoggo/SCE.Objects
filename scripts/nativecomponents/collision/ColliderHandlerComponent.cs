@@ -1,61 +1,31 @@
 ﻿namespace SCE
 {
-    public class ColliderHandlerComponent : IComponent
+    public class ColliderHandlerComponent : ComponentBase<World>
     {
-        private const bool DefaultActiveState = true;
-
         private readonly List<ColliderLayer> colliderLayerList = new();
 
-        private CContainer? cContainer;
-
-        public ColliderHandlerComponent(string name)
+        public ColliderHandlerComponent()
+            : base()
         {
-            Name = name;
-        }
-
-        public string Name { get; set; }
-
-        public bool IsActive { get; set; } = DefaultActiveState;
-
-        private CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
-
-        private World World { get => (World)CContainer.CContainerHolder; }
-
-        public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
-        {
-            if (holder is World)
-            {
-                this.cContainer = cContainer;
-            }
-            else
-            {
-                throw new InvalidCContainerHolderException("CContainerHolder is not World.");
-            }
         }
 
         /// <inheritdoc/>
         public void Update()
         {
-            if (IsActive)
-            {
-                UpdateColliderLayerList();
+            if (!IsActive)
+                return;
 
-                CheckLayersForCollisions();
-            }
+            UpdateColliderLayerList();
+
+            CheckLayersForCollisions();
         }
 
         private static bool DoCollidersCollide(ICollidable collider, ICollidable other)
         {
             if (collider.HasMethodFor(other))
-            {
                 return collider.CollidesWith(other);
-            }
-            
             if (other.HasMethodFor(collider))
-            {
                 return other.CollidesWith(collider);
-            }
-
             return false;
         }
 
@@ -75,9 +45,7 @@
                     collider.OnCollision?.Invoke(collider, other);
 
                     if (other.IsListening)
-                    {
                         other.OnCollision?.Invoke(other, collider);
-                    }
                 }
 
                 i++;
@@ -96,9 +64,7 @@
                     ICollidable collider = fullColliderList[i];
 
                     if (collider.IsListening)
-                    {
                         CheckForCollisionsIn(fullColliderList, collider, i);
-                    }
                 }
             }
         }
@@ -107,12 +73,10 @@
         {
             colliderLayerList.Clear();
 
-            foreach (SCEObject obj in World)
+            foreach (SCEObject obj in Parent)
             {
                 if (obj.IsActive)
-                {
                     TryAddColliderComponents(obj);
-                }
             }
         }
 
@@ -121,9 +85,7 @@
             foreach(IComponent component in obj.CContainer)
             {
                 if (component.IsActive && component is ICollidable collidable && (collidable.IsListening || collidable.IsReceiving))
-                {
                     AddCollider(collidable);
-                }
             }
         }
 
@@ -132,46 +94,37 @@
             ColliderLayer colliderLayer = GetColliderLayer(collidable.Layer);
 
             if (collidable.IsListening)
-            {
                 colliderLayer.ListeningColliderList.Add(collidable);
-            }
             else
-            {
                 colliderLayer.NotListeningColliderList.Add(collidable);
-            }
         }
 
         private ColliderLayer GetColliderLayer(byte layer)
         {
             ColliderLayer colliderLayer;
 
-            if (!HasColliderLayer(layer, out int index))
+            if (Contains(layer, out int index))
+                colliderLayer = colliderLayerList[index];
+            else
             {
                 colliderLayer = new(layer);
 
                 colliderLayerList.Add(colliderLayer);
             }
-            else
-            {
-                colliderLayer = colliderLayerList[index];
-            }
 
             return colliderLayer;
         }
 
-        private bool HasColliderLayer(byte layer, out int index)
+        private bool Contains(byte layer, out int index)
         {
-            int i = 0;
-            foreach (ColliderLayer colliderLayer in colliderLayerList)
+            for (int i = 0; i < colliderLayerList.Count; ++i)
             {
-                if (colliderLayer.Layer == layer)
+                if (colliderLayerList[i].Layer == layer)
                 {
                     index = i;
                     return true;
                 }
-                i++;
             }
-
             index = -1;
             return false;
         }

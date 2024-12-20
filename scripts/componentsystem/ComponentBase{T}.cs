@@ -21,7 +21,7 @@
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public void SetCContainer(CContainer? cContainer, ICContainerHolder holder)
         {
