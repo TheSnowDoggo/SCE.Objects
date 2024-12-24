@@ -22,6 +22,8 @@
         /// <inheritdoc/>
         public byte Layer { get; set; } = DefaultLayer;
 
+        public int CheckDistance { get; set; } = 100;
+
         /// <inheritdoc/>
         public ICollidable.CallOnCollision? OnCollision { get; set; }
 
@@ -64,6 +66,9 @@
         /// <inheritdoc/>
         public bool CollidesWith(ICollidable other)
         {
+            if (CheckDistance > 0 && other.Parent.Position.DistanceFrom(Parent.Position) > CheckDistance)
+                return false;
+
             if (other is MapColliderComponent mapColliderComp)
             {
                 Area2DInt otherObjectAlignedArea = mapColliderComp.ObjectAlignedAnchoredCollisionArea;

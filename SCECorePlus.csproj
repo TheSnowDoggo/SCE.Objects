@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="SCEComponents">
-      <HintPath>lib\SCEComponents.dll</HintPath>
+    <Reference Include="SCE">
+      <HintPath>lib\SCE.dll</HintPath>
     </Reference>
     <Reference Include="SCECore">
       <HintPath>lib\SCECore.dll</HintPath>

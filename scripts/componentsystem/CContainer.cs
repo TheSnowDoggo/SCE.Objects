@@ -15,8 +15,12 @@
         public CContainer(ICContainerHolder holder, CList cList)
             : base(cList)
         {
-            CContainerHolder = holder;
+            Holder = holder;
             SetEveryCContainer(this);
+
+            OnAdd += CContainer_OnAdd;
+            OnRemove += CContainer_OnRemove;
+            OnClear += CContainer_OnClear;
         }
 
         /// <summary>
@@ -29,16 +33,30 @@
         {
         }
 
-        /// <inheritdoc cref="SCEComponents.ICContainerHolder"/>
-        public ICContainerHolder CContainerHolder { get; }
+        public ICContainerHolder Holder { get; }
+
+        public void CContainer_OnAdd(IComponent component)
+        {
+            component.SetCContainer(this, Holder);
+        }
+
+        public void CContainer_OnRemove(IComponent component)
+        {
+            component.SetCContainer(null, Holder);
+        }
+
+        public void CContainer_OnClear()
+        {
+            SetEveryCContainer(null);
+        }
 
         /// <summary>
-        /// Sets the <see cref="CContainerHolder"/> of every <see cref="IComponent"/> in <see cref="CList"/>.
+        /// Sets the <see cref="Holder"/> of every <see cref="IComponent"/> in <see cref="CList"/>.
         /// </summary>
         private void SetEveryCContainer(CContainer? cContainer)
         {
             foreach (IComponent component in this)
-                component.SetCContainer(cContainer, CContainerHolder);
+                component.SetCContainer(cContainer, Holder);
         }
     }
 }

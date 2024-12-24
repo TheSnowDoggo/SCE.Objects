@@ -82,7 +82,7 @@
                 // More efficient than creating a new Area2DInt for the image
                 if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, imageAlignedPos, imageAlignedPosCorner))
                 {
-                    RenderPackage irp = new(dpMap, renderable.Layer, imageAlignedPos);
+                    SpritePackage irp = new(dpMap, renderable.Layer, imageAlignedPos);
 
                     camera.LoadIRP(irp);
                 }

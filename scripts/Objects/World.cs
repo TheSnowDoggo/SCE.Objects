@@ -33,7 +33,7 @@
         /// <summary>
         /// Updates all the components in the world and all the components in every object.
         /// </summary>
-        public void UpdateAll()
+        public void Update()
         {
             if (PrioritiseWorldComponentUpdates)
             {

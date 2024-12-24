@@ -16,7 +16,6 @@ C:\Users\redst\source\repos\SCECorePlus\bin\Debug\net6.0\SCEComponents.dll
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlus.deps.json
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlus.dll
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlus.pdb
-C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCEComponents.dll
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECore.dll
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.AssemblyReference.cache
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCECorePlus.GeneratedMSBuildEditorConfig.editorconfig
@@ -42,3 +41,4 @@ C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECorePlu
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECore.dll
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.CopyComplete
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\ref\SCECorePlus.dll
+C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.dll

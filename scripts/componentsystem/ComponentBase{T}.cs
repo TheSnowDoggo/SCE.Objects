@@ -17,7 +17,7 @@
 
         public CContainer CContainer { get => cContainer ?? throw new NullReferenceException("CContainer is null."); }
 
-        public T Parent { get => (T)CContainer.CContainerHolder; }
+        public T Parent { get => (T)CContainer.Holder; }
 
         public string Name { get; set; }
 

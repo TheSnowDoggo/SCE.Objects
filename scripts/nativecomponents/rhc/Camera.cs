@@ -7,7 +7,7 @@
     {
         private const Color DefaultBgColor = Color.Black;
 
-        private readonly List<RenderPackage> renderList = new();
+        private readonly List<SpritePackage> renderList = new();
 
         private readonly Queue<Area2DInt> clearQueue = new();
 
@@ -85,7 +85,7 @@
 
         public bool ConsistantSorting { get; set; } = true;
 
-        internal void LoadIRP(RenderPackage irp)
+        internal void LoadIRP(SpritePackage irp)
         {
             renderList.Add(irp);
         }
@@ -164,14 +164,14 @@
 
         private void LoadRenderList()
         {
-            foreach (RenderPackage irp in renderList)
+            foreach (SpritePackage irp in renderList)
                 RenderIRP(irp);
         }
 
         /// <summary>
         /// Renders the specified irp to the camera.
         /// </summary>
-        private void RenderIRP(RenderPackage irp)
+        private void RenderIRP(SpritePackage irp)
         {
             if (Area2DInt.Overlaps(WorldAlignedArea, irp.OffsetArea))
             {

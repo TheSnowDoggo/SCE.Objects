@@ -1,16 +1,16 @@
 ﻿namespace SCE
 {
-    public class ColliderHandlerComponent : ComponentBase<World>
+    public class ColliderHandler : ComponentBase<World>
     {
         private readonly List<ColliderLayer> colliderLayerList = new();
 
-        public ColliderHandlerComponent()
+        public ColliderHandler()
             : base()
         {
         }
 
         /// <inheritdoc/>
-        public void Update()
+        public override void Update()
         {
             if (!IsActive)
                 return;

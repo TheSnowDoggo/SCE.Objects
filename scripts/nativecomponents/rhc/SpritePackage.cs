@@ -3,14 +3,14 @@
     /// <summary>
     /// A struct used for containing an image and its offset for rendering.
     /// </summary>
-    internal readonly struct RenderPackage
+    internal readonly struct SpritePackage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenderPackage"/> struct.
+        /// Initializes a new instance of the <see cref="SpritePackage"/> struct.
         /// </summary>
         /// <param name="dpMap">The displaymap to render.</param>
         /// <param name="offset">The offset of the image to render.</param>
-        public RenderPackage(DisplayMap dpMap, int layer, Vector2Int offset)
+        public SpritePackage(DisplayMap dpMap, int layer, Vector2Int offset)
         {
             DisplayMap = dpMap;
             Layer = layer;
