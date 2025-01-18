@@ -8,8 +8,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CList"/> class.
         /// </summary>
-        public CList(CList cList)
-            : base(cList._list)
+        public CList(IEnumerable<IComponent> collection)
+            : base(collection)
         {
         }
 

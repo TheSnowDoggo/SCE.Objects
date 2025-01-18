@@ -42,3 +42,4 @@ C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCECore.dl
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCECorePlus.csproj.CopyComplete
 C:\Users\redst\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\ref\SCECorePlus.dll
 C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.dll
