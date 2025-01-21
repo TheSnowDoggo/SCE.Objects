@@ -2,10 +2,15 @@
 {
     public class Welder : ComponentBase<SCEObject>
     {
-        public Welder(SCEObject obj)
-            : base()
+        public Welder(string name, SCEObject obj)
+            : base(name)
         {
             Object = obj;
+        }
+
+        public Welder(SCEObject obj)
+            : this("welder", obj)
+        {
         }
 
         public SCEObject Object { get; set; }

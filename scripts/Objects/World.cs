@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a world containing objects and components.
     /// </summary>
-    public class World : SearchList<SCEObject>, IEnumerable<SCEObject>, ICContainerHolder
+    public class World : SearchHash<SCEObject>, ICContainerHolder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="World"/> class.
@@ -12,6 +12,9 @@
         public World(CList cList)
         {
             CContainer = new(this, cList);
+            OnAdd += World_OnAdd;
+            OnRemove += World_OnRemove;
+            SetupEveryObject();
         }
 
         /// <summary>
@@ -52,11 +55,27 @@
         /// </summary>
         public void UpdateObjectComponents()
         {
-            foreach (SCEObject obj in this)
+            foreach (var obj in this)
             {
                 if (obj.IsActive)
                     obj.CContainer.Update();
             }
+        }
+
+        private void World_OnAdd(SCEObject obj)
+        {
+            obj.SetWorld(this);
+        }
+
+        private void World_OnRemove(SCEObject obj)
+        {
+            obj.SetWorld(null);
+        }
+
+        private void SetupEveryObject()
+        {
+            foreach (var obj in this)
+                obj.SetWorld(this);
         }
     }
 }

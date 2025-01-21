@@ -11,8 +11,8 @@
         /// Initializes a new instance of the <see cref="WorldSpaceRHC"/> class.
         /// </summary>
         /// <param name="name">The component name.</param>
-        public WorldSpaceRHC()
-            : base()
+        public WorldSpaceRHC(string name = "world_space")
+            : base(name)
         {
         }
 

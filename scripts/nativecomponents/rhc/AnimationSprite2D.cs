@@ -4,22 +4,30 @@
 
     public class AnimationSprite2D : ComponentBase<SCEObject>, IRenderable, ISmartLayerable, IEnumerable<DisplayMap>
     {
+        private const string DEFAULT_NAME = "animation_sprite";
+
         private readonly List<DisplayMap> _dpMapList;
 
         private int current = 0;
 
-        public AnimationSprite2D(List<DisplayMap> dpMapList)
+        public AnimationSprite2D(string name, IEnumerable<DisplayMap> dpMapList)
+            : base(name)
         {
-            _dpMapList = dpMapList;
+            _dpMapList = new(dpMapList);
+        }
+
+        public AnimationSprite2D(string name)
+            : this(name, new List<DisplayMap>())
+        {
+        }
+
+        public AnimationSprite2D(IEnumerable<DisplayMap> dpMapList)
+            : this(DEFAULT_NAME, dpMapList)
+        {
         }
 
         public AnimationSprite2D()
-            : this(new List<DisplayMap>())
-        {
-        }
-
-        public AnimationSprite2D(DisplayMap[] dpMapArr)
-            : this(dpMapArr.ToList())
+            : this(DEFAULT_NAME)
         {
         }
 

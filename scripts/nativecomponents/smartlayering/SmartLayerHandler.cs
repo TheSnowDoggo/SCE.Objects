@@ -4,8 +4,8 @@
     {
         private readonly List<SmartLayer> _smartLayerList = new();
 
-        public SmartLayerHandler()
-            : base()
+        public SmartLayerHandler(string name = "smart_layer_handler")
+            : base(name)
         {
         }
 

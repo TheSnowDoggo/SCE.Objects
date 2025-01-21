@@ -4,8 +4,8 @@
     {
         private readonly List<ColliderLayer> colliderLayerList = new();
 
-        public ColliderHandler()
-            : base()
+        public ColliderHandler(string name = "collider_handler")
+            : base(name)
         {
         }
 

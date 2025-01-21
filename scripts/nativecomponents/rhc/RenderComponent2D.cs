@@ -9,10 +9,15 @@
         /// Initializes a new instance of the <see cref="RenderComponent2D"/> class.
         /// </summary>
         /// <param name="renderable">The initial <see cref="IRenderable"/>.</param>
-        public RenderComponent2D(IRenderable renderable)
-            : base()
+        public RenderComponent2D(string name,IRenderable renderable)
+            : base(name)
         {
             Renderable = renderable;
+        }
+
+        public RenderComponent2D(IRenderable renderable)
+            : this("render_component", renderable)
+        {
         }
 
         public IRenderable Renderable { get; set; }

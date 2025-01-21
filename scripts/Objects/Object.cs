@@ -5,22 +5,28 @@
     /// </summary>
     public class SCEObject : ICContainerHolder, ISearcheable
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SCEObject"/> class.
-        /// </summary>
-        /// <param name="name">The name of the object.</param>
-        /// <param name="cList">The intitial cList of the object.</param>
-        public SCEObject(CList cList)
+        private const string DEFAULT_NAME = "object";
+
+        private World? world = null;
+
+        public SCEObject(string name, CList cList)
         {
+            Name = name;
             CContainer = new(this, cList);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SCEObject"/> class.
-        /// </summary>
-        /// <param name="name">The name of the object.</param>
+        public SCEObject(string name)
+            : this(name, new CList())
+        {
+        }
+
+        public SCEObject(CList cList)
+            : this(DEFAULT_NAME, cList)
+        {
+        }
+
         public SCEObject()
-            : this(new CList())
+            : this(DEFAULT_NAME)
         {
         }
 
@@ -46,6 +52,15 @@
 
         /// <inheritdoc/>
         public CContainer CContainer { get; }
+
+        public World World { get => world ?? throw new NullReferenceException("World is null"); }
+
+        public bool HasWorld { get => world is not null; }
+
+        public void SetWorld(World? world)
+        {
+            this.world = world;
+        }
 
         /// <inheritdoc/>
         public override string ToString()

@@ -7,10 +7,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MapColliderComponent"/> class.
         /// </summary>
-        public MapColliderComponent(Grid2D<bool> collisionGrid)
-            : base()
+        public MapColliderComponent(string name, Grid2D<bool> collisionGrid)
+            : base(name)
         {
             CollisionGrid = collisionGrid;
+        }
+
+        public MapColliderComponent(Grid2D<bool> collisionGrid)
+            : this("map_collider", collisionGrid)
+        {
         }
 
         /// <inheritdoc/>

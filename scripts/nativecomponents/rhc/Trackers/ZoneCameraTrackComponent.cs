@@ -13,12 +13,9 @@
         /// <param name="obj">The objcet to track.</param>
         /// <param name="boundingArea">The area the zone is bounded to.</param>
         /// <param name="zoneDimensions">The dimensions of the zone.</param>
-        /// <param name="zoneAnchor">The anchor of the zone.</param>
-        /// <param name="cameraAnchor">The anchor of the camera.</param>
-        /// <param name="isActive">The active state of the component.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions)
-            : base()
+        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions)
+            : base(name)
         {
             if (zoneDimensions <= 0)
                 throw new ArgumentException("Zone dimensions must be greater than zero.");
@@ -28,6 +25,11 @@
             BoundingArea = boundingArea;
 
             ZoneDimensions = zoneDimensions;
+        }
+
+        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions)
+            : this("zone_camera_track", obj, boundingArea, zoneDimensions)
+        {
         }
 
         /// <summary>

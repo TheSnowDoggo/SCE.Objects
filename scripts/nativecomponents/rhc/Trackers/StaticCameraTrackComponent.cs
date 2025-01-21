@@ -9,10 +9,15 @@
         /// Initializes a new instance of the <see cref="StaticCameraTrackComponent"/> class.
         /// </summary>
         /// <param name="obj">The object to track.</param>
-        public StaticCameraTrackComponent(SCEObject obj)
-            : base()
+        public StaticCameraTrackComponent(string name, SCEObject obj)
+            : base(name)
         {
             Object = obj;
+        }
+
+        public StaticCameraTrackComponent(SCEObject obj)
+            : this("static_camera_track", obj)
+        {
         }
 
         /// <summary>

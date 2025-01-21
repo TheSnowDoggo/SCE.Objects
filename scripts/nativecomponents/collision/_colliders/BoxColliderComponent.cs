@@ -7,12 +7,17 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BoxColliderComponent"/> class.
         /// </summary>
-        public BoxColliderComponent(Vector2Int dimensions)
-            : base()
+        public BoxColliderComponent(string name, Vector2Int dimensions)
+            : base(name)
         {
             if (dimensions < 1)
                 throw new ArgumentException("Dimensions are too small.");
             Dimensions = dimensions;
+        }
+
+        public BoxColliderComponent(Vector2Int dimensions)
+            : this("box_collider", dimensions)
+        {
         }
 
         /// <inheritdoc/>
