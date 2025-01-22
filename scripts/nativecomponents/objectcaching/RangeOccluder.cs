@@ -49,20 +49,14 @@
             updateCount = 0;
 
             if (ObjectCaching)
-            {
                 _objectCache.Clear();
-                _objectCache.Add(Target);
-                _objectCache.AddRange(ExclusionSet);
-            }
 
             foreach (var obj in Parent)
             {
-                if (obj != Target && !ExclusionSet.Contains(obj))
-                {
+                if (obj != Target && !ExclusionSet.Contains(obj) && !obj.CContainer.Contains<RangeOccluderExcluder>())
                     obj.IsActive = obj.Position.DistanceFrom(Target.Position) <= Range;
-                    if (ObjectCaching && obj.IsActive)
-                        _objectCache.Add(obj);
-                }
+                if (ObjectCaching && obj.IsActive)
+                    _objectCache.Add(obj);
             }
         }
     }
