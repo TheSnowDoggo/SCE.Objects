@@ -2,16 +2,26 @@
 {
     public class SmartLayerHandler : ComponentBase<World>
     {
+        private const string DEFAULT_NAME = "smart_layer_handler";
+
         private readonly List<SmartLayer> _smartLayerList = new();
 
-        public SmartLayerHandler(string name = "smart_layer_handler")
+        public SmartLayerHandler(string name = DEFAULT_NAME, IObjectCacheable? iObjectCacheable = null)
             : base(name)
+        {
+            IObjectCacheable = iObjectCacheable;
+        }
+
+        public SmartLayerHandler(IObjectCacheable? iObjectCacheable)
+            : this(DEFAULT_NAME, iObjectCacheable)
         {
         }
 
         public int InitialLayer { get; set; } = 0;
 
         public StackMode LayeringMode { get; set; } = StackMode.BottomUp;
+
+        public IObjectCacheable? IObjectCacheable { get; set; }
 
         public override void Update()
         {
@@ -29,7 +39,8 @@
 
         private void PopulateSmartLayerList()
         {
-            foreach (SCEObject obj in Parent)
+            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
+            foreach (SCEObject obj in collection)
             {
                 if (obj.IsActive)
                     UpdateObject(obj);

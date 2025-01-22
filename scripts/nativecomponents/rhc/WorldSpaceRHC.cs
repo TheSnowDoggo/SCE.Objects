@@ -3,6 +3,8 @@
     // WorldSpace RenderHandlerComponentV2
     public class WorldSpaceRHC : ComponentBase<World>
     {
+        private const string DEFAULT_NAME = "world_space";
+
         private readonly List<Camera> cameraList = new();
 
         private readonly Queue<Camera> cameraRenderQueue = new();
@@ -11,8 +13,14 @@
         /// Initializes a new instance of the <see cref="WorldSpaceRHC"/> class.
         /// </summary>
         /// <param name="name">The component name.</param>
-        public WorldSpaceRHC(string name = "world_space")
+        public WorldSpaceRHC(string name = DEFAULT_NAME, IObjectCacheable? iObjectCacheable = null)
             : base(name)
+        {
+            IObjectCacheable = iObjectCacheable;
+        }
+
+        public WorldSpaceRHC(IObjectCacheable? iObjectCacheable)
+            : this(DEFAULT_NAME, iObjectCacheable)
         {
         }
 
@@ -27,6 +35,8 @@
         public List<Camera> CameraList { get => cameraList; }
 
         public bool HasCamera { get => CameraList.Count != 0; }
+
+        public IObjectCacheable? IObjectCacheable { get; set; }
 
         public override void Update()
         {
@@ -53,7 +63,8 @@
 
         private void LoadObjects()
         {
-            foreach (SCEObject obj in Parent)
+            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
+            foreach (SCEObject obj in collection)
             {
                 if (obj.IsActive)
                     TryLoadActiveObject(obj);

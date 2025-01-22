@@ -1,26 +1,18 @@
 ﻿namespace SCE
 {
-    public class RangeOccluder : ComponentBase<World>
+    public class ActiveCache : ComponentBase<World>, IObjectCacheable
     {
+        private readonly List<SCEObject> _activeCache = new();
+
         private int framesPerUpdate = 1;
 
         private int updateCount = 0;
 
-        public RangeOccluder(string name, SCEObject obj, double range)
-            : base(name)
-        {
-            Object = obj;
-            Range = range;
-        }
-
-        public RangeOccluder(SCEObject obj, double range)
-            : this("range_occluder", obj, range)
+        public ActiveCache()
         {
         }
 
-        public SCEObject Object { get; set; }
-
-        public double Range { get; set; }
+        public IList<SCEObject> ObjectCache { get => _activeCache.AsReadOnly(); }
 
         public int FramesPerUpdate
         {
@@ -34,18 +26,17 @@
             }
         }
 
-        public HashSet<SCEObject> ExclusionSet { get; set; } = new();
-
         public override void Update()
         {
             if (++updateCount < FramesPerUpdate)
                 return;
             updateCount = 0;
 
+            _activeCache.Clear();
             foreach (var obj in Parent)
             {
-                if (obj != Object && !ExclusionSet.Contains(obj))
-                    obj.IsActive = obj.Position.DistanceFrom(Object.Position) <= Range;
+                if (obj.IsActive)
+                    _activeCache.Add(obj);
             }
         }
     }

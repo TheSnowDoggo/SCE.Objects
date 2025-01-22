@@ -2,12 +2,22 @@
 {
     public class ColliderHandler : ComponentBase<World>
     {
+        private const string DEFAULT_NAME = "collider_handler";
+
         private readonly List<ColliderLayer> colliderLayerList = new();
 
-        public ColliderHandler(string name = "collider_handler")
+        public ColliderHandler(string name = DEFAULT_NAME, IObjectCacheable? iObjectCacheable = null)
             : base(name)
         {
+            IObjectCacheable = iObjectCacheable;
         }
+
+        public ColliderHandler(IObjectCacheable? iObjectCacheable)
+            : this(DEFAULT_NAME, iObjectCacheable)
+        {
+        }
+
+        public IObjectCacheable? IObjectCacheable { get; set; }
 
         /// <inheritdoc/>
         public override void Update()
@@ -73,6 +83,7 @@
         {
             colliderLayerList.Clear();
 
+            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in Parent)
             {
                 if (obj.IsActive)

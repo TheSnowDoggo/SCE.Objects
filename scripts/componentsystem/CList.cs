@@ -3,7 +3,7 @@
     /// <summary>
     /// A wrapper class containing a <see cref="IComponent"/> <see cref="List{IComponent}"/>.
     /// </summary>
-    public class CList : SearchHash<IComponent>
+    public class CList : SearchHashExtended<IComponent>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CList"/> class.
