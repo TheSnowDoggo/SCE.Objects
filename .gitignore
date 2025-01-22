@@ -2,4 +2,8 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/SCECorePlus/FileContentIndex
+/.vs/
+/.gitignore
+/obj/Debug/net6.0/SCECorePlus.assets.cache
+/obj/Debug/net6.0/SCECorePlus.csproj.AssemblyReference.cache
+/obj/Debug/net6.0/SCECorePlus.GeneratedMSBuildEditorConfig.editorconfig
