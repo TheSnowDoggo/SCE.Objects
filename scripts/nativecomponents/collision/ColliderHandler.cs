@@ -84,7 +84,7 @@
             colliderLayerList.Clear();
 
             IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
-            foreach (SCEObject obj in Parent)
+            foreach (SCEObject obj in collection)
             {
                 if (obj.IsActive)
                     TryAddColliderComponents(obj);

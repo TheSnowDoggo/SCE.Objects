@@ -42,7 +42,7 @@
             IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in collection)
             {
-                if (obj.IsActive)
+                if (obj.IsActive && obj.CContainer.Contains<SmartLayer>())
                     UpdateObject(obj);
             }
         }
