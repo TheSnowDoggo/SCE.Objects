@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="SCE">
-      <HintPath>lib\SCE.dll</HintPath>
+    <Reference Include="SCE.Core">
+      <HintPath>lib\SCE.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SCECore">
-      <HintPath>lib\SCECore.dll</HintPath>
+    <Reference Include="SCE.GameManager">
+      <HintPath>lib\SCE.GameManager.dll</HintPath>
     </Reference>
   </ItemGroup>
 

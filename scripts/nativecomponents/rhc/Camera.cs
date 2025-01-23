@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a camera in a world space.
     /// </summary>
-    public class Camera : UIBase, ICContainerHolder
+    public class Camera : UIBaseExt, ICContainerHolder
     {
         private const Color DefaultBgColor = Color.Black;
 
@@ -168,25 +168,15 @@
                 RenderIRP(irp);
         }
 
-        /// <summary>
-        /// Renders the specified irp to the camera.
-        /// </summary>
         private void RenderIRP(SpritePackage irp)
         {
-            if (Area2DInt.Overlaps(WorldAlignedArea, irp.OffsetArea))
-            {
-                Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.OffsetArea) - irp.Offset;
+            Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.OffsetArea) - irp.Offset;
 
-                Vector2Int cameraOffsetPosition = irp.Offset - WorldPositionInt;
+            Vector2Int cameraOffsetPosition = irp.Offset - WorldPositionInt;
 
-                _dpMap.MapToArea(irp.DisplayMap, trimmedGridArea, cameraOffsetPosition, true);
+            _dpMap.MapToArea(irp.DisplayMap, trimmedGridArea, cameraOffsetPosition, true);
 
-                clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
-            }
-            else
-            {
-                throw new ArgumentException("owchue");
-            }
+            clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
         }
 
         private void OnUpdateWorldPosition()

@@ -2,25 +2,39 @@
 {
     public class RangeOccluder : ComponentBase<World>, IObjectCacheable
     {
+        private const string DEFAULT_NAME = "range_occluder";
+
         private readonly List<SCEObject> _objectCache = new();
 
         private int framesPerUpdate = 1;
 
         private int updateCount = 0;
 
-        public RangeOccluder(string name, SCEObject target, double range)
+        public RangeOccluder(string name, IEnumerable<SCEObject> targets, double range)
             : base(name)
         {
-            Target = target;
+            TargetSet = new(targets);
             Range = range;
         }
 
-        public RangeOccluder(SCEObject target, double range)
-            : this("range_occluder", target, range)
+        public RangeOccluder(IEnumerable<SCEObject> targets, double range)
+            : this(DEFAULT_NAME, targets, range)
         {
         }
 
-        public SCEObject Target { get; set; }
+        public RangeOccluder(string name, double range)
+            : base(name)
+        {
+            TargetSet = new();
+            Range = range;
+        }
+
+        public RangeOccluder(double range)
+            : this(DEFAULT_NAME, range)
+        {
+        }
+
+        public HashSet<SCEObject> TargetSet { get; set; }
 
         public double Range { get; set; }
 
@@ -53,11 +67,21 @@
 
             foreach (var obj in Parent)
             {
-                if (obj != Target && !ExclusionSet.Contains(obj) && !obj.CContainer.Contains<RangeOccluderExcluder>())
-                    obj.IsActive = obj.Position.DistanceFrom(Target.Position) <= Range;
-                if (ObjectCaching && obj.IsActive)
+                if (!TargetSet.Contains(obj) && !ExclusionSet.Contains(obj) && !obj.CContainer.Contains<RangeOccluderExcluder>())
+                    obj.IsActive = IsObjectOccluded(obj);
+                if (ObjectCaching && obj.IsActive && !obj.CContainer.IsEmpty)
                     _objectCache.Add(obj);
             }
+        }
+
+        public bool IsObjectOccluded(SCEObject obj)
+        {
+            foreach (var target in TargetSet)
+            {
+                if (obj.Position.DistanceFrom(target.Position) <= Range)
+                    return true;
+            }
+            return false;
         }
     }
 }

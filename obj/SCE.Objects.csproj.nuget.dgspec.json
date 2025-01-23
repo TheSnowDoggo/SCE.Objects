@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCECorePlus.csproj": {}
+    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj": {}
   },
   "projects": {
-    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCECorePlus.csproj": {
+    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCECorePlus.csproj",
-        "projectName": "SCECorePlus",
-        "projectPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCECorePlus.csproj",
+        "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
+        "projectName": "SCE.Objects",
+        "projectPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
         "packagesPath": "C:\\Users\\redst\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCECorePlus\\obj\\",
+        "outputPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

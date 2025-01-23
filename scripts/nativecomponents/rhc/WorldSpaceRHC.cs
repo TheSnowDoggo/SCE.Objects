@@ -54,7 +54,7 @@
 
         private void LoadCameraQueue()
         {
-            foreach (Camera camera in cameraList)
+            foreach (var camera in cameraList)
             {
                 if (camera.IsActive)
                     cameraRenderQueue.Enqueue(camera);
@@ -73,7 +73,7 @@
 
         private void TryLoadActiveObject(SCEObject obj)
         {
-            foreach (IComponent component in obj.CContainer)
+            foreach (var component in obj.CContainer)
             {
                 if (component.IsActive && component is IRenderable renderable)
                     TryLoadActiveRenderable(renderable, obj.GridPosition);
@@ -82,27 +82,23 @@
 
         private void TryLoadActiveRenderable(IRenderable renderable, Vector2Int objectOffset)
         {
-            DisplayMap dpMap = renderable.GetMap();
+            var dpMap = renderable.GetMap();
 
-            Vector2Int imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Position + objectOffset;
+            var imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Position + objectOffset;
 
-            Vector2Int imageAlignedPosCorner = imageAlignedPos + dpMap.Dimensions;
+            var imageAlignedPosCorner = imageAlignedPos + dpMap.Dimensions;
 
-            foreach (Camera camera in cameraRenderQueue)
+            foreach (var camera in cameraRenderQueue)
             {
                 // More efficient than creating a new Area2DInt for the image
                 if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, imageAlignedPos, imageAlignedPosCorner))
-                {
-                    SpritePackage irp = new(dpMap, renderable.Layer, imageAlignedPos);
-
-                    camera.LoadIRP(irp);
-                }
+                    camera.LoadIRP(new SpritePackage(dpMap, renderable.Layer, imageAlignedPos));
             }
         }
 
         private void RenderCameraQueue()
         {
-            foreach (Camera camera in cameraRenderQueue)
+            foreach (var camera in cameraRenderQueue)
                 camera.RenderNow();
             cameraRenderQueue.Clear();
         }

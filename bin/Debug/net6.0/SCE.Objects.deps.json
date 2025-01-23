@@ -6,26 +6,26 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "SCECorePlus/1.0.0": {
+      "SCE.Objects/1.0.0": {
         "dependencies": {
-          "SCE": "1.0.0.0",
-          "SCECore": "1.0.0.0"
+          "SCE.Core": "1.0.0.0",
+          "SCE.GameManager": "1.0.0.0"
         },
         "runtime": {
-          "SCECorePlus.dll": {}
+          "SCE.Objects.dll": {}
         }
       },
-      "SCE/1.0.0.0": {
+      "SCE.Core/1.0.0.0": {
         "runtime": {
-          "SCE.dll": {
+          "SCE.Core.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
       },
-      "SCECore/1.0.0.0": {
+      "SCE.GameManager/1.0.0.0": {
         "runtime": {
-          "SCECore.dll": {
+          "SCE.GameManager.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -34,17 +34,17 @@
     }
   },
   "libraries": {
-    "SCECorePlus/1.0.0": {
+    "SCE.Objects/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "SCE/1.0.0.0": {
+    "SCE.Core/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
-    "SCECore/1.0.0.0": {
+    "SCE.GameManager/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
