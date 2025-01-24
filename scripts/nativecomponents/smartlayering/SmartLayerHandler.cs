@@ -19,7 +19,7 @@
 
         public int InitialLayer { get; set; } = 0;
 
-        public StackMode LayeringMode { get; set; } = StackMode.BottomUp;
+        public StackType LayeringMode { get; set; } = StackType.BottomUp;
 
         public IObjectCacheable? IObjectCacheable { get; set; }
 
@@ -60,10 +60,10 @@
         {
             switch (LayeringMode)
             {
-                case StackMode.BottomUp:
+                case StackType.BottomUp:
                     _smartLayerList.Sort((a, b) => b.RelativePosition.Y - a.RelativePosition.Y);
                     break;
-                case StackMode.TopDown:
+                case StackType.TopDown:
                     _smartLayerList.Sort((a, b) => a.RelativePosition.Y - b.RelativePosition.Y);
                     break;              
             }
@@ -73,8 +73,8 @@
         {
             return LayeringMode switch
             {
-                StackMode.BottomUp => +1,
-                StackMode.TopDown => -1,
+                StackType.BottomUp => +1,
+                StackType.TopDown => -1,
                 _ => throw new NotImplementedException()
             };
         }
