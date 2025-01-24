@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Transformer : ComponentBase<SCEObject>
+    public class Transformer : ComponentBase<SCEObject>, IUpdate
     {
         private const string DEFAULT_NAME = "transformer";
 
@@ -47,8 +47,10 @@
 
         public double Speed { get; set; }
 
-        public override void Update()
+        public void Update()
         {
+            if (Speed == 0)
+                return;
             Parent.Position += Direction * (float)(GameHandler.DeltaTime * Speed);
         }
     }

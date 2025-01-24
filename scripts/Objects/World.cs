@@ -9,9 +9,9 @@
         /// Initializes a new instance of the <see cref="World"/> class.
         /// </summary>
         /// <param name="cList">The initial cList of the world.</param>
-        public World(CList cList)
+        public World(CGroup cList)
         {
-            CContainer = new(this, cList);
+            Components = new(this, cList);
             OnAdd += World_OnAdd;
             OnRemove += World_OnRemove;
             SetupEveryObject();
@@ -21,12 +21,12 @@
         /// Initializes a new instance of the <see cref="World"/> class.
         /// </summary>
         public World()
-            : this(new CList())
+            : this(new CGroup())
         {
         }
 
         /// <inheritdoc/>
-        public CContainer CContainer { get; }
+        public CContainer Components { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the world should update its own components before updating the contained objects components.
@@ -40,13 +40,13 @@
         {
             if (PrioritiseWorldComponentUpdates)
             {
-                CContainer.Update();
+                Components.Update();
                 UpdateObjectComponents();
             }
             else
             {
                 UpdateObjectComponents();
-                CContainer.Update();
+                Components.Update();
             }
         }
 
@@ -58,7 +58,7 @@
             foreach (var obj in this)
             {
                 if (obj.IsActive)
-                    obj.CContainer.Update();
+                    obj.Components.Update();
             }
         }
 

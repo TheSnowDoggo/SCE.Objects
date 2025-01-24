@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class RangeOccluder : ComponentBase<World>, IObjectCacheable
+    public class RangeOccluder : ComponentBase<World>, IUpdate, IObjectCacheable
     {
         private const string DEFAULT_NAME = "range_occluder";
 
@@ -56,7 +56,7 @@
 
         public bool ObjectCaching { get; set; } = false;
 
-        public override void Update()
+        public void Update()
         {
             if (++updateCount < FramesPerUpdate)
                 return;
@@ -67,9 +67,9 @@
 
             foreach (var obj in Parent)
             {
-                if (!TargetSet.Contains(obj) && !ExclusionSet.Contains(obj) && !obj.CContainer.Contains<RangeOccluderExcluder>())
+                if (!TargetSet.Contains(obj) && !ExclusionSet.Contains(obj) && !obj.Components.Contains<RangeOccluderExcluder>())
                     obj.IsActive = IsObjectOccluded(obj);
-                if (ObjectCaching && obj.IsActive && !obj.CContainer.IsEmpty)
+                if (ObjectCaching && obj.IsActive && !obj.Components.IsEmpty)
                     _objectCache.Add(obj);
             }
         }

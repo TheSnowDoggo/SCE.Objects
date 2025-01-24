@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class ColliderHandler : ComponentBase<World>
+    public class ColliderHandler : ComponentBase<World>, IUpdate
     {
         private const string DEFAULT_NAME = "collider_handler";
 
@@ -20,7 +20,7 @@
         public IObjectCacheable? IObjectCacheable { get; set; }
 
         /// <inheritdoc/>
-        public override void Update()
+        public void Update()
         {
             if (!IsActive)
                 return;
@@ -46,7 +46,7 @@
             bool layersMatch;
             do
             {
-                ICollidable other = fullColliderList[i];
+                var other = fullColliderList[i];
 
                 layersMatch = collider.Layer == other.Layer;
 
@@ -86,14 +86,14 @@
             IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in collection)
             {
-                if (obj.IsActive)
+                if (obj.IsActive && obj.Components.Contains<IComponent>())
                     TryAddColliderComponents(obj);
             }
         }
 
         private void TryAddColliderComponents(SCEObject obj)
         {
-            foreach(IComponent component in obj.CContainer)
+            foreach(IComponent component in obj.Components)
             {
                 if (component.IsActive && component is ICollidable collidable && (collidable.IsListening || collidable.IsReceiving))
                     AddCollider(collidable);

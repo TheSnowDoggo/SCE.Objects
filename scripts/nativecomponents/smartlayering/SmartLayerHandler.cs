@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class SmartLayerHandler : ComponentBase<World>
+    public class SmartLayerHandler : ComponentBase<World>, IUpdate
     {
         private const string DEFAULT_NAME = "smart_layer_handler";
 
@@ -23,7 +23,7 @@
 
         public IObjectCacheable? IObjectCacheable { get; set; }
 
-        public override void Update()
+        public void Update()
         {
             _smartLayerList.Clear();
 
@@ -42,14 +42,14 @@
             IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in collection)
             {
-                if (obj.IsActive && obj.CContainer.Contains<SmartLayer>())
+                if (obj.IsActive && obj.Components.Contains<SmartLayer>())
                     UpdateObject(obj);
             }
         }
 
         private void UpdateObject(SCEObject obj)
         {
-            foreach (IComponent component in obj.CContainer)
+            foreach (IComponent component in obj.Components)
             {
                 if (component.IsActive && component is SmartLayer smartLayer)
                     _smartLayerList.Add(smartLayer);

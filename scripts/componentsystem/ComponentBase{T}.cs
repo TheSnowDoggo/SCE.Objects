@@ -29,9 +29,5 @@
                 throw new InvalidCContainerHolderException("Holder is invalid.");
             this.cContainer = cContainer;
         }
-
-        public virtual void Update()
-        {
-        }
     }
 }

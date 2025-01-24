@@ -3,7 +3,7 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for zone-based object camera tracking.
     /// </summary>
-    public class ZoneCameraTrackComponent : ComponentBase<Camera>
+    public class ZoneCameraTrackComponent : ComponentBase<Camera>, IUpdate
     {
         private Vector2Int zoneDimensions;
 
@@ -78,7 +78,7 @@
 
         private Area2DInt ObjectAlignedZoneArea => new Area2DInt(Vector2Int.Zero, ZoneDimensions) + ObjectAlignedZonePosition;
 
-        public override void Update()
+        public void Update()
         {
             Parent.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Parent.Dimensions) + CameraPosition);
         }

@@ -3,7 +3,7 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for static object camrea tracking.
     /// </summary>
-    public class StaticCameraTrackComponent : ComponentBase<Camera>
+    public class StaticCameraTrackComponent : ComponentBase<Camera>, IUpdate
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticCameraTrackComponent"/> class.
@@ -33,7 +33,7 @@
         public Anchor Anchor { get; set; }
 
         /// <inheritdoc/>
-        public override void Update()
+        public void Update()
         {
             Parent.WorldPosition = Object.Position + -(Vector2)AnchorUtils.AnchoredDimension(Anchor, Parent.Dimensions) + Position;
         }

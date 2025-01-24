@@ -9,18 +9,18 @@
 
         private World? world = null;
 
-        public SCEObject(string name, CList cList)
+        public SCEObject(string name, CGroup cList)
         {
             Name = name;
-            CContainer = new(this, cList);
+            Components = new(this, cList);
         }
 
         public SCEObject(string name)
-            : this(name, new CList())
+            : this(name, new CGroup())
         {
         }
 
-        public SCEObject(CList cList)
+        public SCEObject(CGroup cList)
             : this(DEFAULT_NAME, cList)
         {
         }
@@ -51,7 +51,7 @@
         public bool IsActive { get; set; } = true;
 
         /// <inheritdoc/>
-        public CContainer CContainer { get; }
+        public CContainer Components { get; }
 
         public World World { get => world ?? throw new NullReferenceException("World is null"); }
 

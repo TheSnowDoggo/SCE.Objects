@@ -26,7 +26,7 @@
             }
         }
 
-        public override void Update()
+        public void Update()
         {
             if (++updateCount < FramesPerUpdate)
                 return;

@@ -17,22 +17,22 @@
 
         private Color bgColor = DefaultBgColor;
 
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CList cList)
+        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CGroup cList)
             : base(dimensions)
         {
             WorldSpace = worldSpace;
 
-            CContainer = new(this, cList);
+            Components = new(this, cList);
 
             OnUpdateWorldPosition();
         }
 
         public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions)
-            : this(worldSpace, dimensions, new CList())
+            : this(worldSpace, dimensions, new CGroup())
         {
         }
 
-        public CContainer CContainer { get; }
+        public CContainer Components { get; }
 
         /// <summary>
         /// Gets or sets the position of this instance in the WorldSpace.

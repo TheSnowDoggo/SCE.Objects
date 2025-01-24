@@ -8,6 +8,6 @@
         /// <summary>
         /// Gets the CContainer.
         /// </summary>
-        CContainer CContainer { get; }
+        CContainer Components { get; }
     }
 }

@@ -16,10 +16,5 @@
         /// <param name="cContainer">The <see cref="CContainer"/> to set to the <see cref="IComponent"/>.</param>
         /// <param name="holder">The <see cref="ICContainerHolder"/> to check if it's valid in the <see cref="IComponent"/>.</param>
         void SetCContainer(CContainer? cContainer, ICContainerHolder holder);
-
-        /// <summary>
-        /// Calls the <see cref="IComponent"/> to update.
-        /// </summary>
-        void Update();
     }
 }

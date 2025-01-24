@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Welder : ComponentBase<SCEObject>
+    public class Welder : ComponentBase<SCEObject>, IUpdate
     {
         public Welder(string name, SCEObject obj)
             : base(name)
@@ -17,7 +17,7 @@
 
         public Vector2Int Position { get; set; }
 
-        public override void Update()
+        public void Update()
         {
             Parent.Position = Object.Position + Position;
         }
