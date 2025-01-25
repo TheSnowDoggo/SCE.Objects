@@ -78,17 +78,17 @@
         {
             colliderLayerList.Clear();
 
-            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
-            foreach (SCEObject obj in collection)
+            IEnumerable<IObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
+            foreach (var obj in collection)
             {
-                if (obj.IsActive && obj.Components.Contains<IComponent>())
+                if (obj.IsActive && obj.Components.Contains<ICollidable>())
                     TryAddColliderComponents(obj);
             }
         }
 
-        private void TryAddColliderComponents(SCEObject obj)
+        private void TryAddColliderComponents(IObject obj)
         {
-            foreach(IComponent component in obj.Components)
+            foreach(var component in obj.Components)
             {
                 if (component.IsActive && component is ICollidable collidable && (collidable.IsListening || collidable.IsReceiving))
                     AddCollider(collidable);

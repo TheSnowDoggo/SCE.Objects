@@ -38,15 +38,15 @@
 
         private void PopulateSmartLayerList()
         {
-            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
-            foreach (SCEObject obj in collection)
+            IEnumerable<IObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
+            foreach (var obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<SmartLayer>())
                     UpdateObject(obj);
             }
         }
 
-        private void UpdateObject(SCEObject obj)
+        private void UpdateObject(IObject obj)
         {
             foreach (IComponent component in obj.Components)
             {

@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Sprite2D : ComponentBase<SCEObject>, IRenderable, ISmartLayerable
+    public class Sprite2D : ComponentBase<IObject>, IRenderable, ISmartLayerable
     {
         public Sprite2D(string name, DisplayMap dpMap)
             : base(name)
@@ -15,7 +15,7 @@
 
         public DisplayMap DisplayMap { get; set; }
 
-        public Vector2Int Position { get; set; }
+        public Vector2Int Offset { get; set; }
 
         public int Layer { get; set; }
 

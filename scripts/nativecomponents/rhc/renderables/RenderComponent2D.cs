@@ -3,7 +3,7 @@
     /// <summary>
     /// An <see cref="IComponent"/> used for storing an <see cref="IRenderable"/> in an object.
     /// </summary>
-    public class RenderComponent2D : ComponentBase<SCEObject>, IRenderable
+    public class RenderComponent2D : ComponentBase<IObject>, IRenderable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderComponent2D"/> class.
@@ -22,7 +22,7 @@
 
         public IRenderable Renderable { get; set; }
 
-        public Vector2Int Position { get => Renderable.Position; }
+        public Vector2Int Offset { get => Renderable.Offset; }
 
         public int Layer { get => Renderable.Layer; }
 

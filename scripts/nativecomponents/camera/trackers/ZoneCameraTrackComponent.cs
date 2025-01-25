@@ -70,7 +70,7 @@
         /// </summary>
         public Anchor CameraAnchor { get; set; }
 
-        private Vector2Int ObjectAlignedZonePosition => Object.GridPosition + -AnchorUtils.AnchoredDimension(ZoneAnchor, ZoneDimensions) + ZonePosition;
+        private Vector2Int ObjectAlignedZonePosition => Object.GridPosition() + -AnchorUtils.AnchoredDimension(ZoneAnchor, ZoneDimensions) + ZonePosition;
 
         private Area2DInt BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
 

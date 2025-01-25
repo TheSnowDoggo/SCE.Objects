@@ -7,7 +7,7 @@
     {
         private const string DEFAULT_NAME = "camera";
 
-        private const Color DEFAULT_BGCOLOR = Color.Black;
+        private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
         #region Camera
         private readonly List<SpritePackage> renderList = new();
@@ -16,7 +16,7 @@
 
         private Vector2 worldPosition;
 
-        private Color? renderedBgColor = null;
+        private SCEColor? renderedBgColor = null;
         #endregion
 
         private CContainer? container;
@@ -67,7 +67,7 @@
         #endregion
 
         #region Settings
-        public Color BgColor { get; set; } = DEFAULT_BGCOLOR;
+        public SCEColor BgColor { get; set; } = DEFAULT_BGCOLOR;
 
         public bool ConsistantSorting { get; set; } = true;
         #endregion

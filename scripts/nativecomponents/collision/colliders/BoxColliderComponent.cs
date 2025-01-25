@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class BoxColliderComponent : ComponentBase<SCEObject>, ICollidable
+    public class BoxColliderComponent : ComponentBase<IObject>, ICollidable
     {
         private const byte DefaultLayer = 0;
 
@@ -46,7 +46,7 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.GridPosition; }
+        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.GridPosition(); }
 
         private Area2DInt CollisionArea { get => new(Vector2Int.Zero, Dimensions); }
 

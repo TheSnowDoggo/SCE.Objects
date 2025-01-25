@@ -20,7 +20,7 @@
 
         public CContainer Components { get; }
 
-        public Color BgColor { get; set; }
+        public SCEColor BgColor { get; set; }
 
         public IUpdateLimit? UpdateLimiter { get; set; }
 
@@ -66,20 +66,20 @@
 
         private void LoadObjects()
         {
-            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
-            foreach (SCEObject obj in collection)
+            IEnumerable<IObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
+            foreach (var obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<IRenderable>())
                     TryLoadActiveObject(obj);
             }
         }
 
-        private void TryLoadActiveObject(SCEObject obj)
+        private void TryLoadActiveObject(IObject obj)
         {
             foreach (var component in obj.Components)
             {
                 if (component.IsActive && component is IRenderable renderable)
-                    TryLoadActiveRenderable(renderable, obj.GridPosition);
+                    TryLoadActiveRenderable(renderable, obj.GridPosition());
             }
         }
 
@@ -87,7 +87,7 @@
         {
             var dpMap = renderable.GetMap();
 
-            var imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Position + objectOffset;
+            var imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + objectOffset;
 
             var imageAlignedPosCorner = imageAlignedPos + dpMap.Dimensions;
 

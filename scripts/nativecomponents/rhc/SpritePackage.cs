@@ -3,7 +3,7 @@
     /// <summary>
     /// A struct used for containing an image and its offset for rendering.
     /// </summary>
-    internal readonly struct SpritePackage
+    internal class SpritePackage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SpritePackage"/> struct.

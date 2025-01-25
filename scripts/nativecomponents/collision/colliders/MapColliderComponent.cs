@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class MapColliderComponent : ComponentBase<SCEObject>, ICollidable
+    public class MapColliderComponent : ComponentBase<IObject>, ICollidable
     {
         private const byte DefaultLayer = 0;
 
@@ -44,11 +44,11 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.GridPosition; }
+        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.GridPosition(); }
 
-        private Vector2Int OffsetPosition { get => Holder.GridPosition + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
+        private Vector2Int OffsetPosition { get => Holder.GridPosition() + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
 
-        public static Grid2D<bool> ConvertToCollisionGrid(DisplayMap displayMap, Color excludedBgColor = Color.Transparent)
+        public static Grid2D<bool> ConvertToCollisionGrid(DisplayMap displayMap, SCEColor excludedBgColor = SCEColor.Transparent)
         {
             Grid2D<bool> collisionGrid = new(displayMap.Dimensions);
 
@@ -63,7 +63,7 @@
             return collisionGrid;
         }
 
-        public static Grid2D<bool> ConvertToCollisionGrid(Image image, Color excludedBgColor = Color.Transparent)
+        public static Grid2D<bool> ConvertToCollisionGrid(Image image, SCEColor excludedBgColor = SCEColor.Transparent)
         {
             return ConvertToCollisionGrid((DisplayMap)image, excludedBgColor);
         }

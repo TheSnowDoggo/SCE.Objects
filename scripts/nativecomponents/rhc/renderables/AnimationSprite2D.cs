@@ -2,7 +2,7 @@
 {
     using System.Collections;
 
-    public class AnimationSprite2D : ComponentBase<SCEObject>, IRenderable, ISmartLayerable, IEnumerable<DisplayMap>
+    public class AnimationSprite2D : ComponentBase<IObject>, IRenderable, ISmartLayerable, IEnumerable<DisplayMap>
     {
         private const string DEFAULT_NAME = "animation_sprite";
 
@@ -69,7 +69,7 @@
 
         public DisplayMap Selected { get => NullabeSelected ?? throw new NullReferenceException("No sprite selected."); }
 
-        public Vector2Int Position { get; set; }
+        public Vector2Int Offset { get; set; }
 
         public Anchor Anchor { get; set; }
 

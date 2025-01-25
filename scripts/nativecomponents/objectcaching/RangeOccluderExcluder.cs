@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class RangeOccluderExcluder : ComponentBase<SCEObject>
+    public class RangeOccluderExcluder : ComponentBase<IObject>
     {
     }
 }

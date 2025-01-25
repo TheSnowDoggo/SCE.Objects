@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Transformer : ComponentBase<SCEObject>, IUpdate
+    public class Transformer : ComponentBase<IObject>, IUpdate
     {
         private const string DEFAULT_NAME = "transformer";
 
@@ -15,13 +15,13 @@
         public Transformer(string name, Vector2 direction, double speed = 1.0)
             : this(name, speed)
         {
-            this.direction = direction.Normalized;
+            this.direction = direction.Normalize();
         }
 
-        public Transformer(string name, double direction, double speed = 1.0)
+        public Transformer(string name, float direction, double speed = 1.0)
             : this(name, speed)
         {
-            this.direction = new Vector2((float)Math.Sin(direction), (float)Math.Cos(direction)).Normalized;
+            this.direction = MathUtils.AngleToVector(direction);
         }
 
         public Transformer(double speed = 1.0)
@@ -34,7 +34,7 @@
         {
         }
 
-        public Transformer(double direction, double speed = 1.0)
+        public Transformer(float direction, double speed = 1.0)
             : this(DEFAULT_NAME, direction, speed)
         {
         }
@@ -42,15 +42,13 @@
         public Vector2 Direction
         {
             get => direction;
-            set => direction = value.Normalized;
+            set => direction = value.Normalize();
         }
 
         public double Speed { get; set; }
 
         public void Update()
         {
-            if (Speed == 0)
-                return;
             Holder.Position += Direction * (float)(GameHandler.DeltaTime * Speed);
         }
     }

@@ -4,16 +4,18 @@
     {
         private const string DEFAULT_NAME = "range_occluder";
 
-        private readonly List<SCEObject> _objectCache = new();
+        private readonly List<IObject> _objectList = new();
 
-        public RangeOccluder(string name, IEnumerable<SCEObject> targets, double range)
+        private readonly HashSet<IObject> _objectCache = new();
+
+        public RangeOccluder(string name, IEnumerable<IObject> targets, double range)
             : base(name)
         {
             TargetSet = new(targets);
             Range = range;
         }
 
-        public RangeOccluder(IEnumerable<SCEObject> targets, double range)
+        public RangeOccluder(IEnumerable<IObject> targets, double range)
             : this(DEFAULT_NAME, targets, range)
         {
         }
@@ -30,36 +32,56 @@
         {
         }
 
-        public HashSet<SCEObject> TargetSet { get; set; }
+        public HashSet<IObject> TargetSet { get; set; }
 
         public double Range { get; set; }
 
-        public IList<SCEObject> ObjectCache { get => _objectCache.AsReadOnly(); }
+        public IList<IObject> ObjectCache { get => _objectList.AsReadOnly(); }
 
         public IUpdateLimit? UpdateLimiter { get; set; }
 
-        public HashSet<SCEObject> ExclusionSet { get; set; } = new();
+        public HashSet<IObject> ExclusionSet { get; set; } = new();
+
+        public HashSet<IObject> PrioritySet { get; set; } = new();
 
         public bool ObjectCaching { get; set; } = false;
 
         public void Update()
         {
             if (!UpdateLimiter?.OnUpdate() ?? false)
+            {
+                UpdateIn(PrioritySet);
                 return;
+            }
 
-            if (ObjectCaching)
-                _objectCache.Clear();
+            Clear();
+            UpdateIn(Holder);
+        }
 
-            foreach (var obj in Holder)
+        private void UpdateIn(IEnumerable<IObject> collection)
+        {
+            foreach (var obj in collection)
             {
                 if (!TargetSet.Contains(obj) && !ExclusionSet.Contains(obj) && !obj.Components.Contains<RangeOccluderExcluder>())
                     obj.IsActive = IsObjectOccluded(obj);
-                if (ObjectCaching && obj.IsActive && !obj.Components.IsEmpty)
+                if (ObjectCaching && obj.IsActive && !obj.Components.IsEmpty && !_objectCache.Contains(obj))
+                {
                     _objectCache.Add(obj);
+                    _objectList.Add(obj);
+                }
             }
         }
 
-        public bool IsObjectOccluded(SCEObject obj)
+        private void Clear()
+        {
+            if (ObjectCaching)
+            {
+                _objectList.Clear();
+                _objectCache.Clear();
+            }
+        }
+
+        private bool IsObjectOccluded(IObject obj)
         {
             foreach (var target in TargetSet)
             {
