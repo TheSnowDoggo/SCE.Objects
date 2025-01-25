@@ -6,14 +6,8 @@
 
         private readonly List<SmartLayer> _smartLayerList = new();
 
-        public SmartLayerHandler(string name = DEFAULT_NAME, IObjectCacheable? iObjectCacheable = null)
+        public SmartLayerHandler(string name = DEFAULT_NAME)
             : base(name)
-        {
-            IObjectCacheable = iObjectCacheable;
-        }
-
-        public SmartLayerHandler(IObjectCacheable? iObjectCacheable)
-            : this(DEFAULT_NAME, iObjectCacheable)
         {
         }
 
@@ -23,8 +17,13 @@
 
         public IObjectCacheable? IObjectCacheable { get; set; }
 
+        public IUpdateLimit? UpdateLimiter { get; set; }
+
         public void Update()
         {
+            if (!UpdateLimiter?.OnUpdate() ?? false)
+                return;
+
             _smartLayerList.Clear();
 
             PopulateSmartLayerList();
@@ -39,7 +38,7 @@
 
         private void PopulateSmartLayerList()
         {
-            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
+            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<SmartLayer>())

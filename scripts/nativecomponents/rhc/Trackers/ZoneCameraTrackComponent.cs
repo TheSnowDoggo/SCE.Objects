@@ -80,7 +80,7 @@
 
         public void Update()
         {
-            Parent.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Parent.Dimensions) + CameraPosition);
+            Holder.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Holder.Dimensions) + CameraPosition);
         }
     }
 }

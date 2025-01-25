@@ -6,10 +6,6 @@
 
         private readonly List<SCEObject> _objectCache = new();
 
-        private int framesPerUpdate = 1;
-
-        private int updateCount = 0;
-
         public RangeOccluder(string name, IEnumerable<SCEObject> targets, double range)
             : base(name)
         {
@@ -40,17 +36,7 @@
 
         public IList<SCEObject> ObjectCache { get => _objectCache.AsReadOnly(); }
 
-        public int FramesPerUpdate
-        {
-            get => framesPerUpdate;
-            set
-            {
-                if (value < 1)
-                    throw new ArgumentException("Update frequency must be greater than 0.");
-                framesPerUpdate = value;
-                updateCount = FramesPerUpdate;
-            }
-        }
+        public IUpdateLimit? UpdateLimiter { get; set; }
 
         public HashSet<SCEObject> ExclusionSet { get; set; } = new();
 
@@ -58,14 +44,13 @@
 
         public void Update()
         {
-            if (++updateCount < FramesPerUpdate)
+            if (!UpdateLimiter?.OnUpdate() ?? false)
                 return;
-            updateCount = 0;
 
             if (ObjectCaching)
                 _objectCache.Clear();
 
-            foreach (var obj in Parent)
+            foreach (var obj in Holder)
             {
                 if (!TargetSet.Contains(obj) && !ExclusionSet.Contains(obj) && !obj.Components.Contains<RangeOccluderExcluder>())
                     obj.IsActive = IsObjectOccluded(obj);

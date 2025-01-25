@@ -44,9 +44,9 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Parent.GridPosition; }
+        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.GridPosition; }
 
-        private Vector2Int OffsetPosition { get => Parent.GridPosition + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
+        private Vector2Int OffsetPosition { get => Holder.GridPosition + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
 
         public static Grid2D<bool> ConvertToCollisionGrid(DisplayMap displayMap, Color excludedBgColor = Color.Transparent)
         {
@@ -71,7 +71,7 @@
         /// <inheritdoc/>
         public bool CollidesWith(ICollidable other)
         {
-            if (CheckDistance > 0 && other.Parent.Position.DistanceFrom(Parent.Position) > CheckDistance)
+            if (CheckDistance > 0 && other.Holder.Position.DistanceFrom(Holder.Position) > CheckDistance)
                 return false;
 
             if (other is MapColliderComponent mapColliderComp)

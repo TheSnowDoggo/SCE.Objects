@@ -25,8 +25,8 @@
 
         public override void Add(IComponent t)
         {
-            base.Add(t);
             AddAssignableTypes(t, AssignableTypeSet);
+            base.Add(t);
         }
 
         public override bool Remove(IComponent t)

@@ -6,57 +6,33 @@
     /// </summary>
     public class CContainer : CGroup
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CContainer"/> class.
-        /// Takes the CContainerHolder and a default CList.
-        /// </summary>
-        /// <param name="holder">The reference to the CContainerHolder storing this instance.</param>
-        /// <param name="cList">The default CList for this instance.</param>
-        public CContainer(ICContainerHolder holder, CGroup cList)
-            : base(cList)
+        public CContainer(ICContainerHolder holder, CGroup? components = null)
+            : base()
         {
             Holder = holder;
-            SetEveryCContainer(this);
-
-            OnAdd += CContainer_OnAdd;
-            OnRemove += CContainer_OnRemove;
-            OnClear += CContainer_OnClear;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CContainer"/> class with an empty CList.
-        /// Takes the CContainerHolder.
-        /// </summary>
-        /// <param name="holder">The reference to the CContainerHolder storing this instance.</param>
-        public CContainer(ICContainerHolder holder)
-            : this(holder, new CGroup())
-        {
+            if (components is not null)
+                AddRange(components);
         }
 
         public ICContainerHolder Holder { get; }
 
-        public void CContainer_OnAdd(IComponent component)
+        public override void Add(IComponent component)
         {
             component.SetCContainer(this, Holder);
+            base.Add(component);        
         }
 
-        public void CContainer_OnRemove(IComponent component)
+        public override bool Remove(IComponent component)
         {
             component.SetCContainer(null, Holder);
+            return base.Remove(component);
         }
 
-        public void CContainer_OnClear()
+        public override void Clear()
         {
-            SetEveryCContainer(null);
-        }
-
-        /// <summary>
-        /// Sets the <see cref="Holder"/> of every <see cref="IComponent"/> in <see cref="CGroup"/>.
-        /// </summary>
-        private void SetEveryCContainer(CContainer? cContainer)
-        {
-            foreach (IComponent component in this)
-                component.SetCContainer(cContainer, Holder);
+            foreach (var component in this)
+                component.SetCContainer(null, Holder);
+            base.Clear();
         }
     }
 }

@@ -46,7 +46,7 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Parent.GridPosition; }
+        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.GridPosition; }
 
         private Area2DInt CollisionArea { get => new(Vector2Int.Zero, Dimensions); }
 
@@ -68,7 +68,7 @@
 
         public bool CollidesWith(BoxColliderComponent other)
         {
-            if (CheckDistance > 0 && other.Parent.Position.DistanceFrom(Parent.Position) > CheckDistance)
+            if (CheckDistance > 0 && other.Holder.Position.DistanceFrom(Holder.Position) > CheckDistance)
                 return false;
             return other.DoesAreaOverlapWith(ObjectAlignedAnchoredCollisionArea);
         }

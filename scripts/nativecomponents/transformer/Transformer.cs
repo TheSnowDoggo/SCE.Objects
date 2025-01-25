@@ -51,7 +51,7 @@
         {
             if (Speed == 0)
                 return;
-            Parent.Position += Direction * (float)(GameHandler.DeltaTime * Speed);
+            Holder.Position += Direction * (float)(GameHandler.DeltaTime * Speed);
         }
     }
 }

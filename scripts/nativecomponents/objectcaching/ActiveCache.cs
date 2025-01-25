@@ -33,7 +33,7 @@
             updateCount = 0;
 
             _activeCache.Clear();
-            foreach (var obj in Parent)
+            foreach (var obj in Holder)
             {
                 if (obj.IsActive)
                     _activeCache.Add(obj);

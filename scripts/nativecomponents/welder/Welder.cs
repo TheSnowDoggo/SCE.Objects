@@ -19,7 +19,7 @@
 
         public void Update()
         {
-            Parent.Position = Object.Position + Position;
+            Holder.Position = Object.Position + Position;
         }
     }
 }

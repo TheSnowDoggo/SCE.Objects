@@ -1,24 +1,28 @@
 ﻿namespace SCE
 {
     // WorldSpace RenderHandlerComponentV2
-    public class WorldSpaceRHC : ComponentBase<World>, IUpdate
+    public class WorldSpaceRHC : ComponentBase<World>, ICContainerHolder, IUpdate
     {
         private const string DEFAULT_NAME = "world_space";
 
         private readonly Queue<Camera> cameraRenderQueue = new();
 
-        public WorldSpaceRHC(string name = DEFAULT_NAME, IObjectCacheable? iObjectCacheable = null)
+        public WorldSpaceRHC(string name, CGroup? components = null)
             : base(name)
         {
-            IObjectCacheable = iObjectCacheable;
+            Components = new(this, components);
         }
 
-        public WorldSpaceRHC(IObjectCacheable? iObjectCacheable)
-            : this(DEFAULT_NAME, iObjectCacheable)
+        public WorldSpaceRHC(CGroup? components = null)
+            : this(DEFAULT_NAME, components)
         {
         }
 
+        public CContainer Components { get; }
+
         public Color BgColor { get; set; }
+
+        public IUpdateLimit? UpdateLimiter { get; set; }
 
         #region Caching
         public IObjectCacheable? IObjectCacheable { get; set; }
@@ -33,11 +37,17 @@
         #region Update
         public void Update()
         {
+            if (!UpdateLimiter?.OnUpdate() ?? false)
+                return;
+            Components.Update();
             Render();
         }
 
         private void Render()
         {
+            if (!Components.Contains<Camera>())
+                return;
+
             LoadCameraQueue();
 
             LoadObjects();
@@ -47,16 +57,16 @@
 
         private void LoadCameraQueue()
         {
-            foreach (var camera in Cameras)
+            foreach (var component in Components)
             {
-                if (camera.IsActive)
+                if (component.IsActive && component is Camera camera)
                     cameraRenderQueue.Enqueue(camera);
             }
         }
 
         private void LoadObjects()
         {
-            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
+            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<IRenderable>())
@@ -85,7 +95,7 @@
             {
                 // More efficient than creating a new Area2DInt for the image
                 if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, imageAlignedPos, imageAlignedPosCorner))
-                    camera.LoadIRP(new SpritePackage(dpMap, renderable.Layer, imageAlignedPos));
+                    camera.Load(new SpritePackage(dpMap, renderable.Layer, imageAlignedPos));
             }
         }
 

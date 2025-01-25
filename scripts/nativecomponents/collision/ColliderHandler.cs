@@ -6,23 +6,18 @@
 
         private readonly List<ColliderLayer> colliderLayerList = new();
 
-        public ColliderHandler(string name = DEFAULT_NAME, IObjectCacheable? iObjectCacheable = null)
+        public ColliderHandler(string name = DEFAULT_NAME)
             : base(name)
-        {
-            IObjectCacheable = iObjectCacheable;
-        }
-
-        public ColliderHandler(IObjectCacheable? iObjectCacheable)
-            : this(DEFAULT_NAME, iObjectCacheable)
         {
         }
 
         public IObjectCacheable? IObjectCacheable { get; set; }
 
-        /// <inheritdoc/>
+        public IUpdateLimit? UpdateLimiter { get; set; }
+      
         public void Update()
         {
-            if (!IsActive)
+            if (!UpdateLimiter?.OnUpdate() ?? false)
                 return;
 
             UpdateColliderLayerList();
@@ -83,7 +78,7 @@
         {
             colliderLayerList.Clear();
 
-            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Parent : IObjectCacheable.ObjectCache;
+            IEnumerable<SCEObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
             foreach (SCEObject obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<IComponent>())

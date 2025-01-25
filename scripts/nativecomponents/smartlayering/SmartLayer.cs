@@ -17,6 +17,6 @@
 
         public Vector2Int Position { get; set; }
 
-        public Vector2Int RelativePosition { get => Parent.GridPosition + Position; }
+        public Vector2Int RelativePosition { get => Holder.GridPosition + Position; }
     }
 }

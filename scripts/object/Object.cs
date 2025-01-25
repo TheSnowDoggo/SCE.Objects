@@ -9,24 +9,14 @@
 
         private World? world = null;
 
-        public SCEObject(string name, CGroup cList)
+        public SCEObject(string name, CGroup? components = null)
         {
             Name = name;
-            Components = new(this, cList);
+            Components = new(this, components);
         }
 
-        public SCEObject(string name)
-            : this(name, new CGroup())
-        {
-        }
-
-        public SCEObject(CGroup cList)
-            : this(DEFAULT_NAME, cList)
-        {
-        }
-
-        public SCEObject()
-            : this(DEFAULT_NAME)
+        public SCEObject(CGroup? components = null)
+            : this(DEFAULT_NAME, components)
         {
         }
 

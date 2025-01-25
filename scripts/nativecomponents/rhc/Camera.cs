@@ -3,10 +3,13 @@
     /// <summary>
     /// Represents a camera in a world space.
     /// </summary>
-    public class Camera : UIBaseExt, ICContainerHolder
+    public class Camera : UIBaseExt, ICContainerHolder, IComponent, IUpdate
     {
-        private const Color DefaultBgColor = Color.Black;
+        private const string DEFAULT_NAME = "camera";
 
+        private const Color DEFAULT_BGCOLOR = Color.Black;
+
+        #region Camera
         private readonly List<SpritePackage> renderList = new();
 
         private readonly Queue<Area2DInt> clearQueue = new();
@@ -14,121 +17,88 @@
         private Vector2 worldPosition;
 
         private Color? renderedBgColor = null;
+        #endregion
 
-        private Color bgColor = DefaultBgColor;
+        private CContainer? container;
 
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions, CGroup cList)
-            : base(dimensions)
+        public Camera(string name, int width, int height, CGroup? components = null)
+            : base(name, width, height)
         {
-            WorldSpace = worldSpace;
+            Components = new(this, components);
 
-            Components = new(this, cList);
-
-            OnUpdateWorldPosition();
+            UpdateWorldProperties();
         }
 
-        public Camera(WorldSpaceRHC worldSpace, Vector2Int dimensions)
-            : this(worldSpace, dimensions, new CGroup())
+        public Camera(string name, Vector2Int dimensions, CGroup? components = null)
+            : this(name, dimensions.X, dimensions.Y, components)
+        {
+        }
+
+        public Camera(int width, int height, CGroup? components = null)
+            : this(DEFAULT_NAME, width, height, components)
+        {
+        }
+
+        public Camera(Vector2Int dimensions, CGroup? components = null)
+            : this(DEFAULT_NAME, dimensions, components)
         {
         }
 
         public CContainer Components { get; }
 
-        /// <summary>
-        /// Gets or sets the position of this instance in the WorldSpace.
-        /// </summary>
+        public CContainer Container { get => container ?? throw new NullReferenceException("Container is null."); }
+
+        public WorldSpaceRHC WorldSpace { get => (WorldSpaceRHC)Container.Holder; }
+
+        public IUpdateLimit? UpdateLimiter { get; set; }
+
+        #region WorldProperties
         public Vector2 WorldPosition
         {
             get => worldPosition;
-            set
-            {
-                worldPosition = value;
-                OnUpdateWorldPosition();
-            }
+            set => UpdateWorldProperties(value);
         }
 
-        /// <summary>
-        /// Gets or sets the WorldSpace of this instance to render from.
-        /// </summary>
-        public WorldSpaceRHC WorldSpace { get; set; }
-
-        public Color BgColor
-        {
-            get => bgColor;
-            set
-            {
-                if (value == Color.Transparent)
-                    throw new ArgumentException("Background color cannot be Transparent.");
-                bgColor = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
-        /// </summary>
         public Vector2Int WorldPositionInt { get; private set; }
 
-        /// <summary>
-        /// Gets the world position rounded and converted to the nearest <see cref="Vector2Int"/>.
-        /// </summary>
         public Vector2Int WorldPositionIntCorner { get; private set; }
 
-        /// <summary>
-        /// Gets the GridArea of this instance aligned to its WorldPosition.
-        /// </summary>
         public Area2DInt WorldAlignedArea { get; private set; }
+        #endregion
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the camera should update every component on render.
-        /// </summary>
-        public bool UpdateOnRender { get; set; } = false;
+        #region Settings
+        public Color BgColor { get; set; } = DEFAULT_BGCOLOR;
 
         public bool ConsistantSorting { get; set; } = true;
+        #endregion
 
-        internal void LoadIRP(SpritePackage irp)
+        #region Load
+        internal void Load(SpritePackage irp)
         {
             renderList.Add(irp);
         }
+        #endregion
 
-        internal void RenderNow()
+        #region Resize
+        public void Resize(int width, int height)
         {
-            SmartClear();
-            SortRenderList();
-            LoadRenderList();
-            renderList.Clear();
-        }
-
-        public void Resize(Vector2Int dimensions)
-        {
-            if (dimensions <= 0)
-                throw new ArgumentException("Dimensions cannot be less than 0.");
-
-            _dpMap.CleanResize(dimensions);
+            _dpMap.CleanResize(width, height);
 
             renderList.Clear();
             clearQueue.Clear();
 
             renderedBgColor = null;
 
-            OnUpdateWorldPosition();
+            UpdateWorldProperties();
         }
 
-        private void SmartClear()
+        public void Resize(Vector2Int dimensions)
         {
-            Pixel clearPixel = new(BgColor);
-            if (renderedBgColor is not null && renderedBgColor != BgColor)
-            {
-                foreach (Area2DInt area in clearQueue)
-                    _dpMap.FillArea(clearPixel, area);
-            }
-            else
-            {
-                _dpMap.Fill(clearPixel);
-                renderedBgColor = BgColor;
-            }
-
-            clearQueue.Clear();
+            Resize(dimensions.X, dimensions.Y);
         }
+        #endregion
+
+        #region Sorting
         private void QuickSortRenderList()
         {
             renderList.Sort((a, b) => a.Layer < b.Layer ? -1 : 1);
@@ -161,10 +131,20 @@
             else
                 QuickSortRenderList();
         }
+        #endregion
 
-        private void LoadRenderList()
+        #region Render
+        internal void RenderNow()
         {
-            foreach (SpritePackage irp in renderList)
+            SmartClear();
+            SortRenderList();
+            RenderAll();
+            renderList.Clear();
+        }
+
+        private void RenderAll()
+        {
+            foreach (var irp in renderList)
                 RenderIRP(irp);
         }
 
@@ -179,13 +159,53 @@
             clearQueue.Enqueue(trimmedGridArea + cameraOffsetPosition);
         }
 
-        private void OnUpdateWorldPosition()
+        private void SmartClear()
         {
+            if (renderedBgColor is not null && renderedBgColor != BgColor)
+            {
+                foreach (Area2DInt area in clearQueue)
+                    _dpMap.FillArea(new Pixel(BgColor), area);
+            }
+            else
+            {
+                _dpMap.Fill(new Pixel(BgColor));
+                renderedBgColor = BgColor;
+            }
+
+            clearQueue.Clear();
+        }
+        #endregion
+
+        #region WorldPropertyFunc
+        private void UpdateWorldProperties(Vector2? newWorldPos = null)
+        {
+            if (newWorldPos is Vector2 newPosition)
+                worldPosition = newPosition;
+
             WorldPositionInt = (Vector2Int)WorldPosition.Round();
 
             WorldPositionIntCorner = WorldPositionInt + Dimensions;
 
             WorldAlignedArea = _dpMap.GridArea + WorldPositionInt;
         }
+        #endregion
+
+        #region Update
+        public void Update()
+        {
+            if (!UpdateLimiter?.OnUpdate() ?? false)
+                return;
+            Components.Update();
+        }
+        #endregion
+
+        #region ComponentFuncs
+        public void SetCContainer(CContainer? container, ICContainerHolder holder)
+        {
+            if (holder is not WorldSpaceRHC)
+                throw new InvalidCContainerHolderException();
+            this.container = container;
+        }
+        #endregion
     }
 }
