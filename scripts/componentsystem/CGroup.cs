@@ -23,10 +23,10 @@
         {
         }
 
-        public override void Add(IComponent t)
+        public override bool Add(IComponent t)
         {
             AddAssignableTypes(t, AssignableTypeSet);
-            base.Add(t);
+            return base.Add(t);
         }
 
         public override bool Remove(IComponent t)

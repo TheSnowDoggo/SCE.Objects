@@ -16,10 +16,12 @@
 
         public ICContainerHolder Holder { get; }
 
-        public override void Add(IComponent component)
+        public override bool Add(IComponent component)
         {
-            component.SetCContainer(this, Holder);
-            base.Add(component);        
+            bool result = base.Add(component);
+            if (result)
+                component.SetCContainer(this, Holder);
+            return result;
         }
 
         public override bool Remove(IComponent component)

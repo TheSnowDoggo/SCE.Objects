@@ -3,17 +3,18 @@
     /// <summary>
     /// Represents a world containing objects and components.
     /// </summary>
-    public class World : SearchHash<IObject>, ICContainerHolder, IUpdate
+    public class World : SearchHash<SCEObject>, ICContainerHolder, IUpdate
     {
         private const string DEFAULT_NAME = "world";
 
         public World(string name, CGroup? components = null)
+            : base()
         {
             Name = name;
             Components = new(this, components);
         }
 
-        public World(CGroup components)
+        public World(CGroup? components = null)
             : this(DEFAULT_NAME, components)
         {
         }
@@ -24,59 +25,35 @@
 
         public CContainer Components { get; }
 
-        public bool PrioritiseWorldComponentUpdates { get; set; } = false;
-
-        #region Caching
-        public IObjectCacheable? IObjectCacheable { get; set; }
-        #endregion
+        public SearchHash<SCEObject> EveryObject { get; } = new();
 
         public void Start()
         {
-            StartObjects();
+            foreach (var obj in this)
+            {
+                if (obj.IsActive)
+                    obj.WorldStart();
+            }
         }
 
         public void Update()
         {
-            if (PrioritiseWorldComponentUpdates)
-            {
-                Components.Update();
-                UpdateObjects();
-            }
-            else
-            {
-                UpdateObjects();
-                Components.Update();
-            }
-        }
-
-        public void StartObjects()
-        {
-            foreach (var obj in GetObjects())
+            EveryObject.Clear();
+            foreach (var obj in this)
             {
                 if (obj.IsActive)
-                    obj.Start();
+                    obj.WorldUpdate(EveryObject);
             }
+            Components.Update();
         }
 
-        public void UpdateObjects()
-        {
-            foreach (var obj in GetObjects())
-            {
-                if (obj.IsActive)
-                {
-                    obj.Components.Update();
-                    obj.Update();
-                }
-            }
-        }
-
-        public override void Add(IObject obj)
+        public override bool Add(SCEObject obj)
         {
             obj.SetWorld(this);
-            base.Add(obj);            
+            return base.Add(obj);
         }
 
-        public override bool Remove(IObject obj)
+        public override bool Remove(SCEObject obj)
         {
             obj.SetWorld(null);
             return base.Remove(obj);
@@ -87,11 +64,6 @@
             foreach (var obj in this)
                 obj.SetWorld(null);
             base.Clear();
-        }
-
-        private IEnumerable<IObject> GetObjects()
-        {
-            return IObjectCacheable is null ? this : IObjectCacheable.ObjectCache; 
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class SmartLayer : ComponentBase<IObject>
+    public class SmartLayer : ComponentBase<SCEObject>
     {
         public SmartLayer(string name,ISmartLayerable smartLayerable)
             : base(name)
@@ -17,6 +17,6 @@
 
         public Vector2Int Position { get; set; }
 
-        public Vector2Int RelativePosition { get => Holder.GridPosition() + Position; }
+        public Vector2Int RelativePosition { get => Holder.WorldGridPosition() + Position; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IObjectCacheable
     {
-        IList<IObject> ObjectCache { get; }
+        IList<SCEObject> ObjectCache { get; }
     }
 }

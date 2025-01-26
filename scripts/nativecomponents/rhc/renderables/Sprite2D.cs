@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Sprite2D : ComponentBase<IObject>, IRenderable, ISmartLayerable
+    public class Sprite2D : ComponentBase<SCEObject>, IRenderable, ISmartLayerable
     {
         public Sprite2D(string name, DisplayMap dpMap)
             : base(name)

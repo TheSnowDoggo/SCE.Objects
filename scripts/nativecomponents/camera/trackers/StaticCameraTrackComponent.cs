@@ -35,7 +35,7 @@
         /// <inheritdoc/>
         public void Update()
         {
-            Holder.WorldPosition = Object.Position + -(Vector2)AnchorUtils.AnchoredDimension(Anchor, Holder.Dimensions) + Position;
+            Holder.WorldPosition = Object.WorldPosition + -(Vector2)AnchorUtils.AnchoredDimension(Anchor, Holder.Dimensions) + Position;
         }
     }
 }

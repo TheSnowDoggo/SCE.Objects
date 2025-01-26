@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class Transformer : ComponentBase<IObject>, IUpdate
+    public class Transformer : ComponentBase<SCEObject>, IUpdate
     {
         private const string DEFAULT_NAME = "transformer";
 

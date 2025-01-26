@@ -25,7 +25,7 @@
         public IUpdateLimit? UpdateLimiter { get; set; }
 
         #region Caching
-        public IObjectCacheable? IObjectCacheable { get; set; }
+        public IObjectCacheable? ObjectCacheable { get; set; }
         #endregion
 
         #region Cameras
@@ -66,7 +66,7 @@
 
         private void LoadObjects()
         {
-            IEnumerable<IObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
+            IEnumerable<SCEObject> collection = ObjectCacheable is null ? Holder.EveryObject : ObjectCacheable.ObjectCache;
             foreach (var obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<IRenderable>())
@@ -74,12 +74,12 @@
             }
         }
 
-        private void TryLoadActiveObject(IObject obj)
+        private void TryLoadActiveObject(SCEObject obj)
         {
             foreach (var component in obj.Components)
             {
                 if (component.IsActive && component is IRenderable renderable)
-                    TryLoadActiveRenderable(renderable, obj.GridPosition());
+                    TryLoadActiveRenderable(renderable, obj.WorldGridPosition());
             }
         }
 

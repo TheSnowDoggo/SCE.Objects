@@ -1,25 +1,39 @@
 ﻿namespace SCE
 {
-    public class Welder : ComponentBase<IObject>, IUpdate
+    public class Welder : ComponentBase<SCEObject>, IUpdate
     {
-        public Welder(string name, IObject obj)
+        public enum ObjectType
+        {
+            Child,
+            Parent,
+        }
+
+        public Welder(string name, SCEObject? obj = null)
             : base(name)
         {
             Object = obj;
         }
 
-        public Welder(IObject obj)
+        public Welder(SCEObject? obj = null)
             : this("welder", obj)
         {
         }
 
-        public IObject Object { get; set; }
+        public SCEObject? Object { get; set; }
+
+        public ObjectType ObjectMode { get; set; } = ObjectType.Child;
 
         public Vector2Int Offset { get; set; }
 
         public void Update()
         {
-            Holder.Position = Object.Position + Offset;
+            if (Object is not null)
+            {
+                if (ObjectMode == ObjectType.Child)
+                    Object.Position = Holder.Position + Offset;
+                else
+                    Holder.Position = Object.Position + Offset;
+            }
         }
     }
 }

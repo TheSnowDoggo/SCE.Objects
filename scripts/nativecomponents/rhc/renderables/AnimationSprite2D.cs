@@ -2,7 +2,7 @@
 {
     using System.Collections;
 
-    public class AnimationSprite2D : ComponentBase<IObject>, IRenderable, ISmartLayerable, IEnumerable<DisplayMap>
+    public class AnimationSprite2D : ComponentBase<SCEObject>, IRenderable, ISmartLayerable, IEnumerable<DisplayMap>
     {
         private const string DEFAULT_NAME = "animation_sprite";
 

@@ -4,18 +4,19 @@
     {
         private const string DEFAULT_NAME = "range_occluder";
 
-        private readonly List<IObject> _objectList = new();
+        private readonly List<SCEObject> _objectList = new();
 
-        private readonly HashSet<IObject> _objectCache = new();
+        private readonly HashSet<SCEObject> _objectCache = new();
 
-        public RangeOccluder(string name, IEnumerable<IObject> targets, double range)
+        #region Constructors
+        public RangeOccluder(string name, IEnumerable<SCEObject> targets, double range)
             : base(name)
         {
             TargetSet = new(targets);
             Range = range;
         }
 
-        public RangeOccluder(IEnumerable<IObject> targets, double range)
+        public RangeOccluder(IEnumerable<SCEObject> targets, double range)
             : this(DEFAULT_NAME, targets, range)
         {
         }
@@ -31,18 +32,19 @@
             : this(DEFAULT_NAME, range)
         {
         }
+        #endregion
 
-        public HashSet<IObject> TargetSet { get; set; }
+        public HashSet<SCEObject> TargetSet { get; set; }
 
         public double Range { get; set; }
 
-        public IList<IObject> ObjectCache { get => _objectList.AsReadOnly(); }
+        public IList<SCEObject> ObjectCache { get => _objectList.AsReadOnly(); }
 
         public IUpdateLimit? UpdateLimiter { get; set; }
 
-        public HashSet<IObject> ExclusionSet { get; set; } = new();
+        public HashSet<SCEObject> ExclusionSet { get; set; } = new();
 
-        public HashSet<IObject> PrioritySet { get; set; } = new();
+        public HashSet<SCEObject> PrioritySet { get; set; } = new();
 
         public bool ObjectCaching { get; set; } = false;
 
@@ -54,17 +56,22 @@
                 return;
             }
 
-            Clear();
-            UpdateIn(Holder);
+            ClearCache();
+            UpdateIn(Holder.EveryObject);
         }
 
-        private void UpdateIn(IEnumerable<IObject> collection)
+        private void UpdateIn(IEnumerable<SCEObject> collection)
         {
             foreach (var obj in collection)
             {
                 if (!TargetSet.Contains(obj) && !ExclusionSet.Contains(obj) && !obj.Components.Contains<RangeOccluderExcluder>())
-                    obj.IsActive = IsObjectOccluded(obj);
-                if (ObjectCaching && obj.IsActive && !obj.Components.IsEmpty && !_objectCache.Contains(obj))
+                {
+                    if (!IsObjectOccluded(obj))
+                        obj.Components.Remove("occluded_tag");
+                    else if(!obj.Components.Contains<OccludedTag>())
+                        obj.Components.Add(new OccludedTag());
+                }
+                if (ObjectCaching && !obj.Components.IsEmpty && !_objectCache.Contains(obj) && !obj.Components.Contains<OccludedTag>())
                 {
                     _objectCache.Add(obj);
                     _objectList.Add(obj);
@@ -72,7 +79,7 @@
             }
         }
 
-        private void Clear()
+        private void ClearCache()
         {
             if (ObjectCaching)
             {
@@ -81,14 +88,14 @@
             }
         }
 
-        private bool IsObjectOccluded(IObject obj)
+        private bool IsObjectOccluded(SCEObject obj)
         {
             foreach (var target in TargetSet)
             {
-                if (obj.Position.DistanceFrom(target.Position) <= Range)
-                    return true;
+                if (obj.WorldPosition.DistanceFrom(target.WorldPosition) <= Range)
+                    return false;
             }
-            return false;
+            return true;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class BoxColliderComponent : ComponentBase<IObject>, ICollidable
+    public class BoxColliderComponent : ComponentBase<SCEObject>, ICollidable
     {
         private const byte DefaultLayer = 0;
 
@@ -46,7 +46,7 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.GridPosition(); }
+        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.WorldGridPosition(); }
 
         private Area2DInt CollisionArea { get => new(Vector2Int.Zero, Dimensions); }
 
@@ -68,7 +68,7 @@
 
         public bool CollidesWith(BoxColliderComponent other)
         {
-            if (CheckDistance > 0 && other.Holder.Position.DistanceFrom(Holder.Position) > CheckDistance)
+            if (CheckDistance > 0 && other.Holder.WorldPosition.DistanceFrom(Holder.WorldPosition) > CheckDistance)
                 return false;
             return other.DoesAreaOverlapWith(ObjectAlignedAnchoredCollisionArea);
         }

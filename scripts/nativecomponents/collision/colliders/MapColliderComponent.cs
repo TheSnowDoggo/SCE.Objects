@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class MapColliderComponent : ComponentBase<IObject>, ICollidable
+    public class MapColliderComponent : ComponentBase<SCEObject>, ICollidable
     {
         private const byte DefaultLayer = 0;
 
@@ -44,9 +44,9 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.GridPosition(); }
+        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.WorldGridPosition(); }
 
-        private Vector2Int OffsetPosition { get => Holder.GridPosition() + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
+        private Vector2Int OffsetPosition { get => Holder.WorldGridPosition() + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
 
         public static Grid2D<bool> ConvertToCollisionGrid(DisplayMap displayMap, SCEColor excludedBgColor = SCEColor.Transparent)
         {
@@ -71,7 +71,7 @@
         /// <inheritdoc/>
         public bool CollidesWith(ICollidable other)
         {
-            if (CheckDistance > 0 && other.Holder.Position.DistanceFrom(Holder.Position) > CheckDistance)
+            if (CheckDistance > 0 && other.Holder.WorldPosition.DistanceFrom(Holder.WorldPosition) > CheckDistance)
                 return false;
 
             if (other is MapColliderComponent mapColliderComp)

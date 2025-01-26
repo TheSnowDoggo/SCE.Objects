@@ -11,7 +11,7 @@
         {
         }
 
-        public IObjectCacheable? IObjectCacheable { get; set; }
+        public IObjectCacheable? ObjectCacheable { get; set; }
 
         public IUpdateLimit? UpdateLimiter { get; set; }
       
@@ -78,7 +78,7 @@
         {
             colliderLayerList.Clear();
 
-            IEnumerable<IObject> collection = IObjectCacheable is null ? Holder : IObjectCacheable.ObjectCache;
+            IEnumerable<SCEObject> collection = ObjectCacheable is null ? Holder.EveryObject : ObjectCacheable.ObjectCache;
             foreach (var obj in collection)
             {
                 if (obj.IsActive && obj.Components.Contains<ICollidable>())
@@ -86,7 +86,7 @@
             }
         }
 
-        private void TryAddColliderComponents(IObject obj)
+        private void TryAddColliderComponents(SCEObject obj)
         {
             foreach(var component in obj.Components)
             {
