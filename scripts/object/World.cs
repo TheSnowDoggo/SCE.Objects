@@ -3,15 +3,18 @@
     /// <summary>
     /// Represents a world containing objects and components.
     /// </summary>
-    public class World : SearchHash<SCEObject>, ICContainerHolder, IUpdate
+    public class World : SCEObject
     {
         private const string DEFAULT_NAME = "world";
 
+        private readonly List<SCEObject> _activeCache = new();
+
+        private readonly SearchHash<SCEObject> _everyObject = new();
+
         public World(string name, CGroup? components = null)
-            : base()
+            : base(name, components)
         {
-            Name = name;
-            Components = new(this, components);
+            SetWorld(this);
         }
 
         public World(CGroup? components = null)
@@ -19,51 +22,63 @@
         {
         }
 
-        public string Name { get; set; }
+        public IUpdateLimit? UpdateLimiter { get; set; }
 
-        public bool IsActive { get; set; } = true;
+        public SearchHash<IRenderRule> RenderRules { get; set; } = new();
 
-        public CContainer Components { get; }
+        public IEnumerable<SCEObject> Objects { get => ObjectCaching ? _activeCache.AsReadOnly() : _everyObject; }
 
-        public SearchHash<SCEObject> EveryObject { get; } = new();
+        public bool ObjectCaching { get; set; } = true;
 
-        public void Start()
+        public override void Start()
         {
-            foreach (var obj in this)
+            foreach (var obj in _everyObject)
             {
-                if (obj.IsActive)
-                    obj.WorldStart();
+                if (obj.CombinedIsActive)
+                    obj.Start();
             }
         }
 
-        public void Update()
+        public override void Update()
         {
-            EveryObject.Clear();
-            foreach (var obj in this)
+            if (UpdateLimiter?.OnUpdate() ?? false)
+                return;
+            if (ObjectCaching)
+                _activeCache.Clear();
+            foreach (var obj in _everyObject)
             {
-                if (obj.IsActive)
-                    obj.WorldUpdate(EveryObject);
+                if (obj.CombinedIsActive && ShouldRender(obj))
+                {
+                    obj.UpdateAll();
+                    if (ObjectCaching)
+                        _activeCache.Add(obj);
+                }
             }
             Components.Update();
         }
 
-        public override bool Add(SCEObject obj)
+        private bool ShouldRender(SCEObject obj)
         {
-            obj.SetWorld(this);
-            return base.Add(obj);
+            foreach (var rule in RenderRules)
+            {
+                if (rule.IsActive && !rule.ShouldRender(obj))
+                    return false;
+            }
+            return true;
         }
 
-        public override bool Remove(SCEObject obj)
+        #region Recursive
+        internal void RecursiveAdd(SCEObject obj)
         {
-            obj.SetWorld(null);
-            return base.Remove(obj);
+            _everyObject.Add(obj);
+            _everyObject.AddRange(obj.RecursiveGetChildren());
         }
 
-        public override void Clear()
+        internal void RecursiveRemove(SCEObject obj)
         {
-            foreach (var obj in this)
-                obj.SetWorld(null);
-            base.Clear();
+            _everyObject.Remove(obj);
+            _everyObject.RemoveRange(obj.RecursiveGetChildren());
         }
+        #endregion
     }
 }

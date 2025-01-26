@@ -16,18 +16,54 @@
 
         public string Name { get; set; }
 
-        public bool IsActive { get; set; } = true;
-
         public ChildSet Children { get; }
 
+        #region Active
+        private bool isActive = true;
+
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                isActive = value;
+                UpdateCombinedIsActive();
+            }
+        }
+
+        public bool CombinedIsActive { get; private set; }
+
+        internal void UpdateCombinedIsActive()
+        {
+            CombinedIsActive = RecursiveResolveActive() && IsActive;
+            RecursiveUpdateCombinedIsActive();
+        }
+        #endregion
+
         #region Position
-        public Vector2 Position { get; set; }
+        private Vector2 localPosition;
+
+        public Vector2 LocalPosition
+        {
+            get => localPosition;
+            set
+            {
+                localPosition = value;
+                UpdateWorldPosition();
+            }
+        }
 
         public Vector2 WorldPosition { get; private set; }
 
         public Vector2Int WorldGridPosition()
         {
             return (Vector2Int)WorldPosition.Round();
+        }
+
+        internal void UpdateWorldPosition()
+        {
+            WorldPosition = (Parent?.WorldPosition ?? Vector2.Zero) + localPosition;
+            RecursiveUpdateWorldPositions();
         }
         #endregion
 
@@ -36,48 +72,20 @@
         #endregion
 
         #region Children
-        internal void WorldStart()
+        public void RecursiveResolveChildren(List<SCEObject> list)
         {
-            RecursiveStartChildren();
-        }
-
-        internal void WorldUpdate(SearchHash<SCEObject> searchHash)
-        {
-            WorldPosition = Position;
-            RecursiveUpdateChildren(searchHash);
+            if (Children.IsEmpty)
+                return;
+            list.AddRange(Children);
+            foreach (var child in Children)
+                child.RecursiveResolveChildren(list);
         }
 
         public List<SCEObject> RecursiveGetChildren()
         {
-            var descendents = new List<SCEObject>(Children);
-            foreach (var obj in Children)
-                descendents.AddRange(obj.RecursiveGetChildren());
-            return descendents;
-        }
-
-        private void RecursiveStartChildren()
-        {
-            Start();
-            foreach (var child in Children)
-            {
-                if (child.IsActive)
-                    child.RecursiveStartChildren();
-            }
-        }
-
-        private void RecursiveUpdateChildren(SearchHash<SCEObject> searchHash)
-        {
-            Components.Update();
-            Update();
-            searchHash.Add(this);
-            foreach (var child in Children)
-            {
-                if (child.IsActive)
-                {
-                    child.WorldPosition = WorldPosition + child.Position;
-                    child.RecursiveUpdateChildren(searchHash);
-                }
-            }
+            var list = new List<SCEObject>();
+            RecursiveResolveChildren(list);
+            return list;
         }
 
         internal void RecursiveSetWorld(World? world)
@@ -85,6 +93,33 @@
             SetWorld(world);
             foreach (var child in Children)
                 child.RecursiveSetWorld(world);
+        }
+
+        private bool RecursiveResolveActive()
+        {
+            if (Parent is null)
+                return true;
+            if (!Parent.IsActive)
+                return false;
+            return Parent.RecursiveResolveActive();
+        }
+
+        private void RecursiveUpdateCombinedIsActive()
+        {
+            foreach (var child in Children)
+            {
+                child.CombinedIsActive = CombinedIsActive && child.IsActive;
+                child.RecursiveUpdateCombinedIsActive();
+            }
+        }
+
+        private void RecursiveUpdateWorldPositions()
+        {
+            foreach (var child in Children)
+            {
+                child.WorldPosition = WorldPosition + child.LocalPosition;
+                child.RecursiveUpdateWorldPositions();
+            }
         }
         #endregion
 
@@ -107,6 +142,12 @@
         public virtual void Update()
         {
         }
+
+        internal void UpdateAll()
+        {
+            Components.Update();
+            Update();
+        }
         #endregion
 
         #region World
@@ -124,7 +165,7 @@
 
         public override string ToString()
         {
-            return $"SCEObject(\"{Name}\", Pos:({Position}), Active?:{IsActive})";
+            return $"SCEObject(\"{Name}\", Pos:({LocalPosition}), Active?:{IsActive})";
         }
     }
 }

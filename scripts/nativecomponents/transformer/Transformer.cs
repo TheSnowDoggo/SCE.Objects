@@ -49,7 +49,7 @@
 
         public void Update()
         {
-            Holder.Position += Direction * (float)(GameHandler.DeltaTime * Speed);
+            Holder.LocalPosition += Direction * (float)(GameHandler.DeltaTime * Speed);
         }
     }
 }

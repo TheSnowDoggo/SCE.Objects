@@ -30,9 +30,9 @@
             if (Object is not null)
             {
                 if (ObjectMode == ObjectType.Child)
-                    Object.Position = Holder.Position + Offset;
+                    Object.LocalPosition = Holder.LocalPosition + Offset;
                 else
-                    Holder.Position = Object.Position + Offset;
+                    Holder.LocalPosition = Object.LocalPosition + Offset;
             }
         }
     }

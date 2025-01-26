@@ -15,7 +15,7 @@
 
         public StackType LayeringMode { get; set; } = StackType.BottomUp;
 
-        public IObjectCacheable? ObjectCacheable { get; set; }
+        public IRenderRule? ObjectCacheable { get; set; }
 
         public IUpdateLimit? UpdateLimiter { get; set; }
 
@@ -38,8 +38,7 @@
 
         private void PopulateSmartLayerList()
         {
-            IEnumerable<SCEObject> collection = ObjectCacheable is null ? Holder.EveryObject : ObjectCacheable.ObjectCache;
-            foreach (var obj in collection)
+            foreach (var obj in Holder.Objects)
             {
                 if (obj.IsActive && obj.Components.Contains<SmartLayer>())
                     UpdateObject(obj);

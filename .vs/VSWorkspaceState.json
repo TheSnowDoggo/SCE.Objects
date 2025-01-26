@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\scripts",
+    "\\scripts\\object"
   ],
-  "SelectedNode": "\\SCE.Objects.sln",
+  "SelectedNode": "\\scripts\\object\\SCEObject.cs",
   "PreviewInSolutionExplorer": false
 }

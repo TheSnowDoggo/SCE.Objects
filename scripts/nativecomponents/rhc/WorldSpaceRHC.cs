@@ -25,7 +25,7 @@
         public IUpdateLimit? UpdateLimiter { get; set; }
 
         #region Caching
-        public IObjectCacheable? ObjectCacheable { get; set; }
+        public IRenderRule? ObjectCacheable { get; set; }
         #endregion
 
         #region Cameras
@@ -66,8 +66,7 @@
 
         private void LoadObjects()
         {
-            IEnumerable<SCEObject> collection = ObjectCacheable is null ? Holder.EveryObject : ObjectCacheable.ObjectCache;
-            foreach (var obj in collection)
+            foreach (var obj in Holder.Objects)
             {
                 if (obj.IsActive && obj.Components.Contains<IRenderable>())
                     TryLoadActiveObject(obj);

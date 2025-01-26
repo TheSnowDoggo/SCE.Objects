@@ -2,61 +2,95 @@
 {
     public class ChildSet : SearchHash<SCEObject>
     {
-        private World? world;
+        private readonly List<SCEObject> _activeList = new();
 
-        public ChildSet(SCEObject parent, World? world = null)
+        public ChildSet(SCEObject parent)
             : base()
         {
             Parent = parent;
-            this.world = world;
         }
 
         public SCEObject Parent { get; }
 
-        public World? World
-        {
-            get => world;
-            set
-            {
-                world = value;
-                foreach (var obj in this)
-                    obj.RecursiveSetWorld(world);
-            }
-        }
+        public World World { get => Parent.World; }
 
+        public IList<SCEObject> ActiveList { get => _activeList.AsReadOnly(); }
+
+        #region Modification
         public override bool Add(SCEObject obj)
         {
             if (obj == Parent)
                 throw new RecursiveParentException("Object tried to add itself as a child object.");
-            SetObject(obj, Parent, World);
+            SetupObject(obj);
             return base.Add(obj);
         }
 
         public override bool Remove(SCEObject obj)
         {
-            bool removed = base.Remove(obj);
-            if (removed)
-                ClearObject(obj);
-            return removed;
+            if (!base.Remove(obj))
+                return false;
+            ClearObject(obj);
+            return true;
         }
 
         public override void Clear()
         {
-            foreach (var obj in this)
-                ClearObject(obj);
+            ClearObjectRange(this);
             base.Clear();
         }
+        #endregion
+
+        #region Update
+        public void Start()
+        {
+            _activeList.Clear();
+            foreach (var child in this)
+            {
+                if (child.IsActive)
+                    child.Start();
+            }
+        }
+
+        public void Update()
+        {
+            _activeList.Clear();
+            foreach (var child in this)
+            {
+                if (child.IsActive)
+                {
+                    child.UpdateAll();
+                    _activeList.Add(child);
+                }
+            }
+        }
+        #endregion
 
         #region SetObject
-        private void SetObject(SCEObject obj, SCEObject? parent, World? world)
+        private void SetupObject(SCEObject obj)
         {
-            obj.SetParent(parent);
-            obj.SetWorld(world);
+            obj.SetParent(Parent);
+            if (Parent.HasWorld)
+            {
+                obj.RecursiveSetWorld(World);  
+                World.RecursiveAdd(obj);
+                obj.UpdateCombinedIsActive();
+                obj.UpdateWorldPosition();
+            } 
         }
 
         private void ClearObject(SCEObject obj)
         {
-            SetObject(obj, null, null);
+            World.RecursiveRemove(obj);
+            obj.SetParent(null);
+            obj.RecursiveSetWorld(null);
+            obj.UpdateCombinedIsActive();
+            obj.UpdateWorldPosition();
+        }
+
+        private void ClearObjectRange(IEnumerable<SCEObject> collection)
+        {
+            foreach (var obj in collection)
+                ClearObject(obj);
         }
         #endregion
     }
