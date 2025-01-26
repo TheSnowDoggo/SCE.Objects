@@ -164,11 +164,11 @@
             if (renderedBgColor is not null && renderedBgColor != BgColor)
             {
                 foreach (Area2DInt area in clearQueue)
-                    _dpMap.FillArea(new Pixel(BgColor), area);
+                    _dpMap.Data.FillArea(new Pixel(BgColor), area);
             }
             else
             {
-                _dpMap.Fill(new Pixel(BgColor));
+                _dpMap.Data.Fill(new Pixel(BgColor));
                 renderedBgColor = BgColor;
             }
 
