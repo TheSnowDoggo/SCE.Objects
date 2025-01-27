@@ -41,16 +41,15 @@
 
         public override void Update()
         {
-            if (UpdateLimiter?.OnUpdate() ?? false)
-                return;
-            if (ObjectCaching)
+            bool updateCache = UpdateLimiter?.OnUpdate() ?? true;
+            if (ObjectCaching && updateCache)
                 _activeCache.Clear();
             foreach (var obj in _everyObject)
             {
-                if (obj.CombinedIsActive && ShouldRender(obj))
+                if (obj.CombinedIsActive && (!updateCache || ShouldRender(obj)))
                 {
                     obj.UpdateAll();
-                    if (ObjectCaching)
+                    if (ObjectCaching && updateCache)
                         _activeCache.Add(obj);
                 }
             }
