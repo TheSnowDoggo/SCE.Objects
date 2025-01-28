@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a world containing objects and components.
     /// </summary>
-    public class World : SCEObject
+    public class World : SCEObject, IUpdate
     {
         private const string DEFAULT_NAME = "world";
 

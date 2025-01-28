@@ -86,7 +86,7 @@
         {
             var dpMap = renderable.GetMap();
 
-            var imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + objectOffset;
+            var imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + objectOffset * new Vector2Int(2, 1);
 
             var imageAlignedPosCorner = imageAlignedPos + dpMap.Dimensions;
 
