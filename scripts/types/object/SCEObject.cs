@@ -2,6 +2,7 @@
 {
     public class SCEObject : ICContainerHolder, IScene
     {
+        #region Constructors
         public SCEObject(string name, CGroup? components = null)
         {
             Name = name;
@@ -13,6 +14,7 @@
             : this(string.Empty, components)
         {
         }
+        #endregion
 
         public string Name { get; set; }
 
@@ -72,6 +74,7 @@
         #endregion
 
         #region Children
+
         public void RecursiveResolveChildren(List<SCEObject> list)
         {
             if (Children.IsEmpty)
@@ -121,9 +124,11 @@
                 child.RecursiveUpdateWorldPositions();
             }
         }
+
         #endregion
 
         #region Parent
+
         public SCEObject? Parent { get; private set; }
 
         public bool HasParent { get => Parent is not null; }
@@ -132,9 +137,11 @@
         {
             Parent = parent;
         }
+
         #endregion
 
         #region Scene
+
         public virtual void Start()
         {
         }
@@ -148,9 +155,11 @@
             Components.Update();
             Update();
         }
+
         #endregion
 
         #region World
+
         private World? world = null;
 
         public World World { get => world ?? throw new NullReferenceException("World is null."); }
@@ -161,6 +170,7 @@
         {
             this.world = world;
         }
+
         #endregion
 
         public override string ToString()

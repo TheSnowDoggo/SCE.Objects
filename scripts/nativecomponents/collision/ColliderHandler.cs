@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class ColliderHandler : ComponentBase<World>, IUpdate
+    public class ColliderHandler : HandlerBase<ICollidable>, IUpdate
     {
         private const string DEFAULT_NAME = "collider_handler";
 
@@ -9,6 +9,7 @@
         public ColliderHandler(string name = DEFAULT_NAME)
             : base(name)
         {
+            ComponentRule = (collidable) => collidable.IsListening || collidable.IsReceiving;
         }
 
         public IRenderRule? ObjectCacheable { get; set; }
@@ -19,10 +20,19 @@
         {
             if (!UpdateLimiter?.OnUpdate() ?? false)
                 return;
-
-            UpdateColliderLayerList();
-
+            colliderLayerList.Clear();
+            LoadObjects();
             CheckLayersForCollisions();
+        }
+
+        protected override void OnLoad(SCEObject obj, ICollidable collidable)
+        {
+            var colliderLayer = GetColliderLayer(collidable.Layer);
+
+            if (collidable.IsListening)
+                colliderLayer.ListeningColliderList.Add(collidable);
+            else
+                colliderLayer.NotListeningColliderList.Add(collidable);
         }
 
         private static bool DoCollidersCollide(ICollidable collider, ICollidable other)
@@ -72,35 +82,6 @@
                         CheckForCollisionsIn(fullColliderList, collider, i);
                 }
             }
-        }
-
-        private void UpdateColliderLayerList()
-        {
-            colliderLayerList.Clear();
-            foreach (var obj in Holder.Objects)
-            {
-                if (obj.IsActive && obj.Components.Contains<ICollidable>())
-                    TryAddColliderComponents(obj);
-            }
-        }
-
-        private void TryAddColliderComponents(SCEObject obj)
-        {
-            foreach(var component in obj.Components)
-            {
-                if (component.IsActive && component is ICollidable collidable && (collidable.IsListening || collidable.IsReceiving))
-                    AddCollider(collidable);
-            }
-        }
-
-        private void AddCollider(ICollidable collidable)
-        {
-            ColliderLayer colliderLayer = GetColliderLayer(collidable.Layer);
-
-            if (collidable.IsListening)
-                colliderLayer.ListeningColliderList.Add(collidable);
-            else
-                colliderLayer.NotListeningColliderList.Add(collidable);
         }
 
         private ColliderLayer GetColliderLayer(byte layer)

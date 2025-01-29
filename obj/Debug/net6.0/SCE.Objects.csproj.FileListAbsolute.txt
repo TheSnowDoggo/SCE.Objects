@@ -29,3 +29,4 @@ C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\refint\SCE
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCE.Objects.pdb
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\ref\SCE.Objects.dll
 C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Debug\net6.0\SCE.UI.dll
+C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.UI.dll

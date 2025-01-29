@@ -3,16 +3,13 @@
     public class ComponentBase<T> : IComponent
         where T : ICContainerHolder
     {
+        private const string DEFAULT_NAME = "component_base";
+
         private CContainer? container;
 
-        public ComponentBase(string name)
+        public ComponentBase(string name = DEFAULT_NAME)
         {
             Name = name;
-        }
-
-        public ComponentBase()
-            : this(string.Empty)
-        {
         }
 
         public CContainer Container { get => container ?? throw new NullReferenceException("CContainer is null."); }

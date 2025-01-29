@@ -1,7 +1,7 @@
 ﻿namespace SCE
 {
     // WorldSpace RenderHandlerComponentV2
-    public class WorldSpaceRHC : ComponentBase<World>, ICContainerHolder, IUpdate
+    public class WorldSpaceRHC : HandlerBase<IRenderable>, ICContainerHolder, IUpdate
     {
         private const string DEFAULT_NAME = "world_space";
 
@@ -24,15 +24,7 @@
 
         public IUpdateLimit? UpdateLimiter { get; set; }
 
-        #region Caching
-        public IRenderRule? ObjectCacheable { get; set; }
-        #endregion
-
-        #region Cameras
         public HashSet<Camera> Cameras { get; } = new();
-
-        public bool HasCamera { get => Cameras.Count != 0; }
-        #endregion
 
         #region Update
         public void Update()
@@ -47,11 +39,8 @@
         {
             if (!Components.Contains<Camera>())
                 return;
-
             LoadCameraQueue();
-
-            LoadObjects();
-
+            base.LoadObjects();
             RenderCameraQueue();
         }
 
@@ -64,37 +53,19 @@
             }
         }
 
-        private void LoadObjects()
-        {
-            foreach (var obj in Holder.Objects)
-            {
-                if (obj.IsActive && obj.Components.Contains<IRenderable>())
-                    TryLoadActiveObject(obj);
-            }
-        }
-
-        private void TryLoadActiveObject(SCEObject obj)
-        {
-            foreach (var component in obj.Components)
-            {
-                if (component.IsActive && component is IRenderable renderable)
-                    TryLoadActiveRenderable(renderable, obj.WorldGridPosition());
-            }
-        }
-
-        private void TryLoadActiveRenderable(IRenderable renderable, Vector2Int objectOffset)
+        protected override void OnLoad(SCEObject obj, IRenderable renderable)
         {
             var dpMap = renderable.GetMap();
 
-            var imageAlignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + objectOffset * new Vector2Int(2, 1);
+            var alignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + obj.WorldGridPosition() * new Vector2Int(2, 1);
 
-            var imageAlignedPosCorner = imageAlignedPos + dpMap.Dimensions;
+            var alignedCorner = alignedPos + dpMap.Dimensions;
 
             foreach (var camera in cameraRenderQueue)
             {
                 // More efficient than creating a new Area2DInt for the image
-                if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, imageAlignedPos, imageAlignedPosCorner))
-                    camera.Load(new SpritePackage(dpMap, renderable.Layer, imageAlignedPos));
+                if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, alignedPos, alignedCorner))
+                    camera.Load(new SpritePackage(dpMap, renderable.Layer, alignedPos));
             }
         }
 

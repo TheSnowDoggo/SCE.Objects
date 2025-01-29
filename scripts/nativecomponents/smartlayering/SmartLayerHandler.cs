@@ -1,6 +1,6 @@
 ﻿namespace SCE
 {
-    public class SmartLayerHandler : ComponentBase<World>, IUpdate
+    public class SmartLayerHandler : HandlerBase<SmartLayer>, IUpdate
     {
         private const string DEFAULT_NAME = "smart_layer_handler";
 
@@ -15,8 +15,6 @@
 
         public StackType LayeringMode { get; set; } = StackType.BottomUp;
 
-        public IRenderRule? ObjectCacheable { get; set; }
-
         public IUpdateLimit? UpdateLimiter { get; set; }
 
         public void Update()
@@ -26,7 +24,7 @@
 
             _smartLayerList.Clear();
 
-            PopulateSmartLayerList();
+            LoadObjects();
 
             if (_smartLayerList.Count == 0)
                 return;
@@ -36,22 +34,9 @@
             UpdateSmartLayerList();
         }
 
-        private void PopulateSmartLayerList()
+        protected override void OnLoad(SCEObject obj, SmartLayer smartLayer)
         {
-            foreach (var obj in Holder.Objects)
-            {
-                if (obj.IsActive && obj.Components.Contains<SmartLayer>())
-                    UpdateObject(obj);
-            }
-        }
-
-        private void UpdateObject(SCEObject obj)
-        {
-            foreach (IComponent component in obj.Components)
-            {
-                if (component.IsActive && component is SmartLayer smartLayer)
-                    _smartLayerList.Add(smartLayer);
-            }
+            _smartLayerList.Add(smartLayer);
         }
 
         private void SortSmartLayerList()
