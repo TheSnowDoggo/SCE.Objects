@@ -46,11 +46,11 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.WorldGridPosition(); }
+        public Rect2D ObjectAlignedAnchoredCollisionArea { get => AnchoredCollisionArea + Holder.WorldGridPosition(); }
 
-        private Area2DInt CollisionArea { get => new(Vector2Int.Zero, Dimensions); }
+        private Rect2D CollisionArea { get => new(Vector2Int.Zero, Dimensions); }
 
-        private Area2DInt AnchoredCollisionArea { get => CollisionArea + -AnchorUtils.AnchoredDimension(Anchor, Dimensions) + Position; } 
+        private Rect2D AnchoredCollisionArea { get => CollisionArea + -AnchorUtils.AnchoredDimension(Anchor, Dimensions) + Position; } 
 
         /// <inheritdoc/>
         public bool HasMethodFor(ICollidable other)
@@ -73,9 +73,9 @@
             return other.DoesAreaOverlapWith(ObjectAlignedAnchoredCollisionArea);
         }
 
-        public bool DoesAreaOverlapWith(Area2DInt area)
+        public bool DoesAreaOverlapWith(Rect2D area)
         {
-            return Area2DInt.Overlaps(ObjectAlignedAnchoredCollisionArea, area);
+            return Rect2D.Overlaps(ObjectAlignedAnchoredCollisionArea, area);
         }
     }
 }

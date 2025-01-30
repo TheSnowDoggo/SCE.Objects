@@ -25,7 +25,7 @@
         /// </summary>
         public SCEObject Object { get; set; }
 
-        public Vector2Int Position { get; set; }
+        public Vector2Int Offset { get; set; }
 
         /// <summary>
         /// Gets or sets the position anchor of the controlled camera.
@@ -35,7 +35,7 @@
         /// <inheritdoc/>
         public void Update()
         {
-            Holder.WorldPosition = Object.WorldPosition + -(Vector2)AnchorUtils.AnchoredDimension(Anchor, Holder.Dimensions) + Position;
+            Holder.WorldPosition = Object.WorldPosition -(Vector2)AnchorUtils.AnchoredDimension(Anchor, Holder.Dimensions / new Vector2Int(2, 1)) + (Vector2)Offset;
         }
     }
 }

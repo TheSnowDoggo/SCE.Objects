@@ -9,20 +9,20 @@
             return position / chunkDimensions;
         }
 
-        public Area2DInt GetChunkArea(Area2DInt area)
+        public Rect2D GetChunkArea(Rect2D area)
         {
-            return new(GetChunkPosition(area.Start), GetChunkPosition(area.End));
+            return new(GetChunkPosition(area.Start()), GetChunkPosition(area.End()));
         }
 
-        public Vector2Int[] ResolveChunks(Area2DInt area)
+        public Vector2Int[] ResolveChunks(Rect2D area)
         {
-            Area2DInt chunkArea = GetChunkArea(area);
+            Rect2D chunkArea = GetChunkArea(area);
 
-            Vector2Int[] chunkPosArr = new Vector2Int[area.Dimensions.ScalarProduct];
+            Vector2Int[] chunkPosArr = new Vector2Int[area.Size()];
             int i = 0;
-            for (int x = chunkArea.Start.X; x < chunkArea.End.X; ++x)
+            for (int x = chunkArea.Left; x < chunkArea.Right; ++x)
             {
-                for (int y = chunkArea.Start.Y; y < chunkArea.End.Y; ++y)
+                for (int y = chunkArea.Bottom; y < chunkArea.Top; ++y)
                 {
                     chunkPosArr[i] = new Vector2Int(x, y);
                     ++i;

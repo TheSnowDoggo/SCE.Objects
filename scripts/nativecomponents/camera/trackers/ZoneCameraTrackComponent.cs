@@ -14,7 +14,7 @@
         /// <param name="boundingArea">The area the zone is bounded to.</param>
         /// <param name="zoneDimensions">The dimensions of the zone.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions)
+        public ZoneCameraTrackComponent(string name, SCEObject obj, Rect2D boundingArea, Vector2Int zoneDimensions)
             : base(name)
         {
             if (zoneDimensions <= 0)
@@ -27,7 +27,7 @@
             ZoneDimensions = zoneDimensions;
         }
 
-        public ZoneCameraTrackComponent(SCEObject obj, Area2DInt boundingArea, Vector2Int zoneDimensions)
+        public ZoneCameraTrackComponent(SCEObject obj, Rect2D boundingArea, Vector2Int zoneDimensions)
             : this("zone_camera_track", obj, boundingArea, zoneDimensions)
         {
         }
@@ -40,7 +40,7 @@
         /// <summary>
         /// Gets or sets the camera bounding area.
         /// </summary>
-        public Area2DInt BoundingArea { get; set; }
+        public Rect2D BoundingArea { get; set; }
 
         /// <summary>
         /// Gets or sets the dimensions of the camera zone.
@@ -72,15 +72,15 @@
 
         private Vector2Int ObjectAlignedZonePosition => Object.WorldGridPosition() + -AnchorUtils.AnchoredDimension(ZoneAnchor, ZoneDimensions) + ZonePosition;
 
-        private Area2DInt BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
+        private Rect2D BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
 
-        private Vector2Int BoundObjectAlignedZonePosition => BoundObjectAlignedZoneArea.Start;
+        private Vector2Int BoundObjectAlignedZonePosition => BoundObjectAlignedZoneArea.Start();
 
-        private Area2DInt ObjectAlignedZoneArea => new Area2DInt(Vector2Int.Zero, ZoneDimensions) + ObjectAlignedZonePosition;
+        private Rect2D ObjectAlignedZoneArea => new Rect2D(Vector2Int.Zero, ZoneDimensions) + ObjectAlignedZonePosition;
 
         public void Update()
         {
-            Holder.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint + -AnchorUtils.AnchoredDimension(CameraAnchor, Holder.Dimensions) + CameraPosition);
+            Holder.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint() + -AnchorUtils.AnchoredDimension(CameraAnchor, Holder.Dimensions) + CameraPosition);
         }
     }
 }

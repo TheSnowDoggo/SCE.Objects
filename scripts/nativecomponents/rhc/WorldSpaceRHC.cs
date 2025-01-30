@@ -57,15 +57,14 @@
         {
             var dpMap = renderable.GetMap();
 
-            var alignedPos = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + obj.WorldGridPosition() * new Vector2Int(2, 1);
-
-            var alignedCorner = alignedPos + dpMap.Dimensions;
+            var start = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + obj.WorldGridPosition() * new Vector2Int(2, 1);
+            var end = start + dpMap.Dimensions;
 
             foreach (var camera in cameraRenderQueue)
             {
                 // More efficient than creating a new Area2DInt for the image
-                if (Area2DInt.Overlaps(camera.WorldPositionInt, camera.WorldPositionIntCorner, alignedPos, alignedCorner))
-                    camera.Load(new SpritePackage(dpMap, renderable.Layer, alignedPos));
+                if (camera.Overlaps(start, end))
+                    camera.Load(new SpritePackage(dpMap, renderable.Layer, start));
             }
         }
 

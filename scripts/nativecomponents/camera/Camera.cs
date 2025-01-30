@@ -12,9 +12,7 @@
         #region Camera
         private readonly List<SpritePackage> renderList = new();
 
-        private readonly Queue<Area2DInt> clearQueue = new();
-
-        private Vector2 worldPosition;
+        private readonly Queue<Rect2D> clearQueue = new();
 
         private SCEColor? renderedBgColor = null;
         #endregion
@@ -25,8 +23,6 @@
             : base(name, width, height)
         {
             Components = new(this, components);
-
-            UpdateWorldProperties();
         }
 
         public Camera(string name, Vector2Int dimensions, CGroup? components = null)
@@ -53,17 +49,19 @@
         public IUpdateLimit? UpdateLimiter { get; set; }
 
         #region WorldProperties
-        public Vector2 WorldPosition
-        {
-            get => worldPosition;
-            set => UpdateWorldProperties(value);
-        }
 
-        public Vector2Int WorldPositionInt { get; private set; }
+        public Vector2 WorldPosition { get; set; }
 
-        public Vector2Int WorldPositionIntCorner { get; private set; }
+        private readonly PropertyMemoizer<Vector2, Vector2Int> rPosMemoizer =
+            new((worldPos) => worldPos.Round().ToVector2Int() * new Vector2Int(2, 1));
 
-        public Area2DInt WorldAlignedArea { get; private set; }
+        public Vector2Int RenderPosition() => rPosMemoizer.Get(WorldPosition);
+
+        private readonly PropertyMemoizer<Vector2Int, Rect2D, Rect2D> rAreaMemoizer =
+            new((rPos, gridArea) => gridArea + rPos);
+
+        public Rect2D RenderArea() => rAreaMemoizer.Get(RenderPosition(), _dpMap.GridArea);
+
         #endregion
 
         #region Settings
@@ -88,8 +86,6 @@
             clearQueue.Clear();
 
             renderedBgColor = null;
-
-            UpdateWorldProperties();
         }
 
         public void Resize(Vector2Int dimensions)
@@ -150,9 +146,9 @@
 
         private void RenderIRP(SpritePackage irp)
         {
-            Area2DInt trimmedGridArea = WorldAlignedArea.TrimArea(irp.OffsetArea) - irp.Offset;
+            Rect2D trimmedGridArea = RenderArea().TrimArea(irp.OffsetArea) - irp.Offset;
 
-            Vector2Int cameraOffsetPosition = irp.Offset - WorldPositionInt;
+            Vector2Int cameraOffsetPosition = irp.Offset - RenderPosition();
 
             _dpMap.MapToArea(irp.DisplayMap, trimmedGridArea, cameraOffsetPosition, true);
 
@@ -176,19 +172,10 @@
         }
         #endregion
 
-        #region WorldPropertyFunc
-        private void UpdateWorldProperties(Vector2? newWorldPos = null)
+        public bool Overlaps(Vector2Int start, Vector2Int end)
         {
-            if (newWorldPos is Vector2 newPosition)
-                worldPosition = newPosition;
-
-            WorldPositionInt = (Vector2Int)WorldPosition.Round();
-
-            WorldPositionIntCorner = WorldPositionInt + Dimensions;
-
-            WorldAlignedArea = _dpMap.GridArea + WorldPositionInt;
+            return RenderArea().Overlaps(start, end);
         }
-        #endregion
 
         #region Update
         public void Update()

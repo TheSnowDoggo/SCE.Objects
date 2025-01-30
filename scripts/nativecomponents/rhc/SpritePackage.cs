@@ -40,6 +40,6 @@
         /// <summary>
         /// Gets the image aligned area offset by the offset.
         /// </summary>
-        public Area2DInt OffsetArea { get; }
+        public Rect2D OffsetArea { get; }
     }
 }

@@ -44,7 +44,7 @@
         /// </summary>
         public Anchor Anchor { get; set; }
 
-        public Area2DInt ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.WorldGridPosition(); }
+        public Rect2D ObjectAlignedAnchoredCollisionArea { get => CollisionGrid.GridArea + Holder.WorldGridPosition(); }
 
         private Vector2Int OffsetPosition { get => Holder.WorldGridPosition() + -AnchorUtils.AnchoredDimension(Anchor, CollisionGrid.Dimensions) + Position; }
 
@@ -76,18 +76,18 @@
 
             if (other is MapColliderComponent mapColliderComp)
             {
-                Area2DInt otherObjectAlignedArea = mapColliderComp.ObjectAlignedAnchoredCollisionArea;
+                Rect2D otherObjectAlignedArea = mapColliderComp.ObjectAlignedAnchoredCollisionArea;
 
-                if (!Area2DInt.Overlaps(ObjectAlignedAnchoredCollisionArea, otherObjectAlignedArea))
+                if (!Rect2D.Overlaps(ObjectAlignedAnchoredCollisionArea, otherObjectAlignedArea))
                     return false;
 
-                Area2DInt thisOverlappingGridArea = Area2DInt.GetOverlap(CollisionGrid.GridArea, otherObjectAlignedArea - OffsetPosition); 
+                Rect2D thisOverlappingGridArea = Rect2D.GetOverlap(CollisionGrid.GridArea, otherObjectAlignedArea - OffsetPosition); 
 
                 bool collides = false;
 
                 bool CycleActionWhile(Vector2Int thisPos)
                 {
-                    Vector2Int otherPos = thisPos - thisOverlappingGridArea.Start;
+                    Vector2Int otherPos = thisPos - thisOverlappingGridArea.Start();
 
                     if (CollisionGrid[thisPos] && mapColliderComp.CollisionGrid[otherPos])
                         collides = true;
@@ -101,12 +101,12 @@
 
             if (other is BoxColliderComponent boxColliderComp)
             {
-                Area2DInt otherObjectAlignedArea = boxColliderComp.ObjectAlignedAnchoredCollisionArea;
+                Rect2D otherObjectAlignedArea = boxColliderComp.ObjectAlignedAnchoredCollisionArea;
 
-                if (!Area2DInt.Overlaps(ObjectAlignedAnchoredCollisionArea, otherObjectAlignedArea))
+                if (!Rect2D.Overlaps(ObjectAlignedAnchoredCollisionArea, otherObjectAlignedArea))
                     return false;
 
-                Area2DInt thisOverlappingGridArea = Area2DInt.GetOverlap(CollisionGrid.GridArea, otherObjectAlignedArea - OffsetPosition);
+                Rect2D thisOverlappingGridArea = Rect2D.GetOverlap(CollisionGrid.GridArea, otherObjectAlignedArea - OffsetPosition);
 
                 bool collides = false;
 
