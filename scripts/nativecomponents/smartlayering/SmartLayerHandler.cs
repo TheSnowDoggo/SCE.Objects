@@ -15,11 +15,11 @@
 
         public StackType LayeringMode { get; set; } = StackType.BottomUp;
 
-        public IUpdateLimit? UpdateLimiter { get; set; }
+        public IUpdateLimit? RenderLimiter { get; set; }
 
         public void Update()
         {
-            if (!UpdateLimiter?.OnUpdate() ?? false)
+            if (!RenderLimiter?.OnUpdate() ?? false)
                 return;
 
             _smartLayerList.Clear();

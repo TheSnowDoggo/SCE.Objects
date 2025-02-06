@@ -1,8 +1,5 @@
 ﻿namespace SCE
 {
-    /// <summary>
-    /// Represents a world containing objects and components.
-    /// </summary>
     public class World : SCEObject, IScene
     {
         private const string DEFAULT_NAME = "world";
@@ -10,6 +7,8 @@
         private readonly List<SCEObject> _activeCache = new();
 
         private readonly SearchHash<SCEObject> _everyObject = new();
+
+        #region Constructors
 
         public World(string name, CGroup? components = null)
             : base(name, components)
@@ -22,13 +21,23 @@
         {
         }
 
-        public IUpdateLimit? UpdateLimiter { get; set; }
-
-        public SearchHash<IRenderRule> RenderRules { get; set; } = new();
+        #endregion
 
         public IEnumerable<SCEObject> Objects { get => ObjectCaching ? _activeCache.AsReadOnly() : _everyObject; }
 
+        #region Settings
+
+        public IUpdateLimit? UpdateLimiter { get; set; }
+
+        public IUpdateLimit? ComponentLimiter { get; set; }
+
+        public SearchHash<IRenderRule> RenderRules { get; set; } = new();
+
         public bool ObjectCaching { get; set; } = true;
+
+        #endregion
+
+        #region Scene
 
         public override void Start()
         {
@@ -53,8 +62,13 @@
                         _activeCache.Add(obj);
                 }
             }
-            Components.Update();
+            if (!ComponentLimiter?.OnUpdate() ?? true)
+                Components.Update();
         }
+
+        #endregion
+
+        #region RenderOptimisation
 
         private bool ShouldRender(SCEObject obj)
         {
@@ -66,7 +80,10 @@
             return true;
         }
 
+        #endregion
+
         #region Recursive
+
         internal void RecursiveAdd(SCEObject obj)
         {
             _everyObject.Add(obj);
@@ -78,6 +95,7 @@
             _everyObject.Remove(obj);
             _everyObject.RemoveRange(obj.RecursiveGetChildren());
         }
+
         #endregion
     }
 }

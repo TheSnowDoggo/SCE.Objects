@@ -15,9 +15,6 @@
     <Reference Include="SCE.GameManager">
       <HintPath>lib\SCE.GameManager.dll</HintPath>
     </Reference>
-    <Reference Include="SCE.UI">
-      <HintPath>lib\SCE.UI.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -14,11 +14,11 @@
 
         public IRenderRule? ObjectCacheable { get; set; }
 
-        public IUpdateLimit? UpdateLimiter { get; set; }
+        public IUpdateLimit? RenderLimiter { get; set; }
       
         public void Update()
         {
-            if (!UpdateLimiter?.OnUpdate() ?? false)
+            if (!RenderLimiter?.OnUpdate() ?? false)
                 return;
             colliderLayerList.Clear();
             LoadObjects();

@@ -7,6 +7,8 @@
 
         private readonly Queue<Camera> cameraRenderQueue = new();
 
+        #region Constructors
+
         public WorldSpaceRHC(string name, CGroup? components = null)
             : base(name)
         {
@@ -18,21 +20,27 @@
         {
         }
 
+        #endregion
+
         public CContainer Components { get; }
+
+        #region Settings
 
         public SCEColor BgColor { get; set; }
 
-        public IUpdateLimit? UpdateLimiter { get; set; }
+        public IUpdateLimit? RenderLimiter { get; set; }
 
         public HashSet<Camera> Cameras { get; } = new();
 
+        #endregion
+
         #region Update
+
         public void Update()
         {
-            if (!UpdateLimiter?.OnUpdate() ?? false)
-                return;
             Components.Update();
-            Render();
+            if (RenderLimiter?.OnUpdate() ?? true)
+                Render();
         }
 
         private void Render()
@@ -40,7 +48,7 @@
             if (!Components.Contains<Camera>())
                 return;
             LoadCameraQueue();
-            base.LoadObjects();
+            LoadObjects();
             RenderCameraQueue();
         }
 
@@ -62,7 +70,6 @@
 
             foreach (var camera in cameraRenderQueue)
             {
-                // More efficient than creating a new Area2DInt for the image
                 if (camera.Overlaps(start, end))
                     camera.Load(new SpritePackage(dpMap, renderable.Layer, start));
             }
@@ -74,6 +81,7 @@
                 camera.RenderNow();
             cameraRenderQueue.Clear();
         }
+
         #endregion
     }
 }

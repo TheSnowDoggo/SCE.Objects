@@ -20,26 +20,14 @@
             OffsetArea = new(offset, OffsetCorner); 
         }
 
-        /// <summary>
-        /// Gets the displayMap to render.
-        /// </summary>
         public DisplayMap DisplayMap { get; }
 
         public int Layer { get; }
 
-        /// <summary>
-        /// Gets the offset of the image to render.
-        /// </summary>
         public Vector2Int Offset { get; }
 
-        /// <summary>
-        /// Gets the image aligned position corner offset by the offset.
-        /// </summary>
         public Vector2Int OffsetCorner { get; }
 
-        /// <summary>
-        /// Gets the image aligned area offset by the offset.
-        /// </summary>
         public Rect2D OffsetArea { get; }
     }
 }

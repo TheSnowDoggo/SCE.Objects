@@ -20,6 +20,8 @@
 
         public string Name { get; set; }
 
+        #region Settings
+
         public bool IsActive { get; set; } = true;
 
         public double Range { get; set; }
@@ -29,6 +31,8 @@
         public HashSet<SCEObject> ExclusionSet { get; set; } = new();
 
         public HashSet<SCEObject> PrioritySet { get; set; } = new();
+
+        #endregion
 
         public bool ShouldRender(SCEObject obj)
         {

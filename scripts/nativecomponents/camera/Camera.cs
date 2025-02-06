@@ -9,15 +9,21 @@
 
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
+        private SCEColor bgColor = DEFAULT_BGCOLOR;
+
         #region Camera
+
         private readonly List<SpritePackage> renderList = new();
 
         private readonly Queue<Rect2D> clearQueue = new();
 
         private SCEColor? renderedBgColor = null;
+
         #endregion
 
         private CContainer? container;
+
+        #region Constructors
 
         public Camera(string name, int width, int height, CGroup? components = null)
             : base(name, width, height)
@@ -40,13 +46,17 @@
         {
         }
 
+        #endregion
+
         public CContainer Components { get; }
+
+        #region Component
 
         public CContainer Container { get => container ?? throw new NullReferenceException("Container is null."); }
 
         public WorldSpaceRHC WorldSpace { get => (WorldSpaceRHC)Container.Holder; }
 
-        public IUpdateLimit? UpdateLimiter { get; set; }
+        #endregion
 
         #region WorldProperties
 
@@ -65,19 +75,34 @@
         #endregion
 
         #region Settings
-        public SCEColor BgColor { get; set; } = DEFAULT_BGCOLOR;
+
+        public IUpdateLimit? UpdateLimiter { get; set; }
+
+        public SCEColor BgColor
+        {
+            get => bgColor;
+            set
+            {
+                bgColor = value;
+                Clear();
+            }
+        }
 
         public bool ConsistantSorting { get; set; } = true;
+
         #endregion
 
         #region Load
+
         internal void Load(SpritePackage irp)
         {
             renderList.Add(irp);
         }
+
         #endregion
 
         #region Resize
+
         public void Resize(int width, int height)
         {
             _dpMap.CleanResize(width, height);
@@ -92,9 +117,11 @@
         {
             Resize(dimensions.X, dimensions.Y);
         }
+
         #endregion
 
         #region Sorting
+
         private void QuickSortRenderList()
         {
             renderList.Sort((a, b) => a.Layer < b.Layer ? -1 : 1);
@@ -127,9 +154,22 @@
             else
                 QuickSortRenderList();
         }
+
+        #endregion
+
+        #region Update
+
+        public void Update()
+        {
+            if (!UpdateLimiter?.OnUpdate() ?? false)
+                return;
+            Components.Update();
+        }
+
         #endregion
 
         #region Render
+
         internal void RenderNow()
         {
             SmartClear();
@@ -157,42 +197,45 @@
 
         private void SmartClear()
         {
-            if (renderedBgColor is not null && renderedBgColor != BgColor)
+            if (renderedBgColor is not null && renderedBgColor == BgColor)
             {
                 foreach (var area in clearQueue)
                     _dpMap.Data.FillArea(new Pixel(BgColor), area);
             }
             else
             {
-                _dpMap.Data.Fill(new Pixel(BgColor));
+                Clear();
                 renderedBgColor = BgColor;
             }
 
             clearQueue.Clear();
         }
-        #endregion
 
         public bool Overlaps(Vector2Int start, Vector2Int end)
         {
             return RenderArea().Overlaps(start, end);
         }
 
-        #region Update
-        public void Update()
-        {
-            if (!UpdateLimiter?.OnUpdate() ?? false)
-                return;
-            Components.Update();
-        }
         #endregion
 
-        #region ComponentFuncs
+        #region Clear
+
+        public void Clear()
+        {
+            _dpMap.Data.Fill(new Pixel(BgColor));
+        }
+
+        #endregion
+
+        #region ComponentFuncs 
+
         public void SetCContainer(CContainer? container, ICContainerHolder holder)
         {
             if (holder is not WorldSpaceRHC)
                 throw new InvalidCContainerHolderException();
             this.container = container;
         }
+
         #endregion
     }
 }
