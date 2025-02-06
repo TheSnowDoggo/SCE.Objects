@@ -1,0 +1,14 @@
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Release\net6.0\SCE.Objects.deps.json
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Release\net6.0\SCE.Objects.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Release\net6.0\SCE.Objects.pdb
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.csproj.AssemblyReference.cache
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.AssemblyInfoInputs.cache
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.AssemblyInfo.cs
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.csproj.CoreCompileInputs.cache
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\refint\SCE.Objects.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.pdb
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\ref\SCE.Objects.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Release\net6.0\SCE.Objects.xml
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Release\net6.0\SCE.Objects.xml

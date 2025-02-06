@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Product>$(AssemblyName)</Product>
+    <Product>SCEObjects</Product>
     <Description>Advanced Objects and Components assembly for SCE.</Description>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,14 +16,7 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Copyright>MIT License</Copyright>
-    <Title>$(AssemblyName)</Title>
-    <PackageId>SCEObjects</PackageId>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SCECore" Version="2.1.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="SCE.Core">

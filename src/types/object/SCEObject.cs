@@ -77,7 +77,7 @@
 
         public void RecursiveResolveChildren(List<SCEObject> list)
         {
-            if (Children.IsEmpty)
+            if (Children.Count == 0)
                 return;
             list.AddRange(Children);
             foreach (var child in Children)

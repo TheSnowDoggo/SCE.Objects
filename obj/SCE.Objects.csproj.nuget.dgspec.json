@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
-        "projectName": "SCE.Objects",
+        "projectName": "SCEObjects",
         "projectPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
         "packagesPath": "C:\\Users\\redst\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\obj\\",
@@ -44,6 +44,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "SCECore": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
