@@ -12,9 +12,6 @@
     <Reference Include="SCE.Core">
       <HintPath>lib\SCE.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SCE.GameManager">
-      <HintPath>lib\SCE.GameManager.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
