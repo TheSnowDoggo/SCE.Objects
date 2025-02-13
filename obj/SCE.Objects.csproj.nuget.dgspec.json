@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj": {}
+    "C:\\Users\\AdamG\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCE.Objects.csproj": {}
   },
   "projects": {
-    "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj": {
+    "C:\\Users\\AdamG\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCE.Objects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
+        "projectUniqueName": "C:\\Users\\AdamG\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCE.Objects.csproj",
         "projectName": "SCEObjects",
-        "projectPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
-        "packagesPath": "C:\\Users\\redst\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\obj\\",
+        "projectPath": "C:\\Users\\AdamG\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCE.Objects.csproj",
+        "packagesPath": "C:\\Users\\AdamG\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\AdamG\\source\\repos\\TheSnowDoggo\\SCECorePlus\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\redst\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\AdamG\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -66,7 +66,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

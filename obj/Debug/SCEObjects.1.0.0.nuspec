@@ -19,8 +19,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Debug\net6.0\SCE.Objects.dll" target="lib\net6.0\SCE.Objects.dll" />
-    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\LICENSE.txt" target="\LICENSE.txt" />
-    <file src="C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\README.md" target="\README.md" />
+    <file src="C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.Objects.dll" target="lib\net6.0\SCE.Objects.dll" />
+    <file src="C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.Objects.xml" target="lib\net6.0\SCE.Objects.xml" />
+    <file src="C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\LICENSE.txt" target="\LICENSE.txt" />
+    <file src="C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\README.md" target="\README.md" />
   </files>
 </package>

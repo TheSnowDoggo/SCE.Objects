@@ -65,8 +65,8 @@
         {
             var dpMap = renderable.GetMap();
 
-            var start = -AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset + obj.WorldGridPosition() * new Vector2Int(2, 1);
-            var end = start + dpMap.Dimensions;
+            var start = ((-AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset) / new Vector2Int(2, 1) + obj.WorldGridPosition()) * new Vector2Int(2, 1);
+            var end = start + (dpMap.Dimensions / new Vector2Int(2, 1));
 
             foreach (var camera in cameraRenderQueue)
             {

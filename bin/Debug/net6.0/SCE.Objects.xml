@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SCE.Objects</name>
+    </assembly>
+    <members>
+        <member name="T:SCE.CContainer">
+            <summary>
+            A class containing a CList and the ICContainerHolder.
+            Used for storing components by a holder.
+            </summary>
+        </member>
+        <member name="T:SCE.CGroup">
+            <summary>
+            A wrapper class containing a <see cref="T:SCE.IComponent"/> <see cref="T:System.Collections.Generic.List`1"/>.
+            </summary>
+        </member>
+        <member name="M:SCE.CGroup.#ctor(System.Collections.Generic.IEnumerable{SCE.IComponent})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.CGroup"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.CGroup.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.CGroup"/> class that is empty.
+            </summary>
+        </member>
+        <member name="M:SCE.CGroup.Update">
+            <summary>
+            Calls <see cref="!:IComponent.Update"/> for every <see cref="T:SCE.IComponent"/> in this instance.
+            </summary>
+        </member>
+        <member name="T:SCE.InvalidCContainerHolderException">
+            <summary>
+            Represents errors thrown when an incompatible <see cref="T:SCE.IComponent"/> is added to a component holder.
+            </summary>
+        </member>
+        <member name="M:SCE.InvalidCContainerHolderException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.InvalidCContainerHolderException"/> class.
+            </summary>
+        </member>
+        <member name="M:SCE.InvalidCContainerHolderException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.InvalidCContainerHolderException"/> class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:SCE.ICContainerHolder">
+            <summary>
+            An interface between the CContainer and its holder instance.
+            </summary>
+        </member>
+        <member name="P:SCE.ICContainerHolder.Components">
+            <summary>
+            Gets the CContainer.
+            </summary>
+        </member>
+        <member name="T:SCE.IComponent">
+            <summary>
+            Allows <see cref="T:SCE.IComponent"/> classes to modularly interface with their holder.
+            </summary>
+        </member>
+        <member name="T:SCE.Camera">
+            <summary>
+            Represents a camera in a world space.
+            </summary>
+        </member>
+        <member name="T:SCE.StaticCameraTrackComponent">
+            <summary>
+            An <see cref="T:SCE.IComponent"/> used for static object camrea tracking.
+            </summary>
+        </member>
+        <member name="M:SCE.StaticCameraTrackComponent.#ctor(System.String,SCE.SCEObject)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.StaticCameraTrackComponent"/> class.
+            </summary>
+            <param name="obj">The object to track.</param>
+        </member>
+        <member name="P:SCE.StaticCameraTrackComponent.Object">
+            <summary>
+            Gets or sets the controlled camera.
+            </summary>
+        </member>
+        <member name="P:SCE.StaticCameraTrackComponent.Anchor">
+            <summary>
+            Gets or sets the position anchor of the controlled camera.
+            </summary>
+        </member>
+        <member name="M:SCE.StaticCameraTrackComponent.Update">
+            <inheritdoc/>
+        </member>
+        <member name="T:SCE.ZoneCameraTrackComponent">
+            <summary>
+            An <see cref="T:SCE.IComponent"/> used for zone-based object camera tracking.
+            </summary>
+        </member>
+        <member name="M:SCE.ZoneCameraTrackComponent.#ctor(System.String,SCE.SCEObject,SCE.Rect2D,SCE.Vector2Int)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.ZoneCameraTrackComponent"/> class.
+            </summary>
+            <param name="obj">The objcet to track.</param>
+            <param name="boundingArea">The area the zone is bounded to.</param>
+            <param name="zoneDimensions">The dimensions of the zone.</param>
+            <exception cref="T:System.ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
+        </member>
+        <member name="P:SCE.ZoneCameraTrackComponent.Object">
+            <summary>
+            Gets or sets the object to track.
+            </summary>
+        </member>
+        <member name="P:SCE.ZoneCameraTrackComponent.BoundingArea">
+            <summary>
+            Gets or sets the camera bounding area.
+            </summary>
+        </member>
+        <member name="P:SCE.ZoneCameraTrackComponent.ZoneDimensions">
+            <summary>
+            Gets or sets the dimensions of the camera zone.
+            </summary>
+        </member>
+        <member name="P:SCE.ZoneCameraTrackComponent.ZoneAnchor">
+            <summary>
+            Gets or sets the anchor of the zone.
+            </summary>
+        </member>
+        <member name="P:SCE.ZoneCameraTrackComponent.CameraAnchor">
+            <summary>
+            Gets or sets the anchor of the camera.
+            </summary>
+        </member>
+        <member name="M:SCE.ColliderLayer.#ctor(System.Byte)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.ColliderLayer"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.ColliderLayer.Layer">
+            <summary>
+            Gets or sets the layer value of the collider layer.
+            </summary>
+        </member>
+        <member name="P:SCE.ColliderLayer.Count">
+            <summary>
+            Gets the total number of collidables in the collider layer.
+            </summary>
+        </member>
+        <member name="M:SCE.BoxColliderComponent.#ctor(System.String,SCE.Vector2Int)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.BoxColliderComponent"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.BoxColliderComponent.IsListening">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.BoxColliderComponent.IsReceiving">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.BoxColliderComponent.Layer">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.BoxColliderComponent.OnCollision">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.BoxColliderComponent.Dimensions">
+            <summary>
+            Gets or sets the dimensions of the box collider component.
+            </summary>
+        </member>
+        <member name="P:SCE.BoxColliderComponent.Anchor">
+            <summary>
+            Gets or sets the anchor of the box.
+            </summary>
+        </member>
+        <member name="M:SCE.BoxColliderComponent.HasMethodFor(SCE.ICollidable)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.BoxColliderComponent.CollidesWith(SCE.ICollidable)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.MapColliderComponent.#ctor(System.String,SCE.Grid2D{System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.MapColliderComponent"/> class.
+            </summary>
+        </member>
+        <member name="P:SCE.MapColliderComponent.IsListening">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.MapColliderComponent.IsReceiving">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.MapColliderComponent.Layer">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.MapColliderComponent.OnCollision">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.MapColliderComponent.CollisionGrid">
+            <summary>
+            Gets or sets the collision grid to collide from.
+            </summary>
+        </member>
+        <member name="P:SCE.MapColliderComponent.Anchor">
+            <summary>
+            Gets or sets the anchor of the collision grid.
+            </summary>
+        </member>
+        <member name="M:SCE.MapColliderComponent.CollidesWith(SCE.ICollidable)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.MapColliderComponent.HasMethodFor(SCE.ICollidable)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.ICollidable.Layer">
+            <summary>
+            Gets the collision layer of the collision component.
+            </summary>
+        </member>
+        <member name="P:SCE.ICollidable.IsListening">
+            <summary>
+            Gets a value indicating whether the collision component should check for collisions with other active colliders.
+            </summary>
+            <remarks>
+            Note: Highly performance intensive; should only be kept on if necessary.
+            </remarks>
+        </member>
+        <member name="P:SCE.ICollidable.IsReceiving">
+            <summary>
+            Gets a value indiciating whether the collision component should be checked for collisions by other listening active colliders.
+            </summary>
+        </member>
+        <member name="P:SCE.ICollidable.OnCollision">
+            <summary>
+            Gets the <see cref="T:SCE.ICollidable.CallOnCollision"/> delegate called when the collision component has collided with another collision component.
+            </summary>
+        </member>
+        <member name="P:SCE.ICollidable.Holder">
+            <summary>
+            Gets the parent object of the collision component.
+            </summary>
+        </member>
+        <member name="M:SCE.ICollidable.CollidesWith(SCE.ICollidable)">
+            <summary>
+            Determines whether the specified collision component collides with this collision component.
+            </summary>
+            <param name="collidable">The collision component to check.</param>
+            <returns><see langword="true"/> if the specified <paramref name="collidable"/> collides with this collision component; otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:SCE.ICollidable.HasMethodFor(SCE.ICollidable)">
+            <summary>
+            Determines whether this collision component has a method for checking collision with the specified collision component type.
+            </summary>
+            <param name="collidable">The collision component to check.</param>
+            <returns><see langword="true"/> if this collision component has a method for checking collision with the specified collision component type; otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="T:SCE.RenderComponent2D">
+            <summary>
+            An <see cref="T:SCE.IComponent"/> used for storing an <see cref="T:SCE.IRenderable"/> in an object.
+            </summary>
+        </member>
+        <member name="M:SCE.RenderComponent2D.#ctor(System.String,SCE.IRenderable)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.RenderComponent2D"/> class.
+            </summary>
+            <param name="renderable">The initial <see cref="T:SCE.IRenderable"/>.</param>
+        </member>
+        <member name="T:SCE.SpritePackage">
+            <summary>
+            A struct used for containing an image and its offset for rendering.
+            </summary>
+        </member>
+        <member name="M:SCE.SpritePackage.#ctor(SCE.DisplayMap,System.Int32,SCE.Vector2Int)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.SpritePackage"/> struct.
+            </summary>
+            <param name="dpMap">The displaymap to render.</param>
+            <param name="offset">The offset of the image to render.</param>
+        </member>
+    </members>
+</doc>

@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "rCcaSBN40XhqO7VOE+xuIgE0xYvxzN/TCHPmzBrMdOlnkvlh0XleezlPNIBqIaVMukROX273amfaVP8M7EHW2w==",
+  "dgSpecHash": "6C5uOwOsWUD5dXyBdXqHzz9ZNCD+l0zjdLKc4vVNRDq5jp3r0EX3o/smsMaoCW2Hi/26i4j6winolGT9K4dORg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\redst\\source\\repos\\TheSnowDoggo\\SCE.Objects\\SCE.Objects.csproj",
+  "projectFilePath": "C:\\Users\\AdamG\\source\\repos\\TheSnowDoggo\\SCECorePlus\\SCE.Objects.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\redst\\.nuget\\packages\\scecore\\2.1.0\\scecore.2.1.0.nupkg.sha512"
+    "C:\\Users\\AdamG\\.nuget\\packages\\scecore\\2.1.0\\scecore.2.1.0.nupkg.sha512"
   ],
   "logs": []
 }
