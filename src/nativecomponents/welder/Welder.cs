@@ -8,15 +8,10 @@
             Parent,
         }
 
-        public Welder(string name, SCEObject? obj = null)
-            : base(name)
+        public Welder(SCEObject? obj = null)
+            : base()
         {
             Object = obj;
-        }
-
-        public Welder(SCEObject? obj = null)
-            : this("welder", obj)
-        {
         }
 
         public SCEObject? Object { get; set; }
@@ -30,9 +25,9 @@
             if (Object is not null)
             {
                 if (ObjectMode == ObjectType.Child)
-                    Object.LocalPosition = Holder.LocalPosition + Offset;
+                    Object.Position = Holder.Position + Offset;
                 else
-                    Holder.LocalPosition = Object.LocalPosition + Offset;
+                    Holder.Position = Object.Position + Offset;
             }
         }
     }

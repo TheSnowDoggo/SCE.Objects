@@ -14,8 +14,8 @@
         /// <param name="boundingArea">The area the zone is bounded to.</param>
         /// <param name="zoneDimensions">The dimensions of the zone.</param>
         /// <exception cref="ArgumentException">Thrown if the <paramref name="zoneDimensions"/> are invalid.</exception>
-        public ZoneCameraTrackComponent(string name, SCEObject obj, Rect2D boundingArea, Vector2Int zoneDimensions)
-            : base(name)
+        public ZoneCameraTrackComponent(SCEObject obj, Rect2D boundingArea, Vector2Int zoneDimensions)
+            : base()
         {
             if (zoneDimensions <= 0)
                 throw new ArgumentException("Zone dimensions must be greater than zero.");
@@ -25,11 +25,6 @@
             BoundingArea = boundingArea;
 
             ZoneDimensions = zoneDimensions;
-        }
-
-        public ZoneCameraTrackComponent(SCEObject obj, Rect2D boundingArea, Vector2Int zoneDimensions)
-            : this("zone_camera_track", obj, boundingArea, zoneDimensions)
-        {
         }
 
         /// <summary>
@@ -70,7 +65,7 @@
         /// </summary>
         public Anchor CameraAnchor { get; set; }
 
-        private Vector2Int ObjectAlignedZonePosition => Object.WorldGridPosition() + -AnchorUtils.AnchoredDimension(ZoneAnchor, ZoneDimensions) + ZonePosition;
+        private Vector2Int ObjectAlignedZonePosition => Object.WorldGridPosition() + -AnchorUtils.DimensionFix(ZoneAnchor, ZoneDimensions) + ZonePosition;
 
         private Rect2D BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
 
@@ -80,7 +75,7 @@
 
         public void Update()
         {
-            Holder.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint() + -AnchorUtils.AnchoredDimension(CameraAnchor, Holder.Dimensions) + CameraPosition);
+            Holder.WorldPosition = (Vector2)(BoundObjectAlignedZonePosition + ZoneDimensions.Midpoint() + -AnchorUtils.DimensionFix(CameraAnchor, Holder.Dimensions) + CameraPosition);
         }
     }
 }

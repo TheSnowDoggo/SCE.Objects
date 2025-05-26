@@ -1,101 +1,130 @@
-﻿namespace SCE
+﻿using System.Diagnostics.CodeAnalysis;
+namespace SCE
 {
     public class SCEObject : ICContainerHolder, IScene
     {
-        #region Constructors
-        public SCEObject(string name, CGroup? components = null)
+        public SCEObject(params IComponent[] arr)
         {
-            Name = name;
-            Components = new(this, components);
+            Components = new(this, arr);
             Children = new(this);
         }
 
-        public SCEObject(CGroup? components = null)
-            : this(string.Empty, components)
-        {
-        }
-        #endregion
-
-        public string Name { get; set; }
-
+        /// <summary>
+        /// Gets the direct children of the object.
+        /// </summary>
         public ChildSet Children { get; }
 
+        /// <summary>
+        /// Gets the components of the object.
+        /// </summary>
+        public CContainer Components { get; }
+
+        internal void UpdateRecursiveProperties()
+        {
+            UpdateWorldIsActive();
+            UpdateWorldPosition();
+        }
+
         #region Active
+
         private bool isActive = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this object is active.
+        /// </summary>
         public bool IsActive
         {
             get => isActive;
             set
             {
                 isActive = value;
-                UpdateCombinedIsActive();
+                UpdateWorldIsActive();
             }
         }
 
-        public bool CombinedIsActive { get; private set; }
+        /// <summary>
+        /// Gets a value indicating the combined active state of this object.
+        /// </summary>
+        public bool WorldIsActive { get; private set; }
 
-        internal void UpdateCombinedIsActive()
+        private void UpdateWorldIsActive()
         {
-            CombinedIsActive = RecursiveResolveActive() && IsActive;
+            WorldIsActive = RecursiveResolveActive() && IsActive;
             RecursiveUpdateCombinedIsActive();
         }
+
         #endregion
 
         #region Position
-        private Vector2 localPosition;
 
-        public Vector2 LocalPosition
+        private Vector2 position;
+
+        /// <summary>
+        /// Gets or sets the local position of this object.
+        /// </summary>
+        public Vector2 Position
         {
-            get => localPosition;
+            get => position;
             set
             {
-                localPosition = value;
+                position = value;
                 UpdateWorldPosition();
             }
         }
 
+        /// <summary>
+        /// Gets the world position of this object.
+        /// </summary>
         public Vector2 WorldPosition { get; private set; }
 
+        /// <summary>
+        /// Returns the rounded world position of this object.
+        /// </summary>
+        /// <returns>The rounded world position of this object.</returns>
         public Vector2Int WorldGridPosition()
         {
             return (Vector2Int)WorldPosition.Round();
         }
 
-        internal void UpdateWorldPosition()
+        private void UpdateWorldPosition()
         {
-            WorldPosition = (Parent?.WorldPosition ?? Vector2.Zero) + localPosition;
+            WorldPosition = (Parent?.WorldPosition ?? Vector2.Zero) + position;
             RecursiveUpdateWorldPositions();
         }
-        #endregion
 
-        #region Components
-        public CContainer Components { get; }
         #endregion
 
         #region Children
 
-        public void RecursiveResolveChildren(List<SCEObject> list)
+        /// <summary>
+        /// Recursively resolves every descendent of this object. 
+        /// </summary>
+        /// <returns>A list containing every descendent of this object. </returns>
+        public List<SCEObject> RecursiveGetDescendents()
+        {
+            List<SCEObject> list = new();
+            RecursiveResolveDescendents(list);
+            return list;
+        }
+
+        private void RecursiveResolveDescendents(List<SCEObject> list)
         {
             if (Children.Count == 0)
                 return;
             list.AddRange(Children);
             foreach (var child in Children)
-                child.RecursiveResolveChildren(list);
-        }
-
-        public List<SCEObject> RecursiveGetChildren()
-        {
-            var list = new List<SCEObject>();
-            RecursiveResolveChildren(list);
-            return list;
+            {
+                child.RecursiveResolveDescendents(list);
+            }
         }
 
         internal void RecursiveSetWorld(World? world)
         {
             SetWorld(world);
             foreach (var child in Children)
+            {
                 child.RecursiveSetWorld(world);
+            }
         }
 
         private bool RecursiveResolveActive()
@@ -111,7 +140,7 @@
         {
             foreach (var child in Children)
             {
-                child.CombinedIsActive = CombinedIsActive && child.IsActive;
+                child.WorldIsActive = WorldIsActive && child.IsActive;
                 child.RecursiveUpdateCombinedIsActive();
             }
         }
@@ -120,7 +149,7 @@
         {
             foreach (var child in Children)
             {
-                child.WorldPosition = WorldPosition + child.LocalPosition;
+                child.WorldPosition = WorldPosition + child.Position;
                 child.RecursiveUpdateWorldPositions();
             }
         }
@@ -129,9 +158,21 @@
 
         #region Parent
 
+        /// <summary>
+        /// Gets the parent of the object.
+        /// </summary>
         public SCEObject? Parent { get; private set; }
 
-        public bool HasParent { get => Parent is not null; }
+        /// <summary>
+        /// Gets a value indicating whether this object has a parent.
+        /// </summary>
+        public bool HasParent { get => Parent != null; }
+
+        public bool TryGetParent([NotNullWhen(true)] out SCEObject? parent)
+        {
+            parent = Parent;
+            return parent != null;
+        }
 
         internal void SetParent(SCEObject? parent)
         {
@@ -140,12 +181,39 @@
 
         #endregion
 
+        #region World
+
+        /// <summary>
+        /// Gets the world of the object.
+        /// </summary>
+        public World? World { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this object has a world.
+        /// </summary>
+        public bool HasWorld { get => World != null; }
+
+        public bool TryGetWorld([NotNullWhen(true)] out World? world)
+        {
+            world = World;
+            return world != null;
+        }
+
+        internal void SetWorld(World? world)
+        {
+            World = world;
+        }
+
+        #endregion
+
         #region Scene
 
+        /// <inheritdoc/>
         public virtual void Start()
         {
         }
 
+        /// <inheritdoc/>
         public virtual void Update()
         {
         }
@@ -158,24 +226,10 @@
 
         #endregion
 
-        #region World
-
-        private World? world = null;
-
-        public World World { get => world ?? throw new NullReferenceException("World is null."); }
-
-        public bool HasWorld { get => world is not null; }
-
-        internal void SetWorld(World? world)
-        {
-            this.world = world;
-        }
-
-        #endregion
-
+        /// <inheritdoc/>
         public override string ToString()
         {
-            return $"SCEObject(\"{Name}\", Pos:({LocalPosition}), Active?:{IsActive})";
+            return $"SCEObject(Pos:({Position}), Active?:{IsActive})";
         }
     }
 }

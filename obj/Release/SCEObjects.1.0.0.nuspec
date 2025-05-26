@@ -13,9 +13,7 @@
     <copyright>MIT License</copyright>
     <repository url="https://github.com/TheSnowDoggo/SCE.Objects" />
     <dependencies>
-      <group targetFramework="net6.0">
-        <dependency id="SCECore" version="2.1.0" exclude="Build,Analyzers" />
-      </group>
+      <group targetFramework="net6.0" />
     </dependencies>
   </metadata>
   <files>

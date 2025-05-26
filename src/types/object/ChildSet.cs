@@ -1,9 +1,7 @@
 ﻿namespace SCE
 {
-    public class ChildSet : SearchHash<SCEObject>
+    public class ChildSet : AliasHash<SCEObject>
     {
-        private readonly List<SCEObject> _activeList = new();
-
         public ChildSet(SCEObject parent)
             : base()
         {
@@ -12,19 +10,22 @@
 
         public SCEObject Parent { get; }
 
-        public World World { get => Parent.World; }
-
-        public IList<SCEObject> ActiveList { get => _activeList.AsReadOnly(); }
+        public World? World { get => Parent.World; }
 
         #region Modification
+
+        /// <inheritdoc/>
         public override bool Add(SCEObject obj)
         {
             if (obj == Parent)
                 throw new RecursiveParentException("Object tried to add itself as a child object.");
+            if (!base.Add(obj))
+                return false;         
             SetupObject(obj);
-            return base.Add(obj);
+            return true;
         }
 
+        /// <inheritdoc/>
         public override bool Remove(SCEObject obj)
         {
             if (!base.Remove(obj))
@@ -33,48 +34,25 @@
             return true;
         }
 
+        /// <inheritdoc/>
         public override void Clear()
         {
             ClearObjectRange(this);
             base.Clear();
         }
-        #endregion
 
-        #region Update
-        public void Start()
-        {
-            _activeList.Clear();
-            foreach (var child in this)
-            {
-                if (child.IsActive)
-                    child.Start();
-            }
-        }
-
-        public void Update()
-        {
-            _activeList.Clear();
-            foreach (var child in this)
-            {
-                if (child.IsActive)
-                {
-                    child.UpdateAll();
-                    _activeList.Add(child);
-                }
-            }
-        }
         #endregion
 
         #region SetObject
+
         private void SetupObject(SCEObject obj)
         {
             obj.SetParent(Parent);
             if (Parent.HasWorld)
             {
-                obj.RecursiveSetWorld(World);  
+                obj.RecursiveSetWorld(World);       
+                obj.UpdateRecursiveProperties();
                 World.RecursiveAdd(obj);
-                obj.UpdateCombinedIsActive();
-                obj.UpdateWorldPosition();
             } 
         }
 
@@ -83,8 +61,7 @@
             World.RecursiveRemove(obj);
             obj.SetParent(null);
             obj.RecursiveSetWorld(null);
-            obj.UpdateCombinedIsActive();
-            obj.UpdateWorldPosition();
+            obj.UpdateRecursiveProperties();
         }
 
         private void ClearObjectRange(IEnumerable<SCEObject> collection)
@@ -92,6 +69,7 @@
             foreach (var obj in collection)
                 ClearObject(obj);
         }
+
         #endregion
     }
 }

@@ -16,8 +16,7 @@
             Layer = layer;
             Offset = offset;          
 
-            OffsetCorner = offset + DisplayMap.Dimensions;
-            OffsetArea = new(offset, OffsetCorner); 
+            OffsetArea = new(offset, offset + DisplayMap.Dimensions); 
         }
 
         public DisplayMap DisplayMap { get; }
@@ -25,8 +24,6 @@
         public int Layer { get; }
 
         public Vector2Int Offset { get; }
-
-        public Vector2Int OffsetCorner { get; }
 
         public Rect2D OffsetArea { get; }
     }

@@ -5,6 +5,7 @@
         private const string DEFAULT_NAME = "range_occluder";
 
         #region Constructors
+
         public RangeOccluder(string name, double range, IEnumerable<SCEObject>? targets = null)
         {
             Name = name;
@@ -16,12 +17,13 @@
             : this(DEFAULT_NAME, range, targets)
         {
         }
+
         #endregion
 
+        /// <inheritdoc/>
         public string Name { get; set; }
 
-        #region Settings
-
+        /// <inheritdoc/>
         public bool IsActive { get; set; } = true;
 
         public double Range { get; set; }
@@ -32,8 +34,7 @@
 
         public HashSet<SCEObject> PrioritySet { get; set; } = new();
 
-        #endregion
-
+        /// <inheritdoc/>
         public bool ShouldRender(SCEObject obj)
         {
             if (TargetSet.Contains(obj) || ExclusionSet.Contains(obj) || obj.Components.Contains<RangeOccluderExcluder>())

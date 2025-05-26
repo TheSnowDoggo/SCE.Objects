@@ -2,15 +2,10 @@
 {
     public class ChunkComponent<T> : ComponentBase<SCEObject>
     {
-        public ChunkComponent(string name, ChunkTemplate chunkTemplate, Grid2D<T> grid)
-            : base(name)
+        public ChunkComponent(ChunkTemplate chunkTemplate, Grid2D<T> grid)
+            : base()
         {
             Grid = grid;
-        }
-
-        public ChunkComponent(ChunkTemplate chunkTemplate, Grid2D<T> grid)
-            : this("chunk", chunkTemplate, grid)
-        {
         }
 
         public Vector2Int ChunkPosition { get; set; }

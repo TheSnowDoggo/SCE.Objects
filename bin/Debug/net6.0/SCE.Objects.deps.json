@@ -6,36 +6,48 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "SCE.Objects/1.0.0": {
+      "SCE.Objects/2.0.1": {
         "dependencies": {
-          "SCECore": "2.1.0"
+          "CSUtils": "1.2.2.0",
+          "SCE.Core": "3.2.2.0"
         },
         "runtime": {
           "SCE.Objects.dll": {}
         }
       },
-      "SCECore/2.1.0": {
+      "CSUtils/1.2.2.0": {
         "runtime": {
-          "lib/net6.0/SCE.Core.dll": {
-            "assemblyVersion": "2.1.0.0",
-            "fileVersion": "2.1.0.0"
+          "CSUtils.dll": {
+            "assemblyVersion": "1.2.2.0",
+            "fileVersion": "1.2.2.0"
+          }
+        }
+      },
+      "SCE.Core/3.2.2.0": {
+        "runtime": {
+          "SCE.Core.dll": {
+            "assemblyVersion": "3.2.2.0",
+            "fileVersion": "3.2.2.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "SCE.Objects/1.0.0": {
+    "SCE.Objects/2.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "SCECore/2.1.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-QHc6KQQbWPdmmPFG2Gl2MZPxVu9Quo1h3vd915xq0mk8601mZ/EHRij67qnU7GRNOD2U4WwZa1R1yiFLwBqDRw==",
-      "path": "scecore/2.1.0",
-      "hashPath": "scecore.2.1.0.nupkg.sha512"
+    "CSUtils/1.2.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SCE.Core/3.2.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

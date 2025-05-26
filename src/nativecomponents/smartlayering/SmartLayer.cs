@@ -2,15 +2,10 @@
 {
     public class SmartLayer : ComponentBase<SCEObject>
     {
-        public SmartLayer(string name,ISmartLayerable smartLayerable)
-            : base(name)
+        public SmartLayer(ISmartLayerable smartLayerable)
+            : base()
         {
             SmartLayerable = smartLayerable;
-        }
-
-        public SmartLayer(ISmartLayerable smartLayerable)
-            : this("smart_layer", smartLayerable)
-        {
         }
 
         public ISmartLayerable SmartLayerable { get; set; }

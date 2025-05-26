@@ -1,8 +1,9 @@
 ﻿namespace SCE
 {
-    public interface IRenderRule : ISearcheable
+    public interface IRenderRule
     {
-        bool IsActive { get; set; }
+        bool IsActive { get; }
+
         bool ShouldRender(SCEObject obj);
     }
 }

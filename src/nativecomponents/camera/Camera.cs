@@ -5,13 +5,9 @@
     /// </summary>
     public class Camera : UIBaseExt, ICContainerHolder, IComponent, IUpdate
     {
-        private const string DEFAULT_NAME = "camera";
-
         private const SCEColor DEFAULT_BGCOLOR = SCEColor.Black;
 
         private SCEColor bgColor = DEFAULT_BGCOLOR;
-
-        #region Camera
 
         private readonly List<SpritePackage> renderList = new();
 
@@ -19,44 +15,18 @@
 
         private SCEColor? renderedBgColor = null;
 
-        #endregion
-
-        private CContainer? container;
-
-        #region Constructors
-
-        public Camera(string name, int width, int height, CGroup? components = null)
-            : base(name, width, height)
+        public Camera(int width, int height, params IComponent[] arr)
+            : base(width, height)
         {
-            Components = new(this, components);
+            Components = new(this, arr);
         }
 
-        public Camera(string name, Vector2Int dimensions, CGroup? components = null)
-            : this(name, dimensions.X, dimensions.Y, components)
+        public Camera(Vector2Int dimensions, params IComponent[] arr)
+            : this(dimensions.X, dimensions.Y, arr)
         {
         }
-
-        public Camera(int width, int height, CGroup? components = null)
-            : this(DEFAULT_NAME, width, height, components)
-        {
-        }
-
-        public Camera(Vector2Int dimensions, CGroup? components = null)
-            : this(DEFAULT_NAME, dimensions, components)
-        {
-        }
-
-        #endregion
 
         public CContainer Components { get; }
-
-        #region Component
-
-        public CContainer Container { get => container ?? throw new NullReferenceException("Container is null."); }
-
-        public WorldSpaceRHC WorldSpace { get => (WorldSpaceRHC)Container.Holder; }
-
-        #endregion
 
         #region WorldProperties
 
@@ -70,7 +40,7 @@
         private readonly PropertyMemoizer<Vector2Int, Rect2D, Rect2D> rAreaMemoizer =
             new((rPos, gridArea) => gridArea + rPos);
 
-        public Rect2D RenderArea() => rAreaMemoizer.Get(RenderPosition(), _dpMap.GridArea);
+        public Rect2D RenderArea() => rAreaMemoizer.Get(RenderPosition(), _dpMap.GridArea());
 
         #endregion
 
@@ -229,11 +199,9 @@
 
         #region ComponentFuncs 
 
+        /// <inheritdoc/>
         public void SetCContainer(CContainer? container, ICContainerHolder holder)
         {
-            if (holder is not WorldSpaceRHC)
-                throw new InvalidCContainerHolderException();
-            this.container = container;
         }
 
         #endregion

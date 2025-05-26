@@ -6,28 +6,18 @@
     <members>
         <member name="T:SCE.CContainer">
             <summary>
-            A class containing a CList and the ICContainerHolder.
+            A class containing components and the ICContainerHolder.
             Used for storing components by a holder.
             </summary>
         </member>
-        <member name="T:SCE.CGroup">
+        <member name="P:SCE.CContainer.AssignableTypeSet">
             <summary>
-            A wrapper class containing a <see cref="T:SCE.IComponent"/> <see cref="T:System.Collections.Generic.List`1"/>.
+            A set containing cached components types.
             </summary>
         </member>
-        <member name="M:SCE.CGroup.#ctor(System.Collections.Generic.IEnumerable{SCE.IComponent})">
+        <member name="M:SCE.CContainer.Update">
             <summary>
-            Initializes a new instance of the <see cref="T:SCE.CGroup"/> class.
-            </summary>
-        </member>
-        <member name="M:SCE.CGroup.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.CGroup"/> class that is empty.
-            </summary>
-        </member>
-        <member name="M:SCE.CGroup.Update">
-            <summary>
-            Calls <see cref="!:IComponent.Update"/> for every <see cref="T:SCE.IComponent"/> in this instance.
+            Calls update for every <see cref="T:SCE.IComponent"/> in this instance.
             </summary>
         </member>
         <member name="T:SCE.InvalidCContainerHolderException">
@@ -66,12 +56,15 @@
             Represents a camera in a world space.
             </summary>
         </member>
+        <member name="M:SCE.Camera.SetCContainer(SCE.CContainer,SCE.ICContainerHolder)">
+            <inheritdoc/>
+        </member>
         <member name="T:SCE.StaticCameraTrackComponent">
             <summary>
             An <see cref="T:SCE.IComponent"/> used for static object camrea tracking.
             </summary>
         </member>
-        <member name="M:SCE.StaticCameraTrackComponent.#ctor(System.String,SCE.SCEObject)">
+        <member name="M:SCE.StaticCameraTrackComponent.#ctor(SCE.SCEObject)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.StaticCameraTrackComponent"/> class.
             </summary>
@@ -95,7 +88,7 @@
             An <see cref="T:SCE.IComponent"/> used for zone-based object camera tracking.
             </summary>
         </member>
-        <member name="M:SCE.ZoneCameraTrackComponent.#ctor(System.String,SCE.SCEObject,SCE.Rect2D,SCE.Vector2Int)">
+        <member name="M:SCE.ZoneCameraTrackComponent.#ctor(SCE.SCEObject,SCE.Rect2D,SCE.Vector2Int)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.ZoneCameraTrackComponent"/> class.
             </summary>
@@ -129,135 +122,12 @@
             Gets or sets the anchor of the camera.
             </summary>
         </member>
-        <member name="M:SCE.ColliderLayer.#ctor(System.Byte)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.ColliderLayer"/> class.
-            </summary>
-        </member>
-        <member name="P:SCE.ColliderLayer.Layer">
-            <summary>
-            Gets or sets the layer value of the collider layer.
-            </summary>
-        </member>
-        <member name="P:SCE.ColliderLayer.Count">
-            <summary>
-            Gets the total number of collidables in the collider layer.
-            </summary>
-        </member>
-        <member name="M:SCE.BoxColliderComponent.#ctor(System.String,SCE.Vector2Int)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.BoxColliderComponent"/> class.
-            </summary>
-        </member>
-        <member name="P:SCE.BoxColliderComponent.IsListening">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.BoxColliderComponent.IsReceiving">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.BoxColliderComponent.Layer">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.BoxColliderComponent.OnCollision">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.BoxColliderComponent.Dimensions">
-            <summary>
-            Gets or sets the dimensions of the box collider component.
-            </summary>
-        </member>
-        <member name="P:SCE.BoxColliderComponent.Anchor">
-            <summary>
-            Gets or sets the anchor of the box.
-            </summary>
-        </member>
-        <member name="M:SCE.BoxColliderComponent.HasMethodFor(SCE.ICollidable)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.BoxColliderComponent.CollidesWith(SCE.ICollidable)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.MapColliderComponent.#ctor(System.String,SCE.Grid2D{System.Boolean})">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.MapColliderComponent"/> class.
-            </summary>
-        </member>
-        <member name="P:SCE.MapColliderComponent.IsListening">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.MapColliderComponent.IsReceiving">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.MapColliderComponent.Layer">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.MapColliderComponent.OnCollision">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.MapColliderComponent.CollisionGrid">
-            <summary>
-            Gets or sets the collision grid to collide from.
-            </summary>
-        </member>
-        <member name="P:SCE.MapColliderComponent.Anchor">
-            <summary>
-            Gets or sets the anchor of the collision grid.
-            </summary>
-        </member>
-        <member name="M:SCE.MapColliderComponent.CollidesWith(SCE.ICollidable)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.MapColliderComponent.HasMethodFor(SCE.ICollidable)">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.ICollidable.Layer">
-            <summary>
-            Gets the collision layer of the collision component.
-            </summary>
-        </member>
-        <member name="P:SCE.ICollidable.IsListening">
-            <summary>
-            Gets a value indicating whether the collision component should check for collisions with other active colliders.
-            </summary>
-            <remarks>
-            Note: Highly performance intensive; should only be kept on if necessary.
-            </remarks>
-        </member>
-        <member name="P:SCE.ICollidable.IsReceiving">
-            <summary>
-            Gets a value indiciating whether the collision component should be checked for collisions by other listening active colliders.
-            </summary>
-        </member>
-        <member name="P:SCE.ICollidable.OnCollision">
-            <summary>
-            Gets the <see cref="T:SCE.ICollidable.CallOnCollision"/> delegate called when the collision component has collided with another collision component.
-            </summary>
-        </member>
-        <member name="P:SCE.ICollidable.Holder">
-            <summary>
-            Gets the parent object of the collision component.
-            </summary>
-        </member>
-        <member name="M:SCE.ICollidable.CollidesWith(SCE.ICollidable)">
-            <summary>
-            Determines whether the specified collision component collides with this collision component.
-            </summary>
-            <param name="collidable">The collision component to check.</param>
-            <returns><see langword="true"/> if the specified <paramref name="collidable"/> collides with this collision component; otherwise, <see langword="false"/>.</returns>
-        </member>
-        <member name="M:SCE.ICollidable.HasMethodFor(SCE.ICollidable)">
-            <summary>
-            Determines whether this collision component has a method for checking collision with the specified collision component type.
-            </summary>
-            <param name="collidable">The collision component to check.</param>
-            <returns><see langword="true"/> if this collision component has a method for checking collision with the specified collision component type; otherwise, <see langword="false"/>.</returns>
-        </member>
         <member name="T:SCE.RenderComponent2D">
             <summary>
             An <see cref="T:SCE.IComponent"/> used for storing an <see cref="T:SCE.IRenderable"/> in an object.
             </summary>
         </member>
-        <member name="M:SCE.RenderComponent2D.#ctor(System.String,SCE.IRenderable)">
+        <member name="M:SCE.RenderComponent2D.#ctor(SCE.IRenderable)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.RenderComponent2D"/> class.
             </summary>
@@ -274,6 +144,112 @@
             </summary>
             <param name="dpMap">The displaymap to render.</param>
             <param name="offset">The offset of the image to render.</param>
+        </member>
+        <member name="M:SCE.WorldSpaceRHC.Update">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.WorldSpaceRHC.OnLoad(SCE.SCEObject,SCE.IRenderable)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.RangeOccluder.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.RangeOccluder.IsActive">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.RangeOccluder.ShouldRender(SCE.SCEObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.ChildSet.Add(SCE.SCEObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.ChildSet.Remove(SCE.SCEObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.ChildSet.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.SCEObject.Children">
+            <summary>
+            Gets the direct children of the object.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.Components">
+            <summary>
+            Gets the components of the object.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.IsActive">
+            <summary>
+            Gets or sets a value indicating whether this object is active.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.WorldIsActive">
+            <summary>
+            Gets a value indicating the combined active state of this object.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.Position">
+            <summary>
+            Gets or sets the local position of this object.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.WorldPosition">
+            <summary>
+            Gets the world position of this object.
+            </summary>
+        </member>
+        <member name="M:SCE.SCEObject.WorldGridPosition">
+            <summary>
+            Returns the rounded world position of this object.
+            </summary>
+            <returns>The rounded world position of this object.</returns>
+        </member>
+        <member name="M:SCE.SCEObject.RecursiveGetDescendents">
+            <summary>
+            Recursively resolves every descendent of this object. 
+            </summary>
+            <returns>A list containing every descendent of this object. </returns>
+        </member>
+        <member name="P:SCE.SCEObject.Parent">
+            <summary>
+            Gets the parent of the object.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.HasParent">
+            <summary>
+            Gets a value indicating whether this object has a parent.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.World">
+            <summary>
+            Gets the world of the object.
+            </summary>
+        </member>
+        <member name="P:SCE.SCEObject.HasWorld">
+            <summary>
+            Gets a value indicating whether this object has a world.
+            </summary>
+        </member>
+        <member name="M:SCE.SCEObject.Start">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.SCEObject.Update">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.SCEObject.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:SCE.World.Objects">
+            <summary>
+            Gets every descendent of the world.
+            </summary>
+        </member>
+        <member name="M:SCE.World.Start">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.World.Update">
+            <inheritdoc/>
         </member>
     </members>
 </doc>

@@ -4,30 +4,18 @@
 
     public class AnimationSprite2D : ComponentBase<SCEObject>, IRenderable, ISmartLayerable, IEnumerable<DisplayMap>
     {
-        private const string DEFAULT_NAME = "animation_sprite";
-
         private readonly List<DisplayMap> _dpMapList;
 
         private int current = 0;
 
-        public AnimationSprite2D(string name, IEnumerable<DisplayMap> dpMapList)
-            : base(name)
+        public AnimationSprite2D(IEnumerable<DisplayMap> dpMapList)
+            : base()
         {
             _dpMapList = new(dpMapList);
         }
 
-        public AnimationSprite2D(string name)
-            : this(name, new List<DisplayMap>())
-        {
-        }
-
-        public AnimationSprite2D(IEnumerable<DisplayMap> dpMapList)
-            : this(DEFAULT_NAME, dpMapList)
-        {
-        }
-
         public AnimationSprite2D()
-            : this(DEFAULT_NAME)
+            : this(new List<DisplayMap>())
         {
         }
 
@@ -77,6 +65,8 @@
 
         private Vector2Int CycleRange { get => new(0, Count); }
 
+        #region IEnumerable
+
         public IEnumerator<DisplayMap> GetEnumerator()
         {
             return _dpMapList.GetEnumerator();
@@ -87,12 +77,15 @@
             return GetEnumerator();
         }
 
+        #endregion
+
         public DisplayMap GetMap()
         {
             return Selected;
         }
 
-        #region List
+        #region Modify
+
         public void Add(DisplayMap dpMap)
         {
             _dpMapList.Add(dpMap);
@@ -134,6 +127,7 @@
         {
             return _dpMapList.Contains(dpMap);
         }
+
         #endregion
 
         public void Next()

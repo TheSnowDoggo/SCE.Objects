@@ -9,15 +9,10 @@
         /// Initializes a new instance of the <see cref="StaticCameraTrackComponent"/> class.
         /// </summary>
         /// <param name="obj">The object to track.</param>
-        public StaticCameraTrackComponent(string name, SCEObject obj)
-            : base(name)
+        public StaticCameraTrackComponent(SCEObject obj)
+            : base()
         {
             Object = obj;
-        }
-
-        public StaticCameraTrackComponent(SCEObject obj)
-            : this("static_camera_track", obj)
-        {
         }
 
         /// <summary>
@@ -35,7 +30,7 @@
         /// <inheritdoc/>
         public void Update()
         {
-            Holder.WorldPosition = Object.WorldPosition -(Vector2)AnchorUtils.AnchoredDimension(Anchor, Holder.Dimensions / new Vector2Int(2, 1)) + (Vector2)Offset;
+            Holder.WorldPosition = Object.WorldPosition -(Vector2)AnchorUtils.DimensionFix(Anchor, Holder.Dimensions / new Vector2Int(2, 1)) + (Vector2)Offset;
         }
     }
 }

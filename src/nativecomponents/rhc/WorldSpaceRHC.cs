@@ -1,28 +1,14 @@
 ﻿namespace SCE
 {
     // WorldSpace RenderHandlerComponentV2
-    public class WorldSpaceRHC : HandlerBase<IRenderable>, ICContainerHolder, IUpdate
+    public class WorldSpaceRHC : HandlerBase<IRenderable>, IUpdate
     {
-        private const string DEFAULT_NAME = "world_space";
-
         private readonly Queue<Camera> cameraRenderQueue = new();
 
-        #region Constructors
-
-        public WorldSpaceRHC(string name, CGroup? components = null)
-            : base(name)
-        {
-            Components = new(this, components);
-        }
-
-        public WorldSpaceRHC(CGroup? components = null)
-            : this(DEFAULT_NAME, components)
+        public WorldSpaceRHC()
+            : base()
         {
         }
-
-        #endregion
-
-        public CContainer Components { get; }
 
         #region Settings
 
@@ -36,16 +22,16 @@
 
         #region Update
 
+        /// <inheritdoc/>
         public void Update()
         {
-            Components.Update();
             if (RenderLimiter?.OnUpdate() ?? true)
                 Render();
         }
 
         private void Render()
         {
-            if (!Components.Contains<Camera>())
+            if (!Holder.Components.Contains<Camera>())
                 return;
             LoadCameraQueue();
             LoadObjects();
@@ -54,25 +40,23 @@
 
         private void LoadCameraQueue()
         {
-            foreach (var component in Components)
-            {
-                if (component.IsActive && component is Camera camera)
-                    cameraRenderQueue.Enqueue(camera);
-            }
+            foreach (var c in Holder.Components.EnumerateType<Camera>())
+                if (c.IsActive)
+                    cameraRenderQueue.Enqueue(c);
         }
 
-        protected override void OnLoad(SCEObject obj, IRenderable renderable)
+        /// <inheritdoc/>
+        protected override void OnLoad(SCEObject obj, IRenderable r)
         {
-            var dpMap = renderable.GetMap();
+            var dpMap = r.GetMap();
 
-            var start = ((-AnchorUtils.AnchoredDimension(renderable.Anchor, dpMap.Dimensions) + renderable.Offset) / new Vector2Int(2, 1) + obj.WorldGridPosition()) * new Vector2Int(2, 1);
-            var end = start + (dpMap.Dimensions / new Vector2Int(2, 1));
+            var start = ((r.Offset - AnchorUtils.DimensionFix(r.Anchor, dpMap.Dimensions)) 
+                / new Vector2Int(2, 1) + obj.WorldGridPosition()) * new Vector2Int(2, 1);
+            var end = start + dpMap.Dimensions;
 
             foreach (var camera in cameraRenderQueue)
-            {
                 if (camera.Overlaps(start, end))
-                    camera.Load(new SpritePackage(dpMap, renderable.Layer, start));
-            }
+                    camera.Load(new SpritePackage(dpMap, r.Layer, start));
         }
 
         private void RenderCameraQueue()

@@ -2,10 +2,8 @@
 {
     public abstract class HandlerBase<T> : ComponentBase<World>
     {
-        private const string DEFAULT_NAME = "handler_base";
-
-        public HandlerBase(string name = DEFAULT_NAME)
-            : base(name)
+        public HandlerBase()
+            : base()
         {
         }
 
@@ -18,19 +16,15 @@
         protected virtual void LoadComponents(SCEObject obj)
         {
             foreach (var component in obj.Components)
-            {
                 if (component.IsActive && component is T t && (ComponentRule?.Invoke(t) ?? true))
                     OnLoad(obj, t);
-            }
         }
 
         protected virtual void LoadObjects()
         {
             foreach (var obj in Holder.Objects)
-            {
                 if (obj.IsActive && obj.Components.Contains<T>() && (ObjectRule?.Invoke(obj) ?? true))
                     LoadComponents(obj);
-            }
         }
     }
 }

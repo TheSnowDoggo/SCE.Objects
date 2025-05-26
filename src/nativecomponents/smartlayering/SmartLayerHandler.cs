@@ -2,12 +2,10 @@
 {
     public class SmartLayerHandler : HandlerBase<SmartLayer>, IUpdate
     {
-        private const string DEFAULT_NAME = "smart_layer_handler";
-
         private readonly List<SmartLayer> _smartLayerList = new();
 
-        public SmartLayerHandler(string name = DEFAULT_NAME)
-            : base(name)
+        public SmartLayerHandler()
+            : base()
         {
         }
 

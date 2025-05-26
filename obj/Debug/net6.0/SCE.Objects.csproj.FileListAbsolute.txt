@@ -24,3 +24,8 @@ C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCE.Object
 C:\Users\AdamG\Source\Repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\ref\SCE.Objects.dll
 C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\bin\Debug\net6.0\SCE.Objects.xml
 C:\Users\AdamG\source\repos\TheSnowDoggo\SCECorePlus\obj\Debug\net6.0\SCE.Objects.xml
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Debug\net6.0\SCE.Objects.xml
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Debug\net6.0\SCE.Objects.xml
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Debug\net6.0\CSUtils.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\bin\Debug\net6.0\SCE.Core.dll
+C:\Users\redst\source\repos\TheSnowDoggo\SCE.Objects\obj\Debug\net6.0\SCE.Objects.csproj.CopyComplete
