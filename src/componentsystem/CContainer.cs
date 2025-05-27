@@ -13,6 +13,7 @@
         {
             typeof(IUpdate),
             typeof(IRenderable),
+            typeof(Collider),
         };
 
         public CContainer(ICContainerHolder holder)
@@ -34,11 +35,13 @@
         /// </summary>
         public void Update()
         {
-            if (!Contains<IUpdate>())
-                return;
-            foreach (var c in this)
-                if (c.IsActive && c is IUpdate update)
+            foreach (var update in EnumerateType<IUpdate>())
+            {
+                if (update.IsActive)
+                {
                     update.Update();
+                }
+            }
         }
 
         #region Modify
@@ -68,7 +71,9 @@
         public override void Clear()
         {
             foreach (var c in this)
+            {
                 c.SetCContainer(null, Holder);
+            }
             base.Clear();
         }
 
@@ -79,13 +84,17 @@
         private void AddCacheTypes(IComponent component)
         {
             foreach (var type in AssignableTypeSet)
+            {
                 AddType(component, type);
+            }
         }
 
         private void RemoveCacheTypes(IComponent component)
         {
             foreach (var type in AssignableTypeSet)
+            {
                 RemoveType(component, type);
+            }
         }
 
         #endregion

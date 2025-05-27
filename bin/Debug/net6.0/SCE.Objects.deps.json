@@ -8,26 +8,26 @@
     ".NETCoreApp,Version=v6.0": {
       "SCE.Objects/2.0.1": {
         "dependencies": {
-          "CSUtils": "1.2.2.0",
-          "SCE.Core": "3.2.2.0"
+          "CSUtils": "1.3.2.0",
+          "SCE.Core": "3.3.2.0"
         },
         "runtime": {
           "SCE.Objects.dll": {}
         }
       },
-      "CSUtils/1.2.2.0": {
+      "CSUtils/1.3.2.0": {
         "runtime": {
           "CSUtils.dll": {
-            "assemblyVersion": "1.2.2.0",
-            "fileVersion": "1.2.2.0"
+            "assemblyVersion": "1.3.2.0",
+            "fileVersion": "1.3.2.0"
           }
         }
       },
-      "SCE.Core/3.2.2.0": {
+      "SCE.Core/3.3.2.0": {
         "runtime": {
           "SCE.Core.dll": {
-            "assemblyVersion": "3.2.2.0",
-            "fileVersion": "3.2.2.0"
+            "assemblyVersion": "3.3.2.0",
+            "fileVersion": "3.3.2.0"
           }
         }
       }
@@ -39,12 +39,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "CSUtils/1.2.2.0": {
+    "CSUtils/1.3.2.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
-    "SCE.Core/3.2.2.0": {
+    "SCE.Core/3.3.2.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

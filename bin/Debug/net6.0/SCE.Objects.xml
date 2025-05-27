@@ -20,6 +20,21 @@
             Calls update for every <see cref="T:SCE.IComponent"/> in this instance.
             </summary>
         </member>
+        <member name="T:SCE.ICContainerHolder">
+            <summary>
+            An interface between the CContainer and its holder instance.
+            </summary>
+        </member>
+        <member name="P:SCE.ICContainerHolder.Components">
+            <summary>
+            Gets the CContainer.
+            </summary>
+        </member>
+        <member name="T:SCE.IComponent">
+            <summary>
+            Allows <see cref="T:SCE.IComponent"/> classes to modularly interface with their holder.
+            </summary>
+        </member>
         <member name="T:SCE.InvalidCContainerHolderException">
             <summary>
             Represents errors thrown when an incompatible <see cref="T:SCE.IComponent"/> is added to a component holder.
@@ -36,20 +51,23 @@
             </summary>
             <param name="message">The message that describes the error.</param>
         </member>
-        <member name="T:SCE.ICContainerHolder">
+        <member name="P:SCE.CollisionDetails.Handler">
             <summary>
-            An interface between the CContainer and its holder instance.
+            Gets the CollisionHandler which handled the collision.
             </summary>
         </member>
-        <member name="P:SCE.ICContainerHolder.Components">
+        <member name="P:SCE.CollisionDetails.Collider">
             <summary>
-            Gets the CContainer.
+            Gets the other Collider that caused the collision.
             </summary>
         </member>
-        <member name="T:SCE.IComponent">
+        <member name="P:SCE.CollisionDetails.Receiver">
             <summary>
-            Allows <see cref="T:SCE.IComponent"/> classes to modularly interface with their holder.
+            Gets the Collider that received the collision.
             </summary>
+        </member>
+        <member name="M:SCE.CollisionHandler.Update">
+            <inheritdoc/>
         </member>
         <member name="T:SCE.Camera">
             <summary>
@@ -58,6 +76,33 @@
         </member>
         <member name="M:SCE.Camera.SetCContainer(SCE.CContainer,SCE.ICContainerHolder)">
             <inheritdoc/>
+        </member>
+        <member name="M:SCE.Camera.GetMapView">
+            <inheritdoc/>
+        </member>
+        <member name="T:SCE.RenderComponent2D">
+            <summary>
+            An <see cref="T:SCE.IComponent"/> used for storing an <see cref="T:SCE.IRenderable"/> in an object.
+            </summary>
+        </member>
+        <member name="M:SCE.RenderComponent2D.#ctor(SCE.IRenderable)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.RenderComponent2D"/> class.
+            </summary>
+            <param name="renderable">The initial <see cref="T:SCE.IRenderable"/>.</param>
+        </member>
+        <member name="M:SCE.Sprite2D.GetMapView">
+            <inheritdoc/>
+        </member>
+        <member name="T:SCE.SpritePackage">
+            <summary>
+            A struct used for containing an image and its offset for rendering.
+            </summary>
+        </member>
+        <member name="M:SCE.SpritePackage.#ctor(SCE.DisplayMapView,System.Int32,SCE.Vector2Int)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SCE.SpritePackage"/> struct.
+            </summary>
         </member>
         <member name="T:SCE.StaticCameraTrackComponent">
             <summary>
@@ -88,7 +133,7 @@
             An <see cref="T:SCE.IComponent"/> used for zone-based object camera tracking.
             </summary>
         </member>
-        <member name="M:SCE.ZoneCameraTrackComponent.#ctor(SCE.SCEObject,SCE.Rect2D,SCE.Vector2Int)">
+        <member name="M:SCE.ZoneCameraTrackComponent.#ctor(SCE.SCEObject,SCE.Rect2DInt,SCE.Vector2Int)">
             <summary>
             Initializes a new instance of the <see cref="T:SCE.ZoneCameraTrackComponent"/> class.
             </summary>
@@ -122,133 +167,62 @@
             Gets or sets the anchor of the camera.
             </summary>
         </member>
-        <member name="T:SCE.RenderComponent2D">
-            <summary>
-            An <see cref="T:SCE.IComponent"/> used for storing an <see cref="T:SCE.IRenderable"/> in an object.
-            </summary>
-        </member>
-        <member name="M:SCE.RenderComponent2D.#ctor(SCE.IRenderable)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.RenderComponent2D"/> class.
-            </summary>
-            <param name="renderable">The initial <see cref="T:SCE.IRenderable"/>.</param>
-        </member>
-        <member name="T:SCE.SpritePackage">
-            <summary>
-            A struct used for containing an image and its offset for rendering.
-            </summary>
-        </member>
-        <member name="M:SCE.SpritePackage.#ctor(SCE.DisplayMap,System.Int32,SCE.Vector2Int)">
-            <summary>
-            Initializes a new instance of the <see cref="T:SCE.SpritePackage"/> struct.
-            </summary>
-            <param name="dpMap">The displaymap to render.</param>
-            <param name="offset">The offset of the image to render.</param>
-        </member>
         <member name="M:SCE.WorldSpaceRHC.Update">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.WorldSpaceRHC.OnLoad(SCE.SCEObject,SCE.IRenderable)">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.RangeOccluder.Name">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.RangeOccluder.IsActive">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.RangeOccluder.ShouldRender(SCE.SCEObject)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.ChildSet.Add(SCE.SCEObject)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.ChildSet.Remove(SCE.SCEObject)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.ChildSet.Clear">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.SCEObject.Children">
-            <summary>
-            Gets the direct children of the object.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.Components">
-            <summary>
-            Gets the components of the object.
-            </summary>
-        </member>
         <member name="P:SCE.SCEObject.IsActive">
             <summary>
-            Gets or sets a value indicating whether this object is active.
+            Gets or sets the local active state.
             </summary>
+            <remarks>
+            Note: Not recommended to set frequently as it will update all descents.
+            </remarks>
         </member>
-        <member name="P:SCE.SCEObject.WorldIsActive">
+        <member name="P:SCE.SCEObject.GlobalIsActive">
             <summary>
-            Gets a value indicating the combined active state of this object.
+            Gets the active state relative to its parents.
             </summary>
         </member>
         <member name="P:SCE.SCEObject.Position">
             <summary>
-            Gets or sets the local position of this object.
+            Gets or sets the local position.
             </summary>
+            <remarks>
+            Note: Not recommended to set frequently as it will update all descents.
+            </remarks>
         </member>
-        <member name="P:SCE.SCEObject.WorldPosition">
+        <member name="P:SCE.SCEObject.GlobalPosition">
             <summary>
-            Gets the world position of this object.
+            Gets the position relative to its parents.
             </summary>
         </member>
-        <member name="M:SCE.SCEObject.WorldGridPosition">
+        <member name="M:SCE.SCEObject.EnumerateDescendents">
             <summary>
-            Returns the rounded world position of this object.
+            Enumerates all descendents.
             </summary>
-            <returns>The rounded world position of this object.</returns>
         </member>
-        <member name="M:SCE.SCEObject.RecursiveGetDescendents">
+        <member name="M:SCE.SCEObject.EnumerateAllActive">
             <summary>
-            Recursively resolves every descendent of this object. 
+            Enumerates all active descendents including this.
             </summary>
-            <returns>A list containing every descendent of this object. </returns>
+            <returns></returns>
         </member>
-        <member name="P:SCE.SCEObject.Parent">
-            <summary>
-            Gets the parent of the object.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.HasParent">
-            <summary>
-            Gets a value indicating whether this object has a parent.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.World">
-            <summary>
-            Gets the world of the object.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.HasWorld">
-            <summary>
-            Gets a value indicating whether this object has a world.
-            </summary>
-        </member>
-        <member name="M:SCE.SCEObject.Start">
+        <member name="P:SCE.World.Components">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.SCEObject.Update">
+        <member name="P:SCE.World.IsActive">
             <inheritdoc/>
-        </member>
-        <member name="M:SCE.SCEObject.ToString">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.World.Objects">
-            <summary>
-            Gets every descendent of the world.
-            </summary>
         </member>
         <member name="M:SCE.World.Start">
             <inheritdoc/>
         </member>
         <member name="M:SCE.World.Update">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.World.Add(SCE.SCEObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.World.Remove(SCE.SCEObject)">
             <inheritdoc/>
         </member>
     </members>

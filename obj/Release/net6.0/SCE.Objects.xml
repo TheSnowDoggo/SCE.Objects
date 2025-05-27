@@ -160,75 +160,30 @@
         <member name="M:SCE.RangeOccluder.ShouldRender(SCE.SCEObject)">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.ChildSet.Add(SCE.SCEObject)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.ChildSet.Remove(SCE.SCEObject)">
-            <inheritdoc/>
-        </member>
-        <member name="M:SCE.ChildSet.Clear">
-            <inheritdoc/>
-        </member>
-        <member name="P:SCE.SCEObject.Children">
-            <summary>
-            Gets the direct children of the object.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.Components">
-            <summary>
-            Gets the components of the object.
-            </summary>
-        </member>
         <member name="P:SCE.SCEObject.IsActive">
             <summary>
-            Gets or sets a value indicating whether this object is active.
+            Gets or sets the local active state.
             </summary>
+            <remarks>
+            Note: Not recommended to set frequently as it will update all descents.
+            </remarks>
         </member>
-        <member name="P:SCE.SCEObject.WorldIsActive">
+        <member name="P:SCE.SCEObject.GlobalIsActive">
             <summary>
-            Gets a value indicating the combined active state of this object.
+            Gets the active state relative to its parents.
             </summary>
         </member>
         <member name="P:SCE.SCEObject.Position">
             <summary>
-            Gets or sets the local position of this object.
+            Gets or sets the local position.
             </summary>
+            <remarks>
+            Note: Not recommended to set frequently as it will update all descents.
+            </remarks>
         </member>
-        <member name="P:SCE.SCEObject.WorldPosition">
+        <member name="P:SCE.SCEObject.GlobalPosition">
             <summary>
-            Gets the world position of this object.
-            </summary>
-        </member>
-        <member name="M:SCE.SCEObject.WorldGridPosition">
-            <summary>
-            Returns the rounded world position of this object.
-            </summary>
-            <returns>The rounded world position of this object.</returns>
-        </member>
-        <member name="M:SCE.SCEObject.RecursiveGetDescendents">
-            <summary>
-            Recursively resolves every descendent of this object. 
-            </summary>
-            <returns>A list containing every descendent of this object. </returns>
-        </member>
-        <member name="P:SCE.SCEObject.Parent">
-            <summary>
-            Gets the parent of the object.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.HasParent">
-            <summary>
-            Gets a value indicating whether this object has a parent.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.World">
-            <summary>
-            Gets the world of the object.
-            </summary>
-        </member>
-        <member name="P:SCE.SCEObject.HasWorld">
-            <summary>
-            Gets a value indicating whether this object has a world.
+            Gets the position relative to its parents.
             </summary>
         </member>
         <member name="M:SCE.SCEObject.Start">
@@ -237,19 +192,28 @@
         <member name="M:SCE.SCEObject.Update">
             <inheritdoc/>
         </member>
-        <member name="M:SCE.SCEObject.ToString">
+        <member name="P:SCE.World.Components">
             <inheritdoc/>
         </member>
-        <member name="P:SCE.World.Objects">
-            <summary>
-            Gets every descendent of the world.
-            </summary>
+        <member name="P:SCE.World.IsActive">
+            <inheritdoc/>
         </member>
         <member name="M:SCE.World.Start">
             <inheritdoc/>
         </member>
         <member name="M:SCE.World.Update">
             <inheritdoc/>
+        </member>
+        <member name="M:SCE.World.Add(SCE.SCEObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.World.Remove(SCE.SCEObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.World.EnumerateActive">
+            <summary>
+            Enumerates all active objects.
+            </summary>
         </member>
     </members>
 </doc>
