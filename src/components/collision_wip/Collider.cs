@@ -6,6 +6,9 @@
 
         public Action<CollisionDetails>? OnCollision;
 
+        /// <summary>
+        /// Returns whether a collision has occured between this and the given collider.
+        /// </summary>
         public abstract bool CollidesWith(Collider other);
     }
 }

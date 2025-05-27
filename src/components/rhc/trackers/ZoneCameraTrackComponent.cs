@@ -69,7 +69,7 @@
 
         private Rect2DInt BoundObjectAlignedZoneArea => BoundingArea.Bound(ObjectAlignedZoneArea);
 
-        private Vector2Int BoundObjectAlignedZonePosition => BoundObjectAlignedZoneArea.Start();
+        private Vector2Int BoundObjectAlignedZonePosition => BoundObjectAlignedZoneArea.Start;
 
         private Rect2DInt ObjectAlignedZoneArea => new Rect2DInt(Vector2Int.Zero, ZoneDimensions) + ObjectAlignedZonePosition;
 

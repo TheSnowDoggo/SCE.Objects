@@ -12,33 +12,19 @@
                 return;
             }
 
-            Dictionary<int, HashSet<Collider>> masks = new();
-            Dictionary<int, HashSet<Collider>> layers = new();
+            KeyHash<int, Collider> masks = new();
+            KeyHash<int, Collider> layers = new();
 
             foreach (var c in EnumerateColliders())
             {
                 foreach (var bit in c.LayerInfo.EnumerateMasks())
                 {
-                    if (masks.ContainsKey(bit))
-                    {
-                        masks[bit].Add(c);
-                    }
-                    else
-                    {
-                        masks[bit] = new(new[] { c });
-                    }
+                    masks[bit].Add(c);
                 }
 
                 foreach (var bit in c.LayerInfo.EnumerateLayers())
                 {
-                    if (layers.ContainsKey(bit))
-                    {
-                        layers[bit].Add(c);
-                    }
-                    else
-                    {
-                        layers[bit] = new(new[] { c });
-                    }
+                    layers[bit].Add(c);
                 }
             }
 
@@ -58,7 +44,7 @@
                             continue;
                         }
 
-                        if (c1.CollidesWith(c2))
+                        if (c1.CollidesWith(c2) || c2.CollidesWith(c1))
                         {
                             c2.OnCollision?.Invoke(new CollisionDetails(this, c2, c1));
                         }

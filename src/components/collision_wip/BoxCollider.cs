@@ -19,13 +19,13 @@
             return CollisionArea() + Holder.GridPosition();
         }
 
+        /// <inheritdoc/>
         public override bool CollidesWith(Collider other)
         {
             if (other is BoxCollider bc)
             {
                 return Rect2D.Overlaps(GlobalCollisionArea(), bc.GlobalCollisionArea());
             }
-
             return false;
         }
     }

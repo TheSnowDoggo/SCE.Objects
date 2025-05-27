@@ -27,8 +27,10 @@
         public int CompareTo(SpritePackage? other)
         {
             if (other is null)
+            {
                 throw new NotImplementedException();
-            return other.Layer - Layer; // Top down sorting
+            }
+            return Layer - other.Layer; // Higher = More visible
         }
     }
 }

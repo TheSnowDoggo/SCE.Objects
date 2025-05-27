@@ -51,6 +51,17 @@
             </summary>
             <param name="message">The message that describes the error.</param>
         </member>
+        <member name="M:SCE.BoxCollider.CollidesWith(SCE.Collider)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.CircleCollider.CollidesWith(SCE.Collider)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SCE.Collider.CollidesWith(SCE.Collider)">
+            <summary>
+            Returns whether a collision has occured between this and the given collider.
+            </summary>
+        </member>
         <member name="P:SCE.CollisionDetails.Handler">
             <summary>
             Gets the CollisionHandler which handled the collision.
