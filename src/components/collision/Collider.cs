@@ -2,7 +2,7 @@
 {
     public abstract class Collider : ComponentBase<SCEObject>
     {
-        public LInfo LayerInfo { get; set; }
+        public uint LayerData;
 
         public Action<CollisionDetails>? OnCollision;
 

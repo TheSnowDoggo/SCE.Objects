@@ -17,12 +17,12 @@
 
             foreach (var c in EnumerateColliders())
             {
-                foreach (var bit in c.LayerInfo.EnumerateMasks())
+                foreach (var bit in LData.EnumerateMasks(c.LayerData))
                 {
                     masks[bit].Add(c);
                 }
 
-                foreach (var bit in c.LayerInfo.EnumerateLayers())
+                foreach (var bit in LData.EnumerateLayers(c.LayerData))
                 {
                     layers[bit].Add(c);
                 }
